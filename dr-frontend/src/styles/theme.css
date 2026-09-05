@@ -1,0 +1,1004 @@
+/* =========================================================
+   RETINA AI
+   HEALTHCARE / HOSPITAL DESIGN SYSTEM
+   Inspired by modern medical website aesthetics
+   ========================================================= */
+
+
+/* =========================================================
+   1. COLOR SYSTEM
+   ========================================================= */
+
+:root {
+
+    /* -------------------------------------------------------
+     Brand
+     ------------------------------------------------------- */
+
+    --color-primary: #2f6f9f;
+    --color-primary-dark: #245a82;
+    --color-primary-light: #e8f4fb;
+
+    --color-secondary: #2aa889;
+    --color-secondary-light: #e7f7f2;
+
+
+    /* -------------------------------------------------------
+     Backgrounds
+     ------------------------------------------------------- */
+
+    --color-background: #f3f8fc;
+
+    --color-background-soft: #edf5fa;
+
+    --color-surface: rgba(255, 255, 255, 0.72);
+
+    --color-surface-solid: #ffffff;
+
+
+    /* -------------------------------------------------------
+     Text
+     ------------------------------------------------------- */
+
+    --color-heading: #162b45;
+
+    --color-text-primary: #243b53;
+
+    --color-text-secondary: #647b91;
+
+    --color-text-muted: #8ca0b2;
+
+    --color-text-white: #ffffff;
+
+
+    /* -------------------------------------------------------
+     Borders
+     ------------------------------------------------------- */
+
+    --color-border: rgba(104, 139, 165, 0.18);
+
+    --color-border-strong: rgba(78, 119, 149, 0.28);
+
+
+    /* -------------------------------------------------------
+     Status colors
+     ------------------------------------------------------- */
+
+    --color-success: #21b978;
+
+    --color-success-light: #e8f8f1;
+
+    --color-warning: #f3a712;
+
+    --color-warning-light: #fff6df;
+
+    --color-danger: #dc5c5c;
+
+    --color-danger-light: #fdecec;
+
+
+    /* -------------------------------------------------------
+     Medical blue
+     ------------------------------------------------------- */
+
+    --medical-blue-50: #f2f8fc;
+    --medical-blue-100: #e5f1f8;
+    --medical-blue-200: #cde3f0;
+    --medical-blue-300: #acd0e3;
+    --medical-blue-400: #82b5d0;
+    --medical-blue-500: #5798bd;
+    --medical-blue-600: #3b7fa7;
+    --medical-blue-700: #2f6f9f;
+    --medical-blue-800: #275a80;
+    --medical-blue-900: #1e4563;
+
+
+    /* -------------------------------------------------------
+     Shadows
+     ------------------------------------------------------- */
+
+    --shadow-xs:
+        0 2px 8px rgba(31, 65, 91, 0.05);
+
+    --shadow-sm:
+        0 6px 18px rgba(31, 65, 91, 0.07);
+
+    --shadow-md:
+        0 12px 30px rgba(31, 65, 91, 0.10);
+
+    --shadow-lg:
+        0 20px 50px rgba(31, 65, 91, 0.13);
+
+
+    /* -------------------------------------------------------
+     Radius
+     ------------------------------------------------------- */
+
+    --radius-sm: 10px;
+
+    --radius-md: 16px;
+
+    --radius-lg: 24px;
+
+    --radius-xl: 30px;
+
+    --radius-pill: 999px;
+
+
+    /* -------------------------------------------------------
+     Spacing
+     ------------------------------------------------------- */
+
+    --space-xs: 6px;
+
+    --space-sm: 10px;
+
+    --space-md: 16px;
+
+    --space-lg: 24px;
+
+    --space-xl: 32px;
+
+    --space-2xl: 48px;
+
+    --space-3xl: 64px;
+
+
+    /* -------------------------------------------------------
+     Layout
+     ------------------------------------------------------- */
+
+    --content-width: 1120px;
+
+    --page-padding: 24px;
+}
+
+
+/* =========================================================
+   2. PAGE BACKGROUND
+   ========================================================= */
+
+body {
+
+    background:
+
+        radial-gradient(circle at 0% 0%,
+            rgba(111, 169, 220, 0.18),
+            transparent 30%),
+
+        radial-gradient(circle at 100% 5%,
+            rgba(78, 190, 170, 0.14),
+            transparent 30%),
+
+        radial-gradient(circle at 50% 100%,
+            rgba(122, 168, 206, 0.10),
+            transparent 35%),
+
+        linear-gradient(135deg,
+            #f5f9fd 0%,
+            #edf5fa 50%,
+            #f4fbfd 100%);
+
+    background-attachment: fixed;
+}
+
+
+/* =========================================================
+   3. MAIN APP
+   ========================================================= */
+
+#root {
+
+    width: 100%;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   4. GENERAL TEXT
+   ========================================================= */
+
+body {
+
+    color: var(--color-text-primary);
+
+    font-size: 16px;
+
+    font-weight: 400;
+
+    letter-spacing: -0.01em;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+    color: var(--color-heading);
+
+    letter-spacing: -0.025em;
+}
+
+
+p {
+
+    color: var(--color-text-secondary);
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   5. MEDICAL EYEBROW / KICKER
+   ========================================================= */
+
+.eyebrow,
+.section-kicker {
+
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--color-primary);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   6. SECTION HEADING
+   ========================================================= */
+
+.section-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 22px;
+}
+
+
+.section-heading h2 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+    font-weight: 750;
+
+    line-height: 1.15;
+}
+
+
+.section-heading p {
+
+    margin-top: 7px;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   7. DR LEVEL BADGE
+   ========================================================= */
+
+.dr-level-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 34px;
+
+    padding: 8px 16px;
+
+    border: 1px solid rgba(71, 148, 207, 0.20);
+
+    border-radius: var(--radius-pill);
+
+    background: rgba(225, 241, 252, 0.72);
+
+    color: var(--color-primary);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    white-space: nowrap;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+
+/* =========================================================
+   8. GENERIC DASHBOARD SECTION
+   ========================================================= */
+
+.dashboard-section {
+
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: var(--space-3xl);
+}
+
+
+/* =========================================================
+   9. RESULT DASHBOARD
+   ========================================================= */
+
+.result-dashboard {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    margin-bottom: 48px;
+}
+
+
+/* =========================================================
+   10. ASSESSMENT CARD
+   ========================================================= */
+
+.assessment-card {
+
+    width: 100%;
+
+    min-height: 180px;
+
+    margin-top: 18px;
+}
+
+
+.assessment-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 32px;
+
+    min-height: 180px;
+
+    padding: 32px;
+}
+
+
+.assessment-label {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: var(--color-primary);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+}
+
+
+.assessment-text h1 {
+
+    margin: 0;
+
+    color: var(--color-heading);
+
+    font-size: 34px;
+
+    font-weight: 750;
+
+    line-height: 1.15;
+}
+
+
+.assessment-text p {
+
+    margin-top: 9px;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   11. CONFIDENCE CARD
+   ========================================================= */
+
+.confidence-card {
+
+    flex: 0 0 145px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 110px;
+
+    padding: 16px;
+
+    border: 1px solid rgba(108, 141, 165, 0.14);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(239, 247, 252, 0.58));
+
+    box-shadow:
+        0 10px 24px rgba(50, 90, 115, 0.07),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+
+.confidence-card span {
+
+    color: var(--color-text-secondary);
+
+    font-size: 13px;
+}
+
+
+.confidence-card strong {
+
+    margin: 3px 0;
+
+    color: var(--color-heading);
+
+    font-size: 32px;
+
+    font-weight: 750;
+
+    line-height: 1;
+}
+
+
+.confidence-card small {
+
+    color: var(--color-text-muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   12. REFERRAL CARD
+   ========================================================= */
+
+.referral-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-top: 18px;
+
+    padding: 20px 24px;
+}
+
+
+.referral-icon {
+
+    flex: 0 0 40px;
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(145deg,
+            #f7b733,
+            #ed9d00);
+
+    color: white;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 6px 14px rgba(230, 160, 20, 0.22);
+}
+
+
+.referral-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.referral-title {
+
+    color: #9a5710;
+
+    font-size: 17px;
+
+    font-weight: 750;
+}
+
+
+.referral-content p {
+
+    margin: 0;
+
+    color: #815f31;
+
+    font-size: 14px;
+}
+
+
+.referral-content strong {
+
+    color: #694615;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   13. METRICS
+   ========================================================= */
+
+.metrics-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-top: 18px;
+}
+
+
+.metric-card {
+
+    min-height: 118px;
+}
+
+
+.metric-inner {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    height: 100%;
+
+    min-height: 118px;
+
+    padding: 20px;
+}
+
+
+.metric-label {
+
+    margin-bottom: 7px;
+
+    color: var(--color-text-secondary);
+
+    font-size: 13px;
+
+    font-weight: 550;
+}
+
+
+.metric-value {
+
+    color: var(--color-heading);
+
+    font-size: 26px;
+
+    font-weight: 750;
+
+    line-height: 1.1;
+}
+
+
+/* =========================================================
+   14. METRIC PROGRESS BAR
+   ========================================================= */
+
+.metric-bar {
+
+    width: 100%;
+
+    height: 5px;
+
+    margin-top: 12px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(100, 135, 160, 0.13);
+}
+
+
+.metric-bar-fill {
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(90deg,
+            #6ba9d8,
+            #327ec0);
+
+    transition: width 0.6s ease;
+}
+
+
+/* =========================================================
+   15. CLINICAL EVIDENCE
+   ========================================================= */
+
+.clinical-evidence {
+
+    width: 100%;
+
+    margin-top: 48px;
+}
+
+
+/* =========================================================
+   16. EVIDENCE GRID
+   ========================================================= */
+
+.evidence-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr) minmax(0, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   17. EVIDENCE CARD
+   ========================================================= */
+
+.evidence-card {
+
+    min-height: 400px;
+}
+
+
+/* =========================================================
+   18. CONFIDENCE BREAKDOWN
+   ========================================================= */
+
+.confidence-breakdown {
+
+    margin-top: 48px;
+}
+
+
+.confidence-breakdown-card {
+
+    padding: 28px;
+}
+
+
+.confidence-row {
+
+    margin-bottom: 18px;
+}
+
+
+.confidence-row:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.confidence-row-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 7px;
+}
+
+
+.confidence-row-header span {
+
+    color: var(--color-text-secondary);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.confidence-row-header strong {
+
+    color: var(--color-heading);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   19. CONFIDENCE PROGRESS
+   ========================================================= */
+
+.confidence-progress {
+
+    width: 100%;
+
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(91, 130, 156, 0.12);
+}
+
+
+.confidence-progress-fill {
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(90deg,
+            #73b1dc,
+            #377fb9);
+}
+
+
+/* =========================================================
+   20. SCREENING SUMMARY
+   ========================================================= */
+
+.screening-summary {
+
+    margin-top: 48px;
+}
+
+
+.summary-card {
+
+    padding: 30px;
+}
+
+
+.summary-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background: var(--color-success-light);
+
+    color: var(--color-success);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.summary-card h3 {
+
+    margin-bottom: 8px;
+
+    font-size: 20px;
+}
+
+
+.summary-card p {
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   21. AI EVIDENCE BOX
+   ========================================================= */
+
+.ai-evidence-box {
+
+    margin-top: 20px;
+
+    padding: 17px 20px;
+
+    border: 1px solid rgba(87, 151, 202, 0.15);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(228, 241, 251, 0.75),
+            rgba(241, 248, 253, 0.58));
+}
+
+
+.ai-evidence-label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--color-primary);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+
+.ai-evidence-box p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   22. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .section-heading {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .assessment-content {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .confidence-card {
+
+        width: 100%;
+
+        flex-basis: auto;
+    }
+
+
+    .metrics-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .evidence-grid {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   23. MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    :root {
+
+        --page-padding: 16px;
+    }
+
+
+    .section-heading h2 {
+
+        font-size: 27px;
+    }
+
+
+    .assessment-content {
+
+        padding: 22px;
+    }
+
+
+    .assessment-text h1 {
+
+        font-size: 27px;
+    }
+
+
+    .metrics-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .referral-card {
+
+        align-items: flex-start;
+
+        padding: 18px;
+    }
+
+
+    .confidence-card {
+
+        min-height: 100px;
+    }
+}

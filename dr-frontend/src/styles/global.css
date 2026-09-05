@@ -1,0 +1,287 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
+
+/* =========================================================
+   RETINA AI — GLOBAL STYLES
+   Healthcare / Hospital inspired foundation
+   ========================================================= */
+
+
+/* =========================================================
+   1. RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+
+    font-family: "Inter", Arial, sans-serif;
+    color: var(--color-text-primary);
+
+    background:
+        radial-gradient(
+            circle at 5% 5%,
+            rgba(47, 111, 159, 0.32),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 95% 8%,
+            rgba(42, 168, 137, 0.25),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(77, 148, 195, 0.18),
+            transparent 34%
+        ),
+
+        radial-gradient(
+            circle at 15% 85%,
+            rgba(76, 139, 190, 0.16),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(42, 168, 137, 0.12),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            135deg,
+            #d7e9f7 0%,
+            #e8f3fa 35%,
+            #eef7f9 65%,
+            #dcefed 100%
+        );
+
+    background-attachment: fixed;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   2. ROOT
+   ========================================================= */
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   3. TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Manrope", Arial, sans-serif;
+
+    color: var(--color-heading);
+
+    font-weight: 700;
+
+    line-height: 1.15;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+p {
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   4. FORM ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+
+/* =========================================================
+   5. LINKS
+   ========================================================= */
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   6. BUTTON BASE
+   ========================================================= */
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   7. TEXT SELECTION
+   ========================================================= */
+
+::selection {
+    background: rgba(22, 119, 200, 0.18);
+    color: var(--color-heading);
+}
+
+
+/* =========================================================
+   8. SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(214, 231, 243, 0.65);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(20, 38, 61, 0.20);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(20, 38, 61, 0.30);
+}
+
+
+/* =========================================================
+   9. IMAGES
+   ========================================================= */
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* =========================================================
+   10. COMMON CONTAINER
+   ========================================================= */
+
+.container {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   11. SECTION SPACING
+   ========================================================= */
+
+section {
+    position: relative;
+}
+
+
+/* =========================================================
+   12. RESPONSIVE TYPOGRAPHY
+   ========================================================= */
+
+@media (max-width: 900px) {
+    h1 {
+        font-size: 40px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 22px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 34px;
+    }
+
+    h2 {
+        font-size: 26px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .container {
+        width: min(100% - 24px, 1120px);
+    }
+}
+
+
+/* =========================================================
+   13. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
