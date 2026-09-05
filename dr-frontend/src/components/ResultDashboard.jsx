@@ -10,40 +10,20 @@ function ResultDashboard() {
     return null;
   }
 
-  const drLevel = grade.dr_level;
-  const drLabel = grade.dr_label;
+  const drLabel = grade.dr_label || "Assessment unavailable";
+
   const confidence = grade.confidence ?? 0;
-  const calibratedConfidence = grade.calibrated_confidence ?? 0;
+
+  const calibratedConfidence =
+    grade.calibrated_confidence ?? 0;
 
   const lesions = report?.lesions || {};
 
+  const imageQuality =
+    quality?.quality_score ?? 0;
+
   return (
     <section className="result-dashboard">
-
-      {/* =====================================================
-          SECTION HEADER
-      ===================================================== */}
-
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">
-            PRIMARY ASSESSMENT
-          </span>
-
-          <h2>
-            Screening Result
-          </h2>
-
-          <p>
-            Automated diabetic retinopathy assessment
-          </p>
-        </div>
-
-        <div className="dr-level-badge">
-          DR LEVEL {drLevel}
-        </div>
-      </div>
-
 
       {/* =====================================================
           MAIN ASSESSMENT CARD
@@ -53,7 +33,6 @@ function ResultDashboard() {
         className="assessment-card"
         variant="strong"
       >
-
         <div className="assessment-content">
 
           <div className="assessment-text">
@@ -87,13 +66,15 @@ function ResultDashboard() {
 
             <small>
               Calibrated:{" "}
-              {Math.round(calibratedConfidence * 100)}%
+              {Math.round(
+                calibratedConfidence * 100
+              )}
+              %
             </small>
 
           </div>
 
         </div>
-
       </LiquidGlass>
 
 
@@ -106,7 +87,6 @@ function ResultDashboard() {
           className="referral-card"
           variant="light"
         >
-
           <div className="referral-icon">
             !
           </div>
@@ -120,19 +100,18 @@ function ResultDashboard() {
             <p>
               Routing:{" "}
               <strong>
-                {grade.routing}
+                {grade.routing || "STANDARD_REFERRAL"}
               </strong>
             </p>
 
             <p>
               Urgency:{" "}
               <strong>
-                {grade.referral_urgency}
+                {grade.referral_urgency || "standard"}
               </strong>
             </p>
 
           </div>
-
         </LiquidGlass>
       )}
 
@@ -145,14 +124,10 @@ function ResultDashboard() {
 
         <Metric
           label="Image Quality"
-          value={
-            quality
-              ? `${Math.round(
-                  quality.quality_score * 100
-                )}%`
-              : "N/A"
-          }
-          type="percentage"
+          value={`${Math.round(
+            imageQuality * 100
+          )}%`}
+          percentage={imageQuality}
         />
 
         <Metric
@@ -160,7 +135,7 @@ function ResultDashboard() {
           value={`${Math.round(
             confidence * 100
           )}%`}
-          type="percentage"
+          percentage={confidence}
         />
 
         <Metric
@@ -192,12 +167,12 @@ function ResultDashboard() {
 
 /* =========================================================
    METRIC COMPONENT
-   ========================================================= */
+========================================================= */
 
 function Metric({
   label,
   value,
-  type = "number",
+  percentage = null,
 }) {
   return (
     <LiquidGlass
@@ -205,7 +180,6 @@ function Metric({
       variant="light"
       hover
     >
-
       <div className="metric-inner">
 
         <span className="metric-label">
@@ -216,13 +190,16 @@ function Metric({
           {value}
         </strong>
 
-        {type === "percentage" && (
+        {percentage !== null && (
           <div className="metric-bar">
 
             <div
               className="metric-bar-fill"
               style={{
-                width: value,
+                width: `${Math.min(
+                  Math.max(percentage * 100, 0),
+                  100
+                )}%`,
               }}
             />
 
@@ -230,7 +207,6 @@ function Metric({
         )}
 
       </div>
-
     </LiquidGlass>
   );
 }

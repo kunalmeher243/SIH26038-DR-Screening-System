@@ -217,11 +217,16 @@ function Analysis() {
               <h2>
                 Screening Result
               </h2>
+
+               <p>
+                  Automated diabetic retinopathy assessment
+                </p>
+
             </div>
 
             {grade && (
               <span className="dr-level-badge">
-                DR LEVEL {drLevel}
+                DR LEVEL {grade.dr_Level}
               </span>
             )}
 
