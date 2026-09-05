@@ -1,0 +1,2206 @@
+/* =========================================================
+   RETINA AI — LIQUID GLASS DESIGN SYSTEM
+   DR Screening Application
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL RESET
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  color: #172033;
+
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(190, 215, 255, 0.55),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(190, 235, 255, 0.5),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #edf5ff 0%,
+      #f7fbff 48%,
+      #e8f6ff 100%
+    );
+
+  background-attachment: fixed;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(255, 255, 255, 0.55),
+      transparent 35%
+    );
+
+  z-index: -1;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   ANALYSIS PAGE
+   ========================================================= */
+
+.analysis-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 54px 28px 80px;
+}
+
+.analysis-container {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 28px;
+}
+
+
+/* =========================================================
+   ANALYSIS HEADER
+   ========================================================= */
+
+.analysis-header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 10px 4px 4px;
+}
+
+.analysis-header > div:first-child {
+  min-width: 0;
+}
+
+.brand-kicker {
+  display: inline-block;
+
+  margin-bottom: 12px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  color: #55708f;
+}
+
+.analysis-header h1 {
+  margin: 0;
+
+  font-size: clamp(34px, 4vw, 52px);
+
+  line-height: 1.05;
+
+  letter-spacing: -0.035em;
+
+  color: #152238;
+}
+
+.analysis-header p {
+  margin: 14px 0 0;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+
+  color: #667991;
+}
+
+
+/* =========================================================
+   ANALYSIS STATUS
+   ========================================================= */
+
+.analysis-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  flex-shrink: 0;
+
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+
+  box-shadow:
+    0 8px 22px rgba(43, 70, 105, 0.08);
+
+  color: #5c6e83;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #94a3b8;
+
+  box-shadow:
+    0 0 0 4px rgba(148, 163, 184, 0.12);
+}
+
+.status-complete {
+  color: #16734b;
+}
+
+.status-complete .status-dot {
+  background: #20bf6b;
+
+  box-shadow:
+    0 0 0 4px rgba(32, 191, 107, 0.13);
+}
+
+
+/* =========================================================
+   LIQUID GLASS BASE
+   ========================================================= */
+
+.glass {
+  --glass-blur: 14px;
+  --glass-saturate: 1.16;
+  --glass-tint: rgba(255, 255, 255, 0.42);
+  --glass-radius: 26px;
+
+  position: relative;
+
+  width: 100%;
+
+  background: var(--glass-tint);
+
+  -webkit-backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturate));
+
+  backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturate));
+
+  border:
+    1px solid rgba(255, 255, 255, 0.55);
+
+  border-radius:
+    var(--glass-radius);
+
+  box-shadow:
+    0 18px 45px rgba(38, 62, 91, 0.12),
+    0 4px 14px rgba(38, 62, 91, 0.06);
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+/* =========================================================
+   GLASS CONTENT
+   ========================================================= */
+
+.glass-content {
+  position: relative;
+
+  z-index: 3;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+}
+
+
+/* =========================================================
+   GLASS RIM
+   ========================================================= */
+
+.glass::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -1px;
+
+  border-radius: inherit;
+
+  padding: 1px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.75),
+      rgba(255, 255, 255, 0.16) 42%,
+      rgba(80, 105, 135, 0.1)
+    );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  mask-composite: exclude;
+
+  pointer-events: none;
+
+  z-index: 4;
+}
+
+
+/* =========================================================
+   SPECULAR HIGHLIGHT
+   ========================================================= */
+
+.glass > .glass-specular {
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      210deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.13) 22%,
+      rgba(255, 255, 255, 0) 52%
+    );
+
+  box-shadow:
+    inset -0.5px 0.866px 0
+    rgba(255, 255, 255, 0.35);
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   GLASS VARIANTS
+   ========================================================= */
+
+.glass-light {
+  --glass-tint:
+    rgba(255, 255, 255, 0.34);
+
+  --glass-blur:
+    12px;
+
+  box-shadow:
+    0 14px 34px rgba(38, 62, 91, 0.1);
+}
+
+.glass-strong {
+  --glass-tint:
+    rgba(255, 255, 255, 0.62);
+
+  --glass-blur:
+    18px;
+
+  box-shadow:
+    0 20px 48px rgba(38, 62, 91, 0.15);
+}
+
+.glass-dark {
+  --glass-tint:
+    rgba(20, 30, 45, 0.62);
+
+  color: white;
+
+  border-color:
+    rgba(255, 255, 255, 0.14);
+}
+
+.glass-small {
+  --glass-radius:
+    16px;
+
+  --glass-blur:
+    10px;
+}
+
+.glass-large {
+  --glass-radius:
+    32px;
+
+  --glass-blur:
+    18px;
+}
+
+
+/* =========================================================
+   GLASS HOVER
+   ========================================================= */
+
+.glass-hover {
+  cursor: pointer;
+}
+
+.glass-hover:hover {
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 22px 48px
+    rgba(38, 62, 91, 0.17);
+
+  border-color:
+    rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================================================
+   ANALYSIS INFORMATION CARD
+   ========================================================= */
+
+.analysis-info-card {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  padding: 0;
+}
+
+.info-item {
+  min-width: 0;
+
+  padding:
+    22px 24px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  border-right:
+    1px solid rgba(120, 145, 175, 0.13);
+}
+
+.info-item:last-child {
+  border-right: none;
+}
+
+.info-label {
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  color: #8091a6;
+}
+
+.info-item strong {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 15px;
+
+  color: #1c2c42;
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
+
+.dashboard-section {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.section-heading {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding:
+    0 4px;
+}
+
+.section-kicker {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+
+  color: #8091a6;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: 27px;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.025em;
+
+  color: #18263a;
+}
+
+.section-heading p {
+  margin: 7px 0 0;
+
+  color: #718197;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   DR LEVEL BADGE
+   ========================================================= */
+
+.dr-level-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    9px 15px;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(219, 237, 255, 0.72);
+
+  border:
+    1px solid rgba(164, 203, 244, 0.45);
+
+  color:
+    #1765a7;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.06em;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESULT DASHBOARD
+   ========================================================= */
+
+.result-dashboard {
+  width: 100%;
+
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   MAIN ASSESSMENT CARD
+   ========================================================= */
+
+.assessment-card {
+  padding: 28px;
+
+  margin-bottom: 18px;
+}
+
+.assessment-content {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+.assessment-text {
+  min-width: 0;
+}
+
+.assessment-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.13em;
+
+  color: #718197;
+}
+
+.assessment-text h1 {
+  margin: 0;
+
+  font-size: 32px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  color: #142238;
+
+  letter-spacing: -0.03em;
+}
+
+.assessment-text p {
+  margin: 9px 0 0;
+
+  color: #667991;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   CONFIDENCE CARD
+   ========================================================= */
+
+.confidence-card {
+  flex-shrink: 0;
+
+  min-width: 155px;
+
+  padding: 18px 22px;
+
+  text-align: center;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.58);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.7);
+
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.08);
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+}
+
+.confidence-card span {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.confidence-card strong {
+  display: block;
+
+  margin: 6px 0;
+
+  color: #0f172a;
+
+  font-size: 34px;
+
+  line-height: 1;
+
+  font-weight: 700;
+}
+
+.confidence-card small {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   REFERRAL CARD
+   ========================================================= */
+
+.referral-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+
+  --glass-tint:
+    rgba(255, 248, 220, 0.62);
+
+  border-color:
+    rgba(245, 158, 11, 0.3);
+}
+
+.referral-icon {
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    #f59e0b;
+
+  color: white;
+
+  font-size: 22px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 15px
+    rgba(245, 158, 11, 0.25);
+}
+
+.referral-content {
+  min-width: 0;
+}
+
+.referral-title {
+  display: block;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #92400e;
+}
+
+.referral-content p {
+  margin: 4px 0 0;
+
+  color: #78350f;
+
+  font-size: 14px;
+}
+
+.referral-content strong {
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   METRICS GRID
+   ========================================================= */
+
+.metrics-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 20px;
+}
+
+
+/* =========================================================
+   METRIC CARD
+   ========================================================= */
+
+.metric-card {
+  min-height: 120px;
+
+  --glass-radius: 18px;
+
+  --glass-blur: 10px;
+
+  --glass-tint:
+    rgba(255, 255, 255, 0.32);
+}
+
+.metric-inner {
+  height: 100%;
+
+  padding: 19px;
+}
+
+.metric-label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+.metric-value {
+  display: block;
+
+  color: #0f172a;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   METRIC PROGRESS BAR
+   ========================================================= */
+
+.metric-bar {
+  width: 100%;
+
+  height: 5px;
+
+  margin-top: 15px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(148, 163, 184, 0.18);
+}
+
+.metric-bar-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #60a5fa,
+      #2563eb
+    );
+
+  transition:
+    width 0.6s ease;
+}
+
+
+/* =========================================================
+   EVIDENCE GRID
+   ========================================================= */
+
+.evidence-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+.evidence-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  background:
+    rgba(248, 251, 255, 0.58);
+
+  border:
+    1px solid rgba(130, 155, 185, 0.18);
+
+  border-radius:
+    20px;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.6);
+}
+
+
+/* =========================================================
+   EVIDENCE CARD HEADER
+   ========================================================= */
+
+.evidence-card-header {
+  padding:
+    22px 22px 18px;
+
+  border-bottom:
+    1px solid rgba(130, 155, 185, 0.14);
+}
+
+.card-kicker {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  color: #8798ab;
+}
+
+.evidence-card-header h3 {
+  margin: 0;
+
+  font-size: 21px;
+
+  color: #1b2a3e;
+}
+
+.evidence-card-header p {
+  margin: 6px 0 0;
+
+  font-size: 13px;
+
+  color: #718197;
+}
+
+
+/* =========================================================
+   GRAD-CAM
+   ========================================================= */
+
+.gradcam-container {
+  min-height: 270px;
+
+  padding: 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  color: #718197;
+
+  font-size: 13px;
+}
+
+.gradcam-container img {
+  display: block;
+
+  width: 100%;
+
+  max-height: 360px;
+
+  object-fit: contain;
+
+  border-radius: 16px;
+}
+
+
+/* =========================================================
+   LESION GRID
+   ========================================================= */
+
+.lesion-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  padding: 20px;
+}
+
+.lesion-metric {
+  min-width: 0;
+
+  padding:
+    16px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr;
+
+  column-gap: 12px;
+
+  align-items: center;
+
+  background:
+    rgba(255, 255, 255, 0.6);
+
+  border:
+    1px solid rgba(130, 155, 185, 0.15);
+
+  border-radius:
+    15px;
+}
+
+.lesion-icon {
+  grid-row:
+    span 2;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius:
+    11px;
+
+  background:
+    rgba(224, 238, 255, 0.85);
+
+  color:
+    #276aa2;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+.lesion-metric strong {
+  font-size: 21px;
+
+  line-height: 1;
+
+  color: #1b2b40;
+}
+
+.lesion-metric span {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #78889b;
+}
+
+
+/* =========================================================
+   FINDING ROW
+   ========================================================= */
+
+.finding-row {
+  margin:
+    0 20px;
+
+  padding:
+    13px 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-top:
+    1px solid rgba(130, 155, 185, 0.13);
+
+  font-size: 13px;
+
+  color: #687b91;
+}
+
+.finding-row strong {
+  color: #26374c;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   CONFIDENCE BREAKDOWN
+   ========================================================= */
+
+.confidence-breakdown {
+  width: 100%;
+}
+
+.confidence-card-breakdown {
+  padding:
+    24px 28px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 22px;
+}
+
+.confidence-row {
+  width: 100%;
+}
+
+.confidence-label {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 9px;
+
+  gap: 20px;
+}
+
+.confidence-label span {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #596d84;
+}
+
+.confidence-label strong {
+  font-size: 13px;
+
+  color: #1c2d42;
+}
+
+.confidence-track {
+  width: 100%;
+
+  height: 9px;
+
+  overflow: hidden;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(177, 193, 211, 0.28);
+}
+
+.confidence-fill {
+  height: 100%;
+
+  border-radius:
+    inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #74aee2,
+      #3c83c6
+    );
+
+  box-shadow:
+    0 0 10px
+    rgba(60, 131, 198, 0.2);
+
+  transition:
+    width 0.8s ease;
+}
+
+
+/* =========================================================
+   CLINICAL SUMMARY
+   ========================================================= */
+
+.clinical-summary {
+  padding:
+    27px 30px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+}
+
+.summary-icon {
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(33, 191, 107, 0.14);
+
+  color:
+    #15965a;
+
+  font-size: 20px;
+
+  font-weight: 800;
+}
+
+.summary-content {
+  min-width: 0;
+}
+
+.summary-content h3 {
+  margin: 0 0 9px;
+
+  font-size: 19px;
+
+  color: #1b2b40;
+}
+
+.summary-content > p {
+  margin: 0;
+
+  max-width: 850px;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  color: #61738a;
+}
+
+.evidence-statement {
+  margin-top: 20px;
+
+  padding:
+    15px 17px;
+
+  border-radius:
+    14px;
+
+  background:
+    rgba(226, 239, 255, 0.55);
+
+  border:
+    1px solid rgba(151, 185, 220, 0.2);
+}
+
+.evidence-statement span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  color: #6684a4;
+}
+
+.evidence-statement p {
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: #536b85;
+}
+
+
+/* =========================================================
+   PIPELINE
+   ========================================================= */
+
+.pipeline-shell {
+  padding:
+    24px;
+}
+
+
+/* =========================================================
+   PIPELINE STEP CARDS
+   ========================================================= */
+
+.pipeline-steps {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.pipeline-step {
+  position: relative;
+
+  min-width: 0;
+
+  padding:
+    20px;
+
+  border-radius:
+    18px;
+
+  background:
+    rgba(255, 255, 255, 0.42);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.62);
+
+  box-shadow:
+    0 8px 22px
+    rgba(38, 62, 91, 0.07);
+}
+
+.pipeline-step.completed {
+  background:
+    rgba(226, 250, 238, 0.48);
+
+  border-color:
+    rgba(32, 191, 107, 0.35);
+}
+
+.pipeline-step.active {
+  background:
+    rgba(224, 239, 255, 0.55);
+
+  border-color:
+    rgba(60, 131, 198, 0.35);
+}
+
+.pipeline-step.error {
+  background:
+    rgba(255, 241, 241, 0.55);
+
+  border-color:
+    rgba(225, 65, 65, 0.3);
+}
+
+.pipeline-step-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 13px;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(148, 163, 184, 0.16);
+
+  color:
+    #64748b;
+
+  font-weight: 800;
+}
+
+.pipeline-step.completed .pipeline-step-icon {
+  background:
+    #20bf6b;
+
+  color:
+    white;
+
+  box-shadow:
+    0 7px 18px
+    rgba(32, 191, 107, 0.2);
+}
+
+.pipeline-step.active .pipeline-step-icon {
+  background:
+    #3c83c6;
+
+  color:
+    white;
+}
+
+.pipeline-step h3 {
+  margin: 0;
+
+  font-size: 16px;
+
+  color: #1b2b40;
+}
+
+.pipeline-step p {
+  margin: 5px 0 0;
+
+  font-size: 12px;
+
+  color: #718197;
+}
+
+
+/* =========================================================
+   COMPLETION
+   ========================================================= */
+
+.completion-card {
+  padding:
+    23px 27px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 17px;
+
+  background:
+    rgba(226, 250, 238, 0.48);
+}
+
+.completion-icon {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius:
+    50%;
+
+  background:
+    #20bf6b;
+
+  color:
+    white;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 7px 18px
+    rgba(32, 191, 107, 0.22);
+}
+
+.completion-card h2 {
+  margin: 0 0 5px;
+
+  font-size: 19px;
+
+  color: #17643f;
+}
+
+.completion-card p {
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  color: #4b7d63;
+}
+
+
+/* =========================================================
+   ERROR CARD
+   ========================================================= */
+
+.error-card {
+  padding:
+    20px 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  background:
+    rgba(255, 241, 241, 0.55);
+
+  border-color:
+    rgba(240, 120, 120, 0.3);
+}
+
+.error-icon {
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(225, 65, 65, 0.12);
+
+  color:
+    #c83c3c;
+
+  font-weight: 800;
+}
+
+.error-card h3 {
+  margin: 0 0 5px;
+
+  font-size: 16px;
+
+  color: #9d3030;
+}
+
+.error-card p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #9b5b5b;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-analysis {
+  min-height: 320px;
+
+  padding:
+    50px 30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 62px;
+  height: 62px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(218, 236, 255, 0.75);
+
+  color:
+    #4b87bc;
+
+  font-size: 30px;
+}
+
+.empty-analysis h1 {
+  margin: 0 0 10px;
+
+  font-size: 25px;
+
+  color: #1d2d42;
+}
+
+.empty-analysis p {
+  max-width: 460px;
+
+  margin: 0;
+
+  line-height: 1.6;
+
+  font-size: 14px;
+
+  color: #6d7e93;
+}
+
+
+/* =========================================================
+   GLASS BUTTON
+   ========================================================= */
+
+.glass-button {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    10px 18px;
+
+  border-radius:
+    14px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.45);
+
+  background:
+    rgba(255, 255, 255, 0.38);
+
+  -webkit-backdrop-filter:
+    blur(10px) saturate(1.15);
+
+  backdrop-filter:
+    blur(10px) saturate(1.15);
+
+  box-shadow:
+    0 7px 20px
+    rgba(38, 62, 91, 0.1);
+
+  color:
+    #1c2d42;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.glass-button:hover {
+  transform:
+    translateY(-2px);
+
+  background:
+    rgba(255, 255, 255, 0.58);
+
+  box-shadow:
+    0 11px 26px
+    rgba(38, 62, 91, 0.15);
+}
+
+.glass-button:active {
+  transform:
+    translateY(0);
+}
+
+
+/* =========================================================
+   GLASS BADGE
+   ========================================================= */
+
+.glass-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    6px 12px;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(255, 255, 255, 0.35);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.35);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+
+  backdrop-filter:
+    blur(8px);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   GLASS DIVIDER
+   ========================================================= */
+
+.glass-divider {
+  width: 100%;
+
+  height: 1px;
+
+  margin:
+    16px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(110, 140, 170, 0.25),
+      transparent
+    );
+}
+
+
+/* =========================================================
+   UPLOAD PAGE SUPPORT
+   ========================================================= */
+
+.upload-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  padding:
+    55px 20px 80px;
+}
+
+.upload-container {
+  width: 100%;
+  max-width: 920px;
+}
+
+.upload-card {
+  padding:
+    32px;
+}
+
+.upload-card h1 {
+  margin:
+    0 0 10px;
+
+  color:
+    #152238;
+
+  font-size:
+    34px;
+
+  letter-spacing:
+    -0.03em;
+}
+
+.upload-card > p {
+  margin:
+    0 0 25px;
+
+  color:
+    #667991;
+
+  font-size:
+    15px;
+}
+
+.upload-section {
+  padding:
+    24px;
+
+  margin-top:
+    18px;
+
+  border-radius:
+    20px;
+
+  background:
+    rgba(255, 255, 255, 0.42);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.6);
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.55);
+}
+
+.upload-section h3 {
+  margin:
+    0 0 8px;
+
+  font-size:
+    18px;
+
+  color:
+    #1b2b40;
+}
+
+.upload-section p {
+  margin:
+    0 0 18px;
+
+  color:
+    #718197;
+
+  font-size:
+    13px;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.glass:focus-visible,
+.glass-button:focus-visible {
+  outline:
+    2px solid rgba(60, 130, 246, 0.7);
+
+  outline-offset:
+    3px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1000px) {
+
+  .analysis-page {
+    padding:
+      40px 20px 60px;
+  }
+
+  .analysis-info-card {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .info-item:nth-child(2) {
+    border-right:
+      none;
+  }
+
+  .info-item:nth-child(-n + 2) {
+    border-bottom:
+      1px solid rgba(120, 145, 175, 0.13);
+  }
+
+  .evidence-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .pipeline-steps {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .analysis-page {
+    padding:
+      28px 14px 55px;
+  }
+
+  .analysis-container {
+    gap:
+      22px;
+  }
+
+  .analysis-header {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      18px;
+  }
+
+  .analysis-header h1 {
+    font-size:
+      34px;
+  }
+
+  .analysis-header p {
+    font-size:
+      14px;
+  }
+
+  .analysis-status {
+    align-self:
+      flex-start;
+  }
+
+  .analysis-info-card {
+    grid-template-columns:
+      1fr;
+  }
+
+  .info-item {
+    padding:
+      16px 19px;
+
+    border-right:
+      none;
+
+    border-bottom:
+      1px solid rgba(120, 145, 175, 0.13);
+  }
+
+  .info-item:last-child {
+    border-bottom:
+      none;
+  }
+
+  .section-heading {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      10px;
+  }
+
+  .section-heading h2 {
+    font-size:
+      24px;
+  }
+
+  .dr-level-badge {
+    align-self:
+      flex-start;
+  }
+
+  .assessment-card {
+    padding:
+      20px;
+  }
+
+  .assessment-content {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      20px;
+  }
+
+  .assessment-text h1 {
+    font-size:
+      25px;
+  }
+
+  .confidence-card {
+    width:
+      100%;
+
+    min-width:
+      0;
+  }
+
+  .metrics-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .evidence-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .lesion-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .referral-card {
+    align-items:
+      flex-start;
+  }
+
+  .clinical-summary {
+    padding:
+      21px;
+
+    flex-direction:
+      column;
+  }
+
+  .pipeline-shell {
+    padding:
+      15px;
+  }
+
+  .pipeline-steps {
+    grid-template-columns:
+      1fr;
+  }
+
+  .completion-card {
+    align-items:
+      flex-start;
+
+    padding:
+      20px;
+  }
+
+  .upload-page {
+    padding:
+      25px 14px 50px;
+  }
+
+  .upload-card {
+    padding:
+      22px;
+  }
+
+  .upload-card h1 {
+    font-size:
+      28px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .analysis-page {
+    padding:
+      20px 10px 45px;
+  }
+
+  .analysis-header h1 {
+    font-size:
+      30px;
+  }
+
+  .brand-kicker {
+    font-size:
+      10px;
+  }
+
+  .assessment-text h1 {
+    font-size:
+      23px;
+  }
+
+  .assessment-card {
+    padding:
+      18px;
+  }
+
+  .referral-card {
+    padding:
+      16px;
+  }
+
+  .metric-inner {
+    padding:
+      17px;
+  }
+
+  .evidence-card-header {
+    padding:
+      18px;
+  }
+
+  .finding-row {
+    margin:
+      0 15px;
+  }
+
+  .lesion-grid {
+    padding:
+      15px;
+  }
+
+  .pipeline-shell {
+    padding:
+      12px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior:
+      auto;
+  }
+
+  .glass,
+  .glass-button,
+  .confidence-fill,
+  .metric-bar-fill {
+    transition:
+      none;
+  }
+
+  .glass-hover:hover {
+    transform:
+      none;
+  }
+}
+
+
+/* =========================================================
+   REDUCED TRANSPARENCY
+   ========================================================= */
+
+@media (prefers-reduced-transparency: reduce) {
+
+  .glass {
+    --glass-tint:
+      rgba(255, 255, 255, 0.92);
+
+    -webkit-backdrop-filter:
+      none;
+
+    backdrop-filter:
+      none;
+  }
+
+  .glass-dark {
+    --glass-tint:
+      rgba(20, 28, 42, 0.92);
+  }
+}
