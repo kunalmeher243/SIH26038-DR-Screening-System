@@ -1,215 +1,417 @@
 import { create } from "zustand";
 
 import {
-  assessQuality,
+  checkQuality,
   enhanceImage,
   gradeImage,
   generateReport,
 } from "../api/endpoints";
 
-const useAnalysisStore = create((set) => ({
-  // =========================
-  // Uploaded file
-  // =========================
-  file: null,
 
-  // =========================
-  // Selected eye
-  // =========================
-  eye: "right",
+const useAnalysisStore = create(
+  (set, get) => ({
 
-  // =========================
-  // Current pipeline stage
-  // =========================
-  stage: "idle",
+    /* =====================================================
+       STATE
+       ===================================================== */
 
-  // =========================
-  // API responses
-  // =========================
-  quality: null,
-  enhance: null,
-  grade: null,
-  report: null,
+    file: null,
 
-  // =========================
-  // Error
-  // =========================
-  error: null,
+    eye: "right",
 
-  // =========================
-  // Set file
-  // =========================
-  setFile: (file) =>
-    set({
-      file,
-      stage: "idle",
-      quality: null,
-      enhance: null,
-      grade: null,
-      report: null,
-      error: null,
-    }),
+    stage: "idle",
 
-  // =========================
-  // Set eye
-  // =========================
-  setEye: (eye) =>
-    set({
-      eye,
-    }),
+    quality: null,
 
-  // =========================
-  // Set stage
-  // =========================
-  setStage: (stage) =>
-    set({
-      stage,
-    }),
+    enhance: null,
 
-  // =========================
-  // Set API responses
-  // =========================
-  setQuality: (quality) =>
-    set({
-      quality,
-    }),
+    grade: null,
 
-  setEnhance: (enhance) =>
-    set({
-      enhance,
-    }),
+    report: null,
 
-  setGrade: (grade) =>
-    set({
-      grade,
-    }),
+    error: null,
 
-  setReport: (report) =>
-    set({
-      report,
-      stage: "done",
-      error: null,
-    }),
 
-  // =========================
-  // Set error
-  // =========================
-  setError: (error) =>
-    set({
-      error,
-      stage: "error",
-    }),
+    /* =====================================================
+       SET FILE
+       ===================================================== */
 
-  // =========================
-  // FULL ANALYSIS PIPELINE
-  // =========================
-  runFullAnalysis: async (file) => {
-    try {
-      // Clear previous error
+    setFile: (file) =>
       set({
+        file,
+        stage: "idle",
+        quality: null,
+        enhance: null,
+        grade: null,
+        report: null,
         error: null,
-        stage: "quality",
-      });
+      }),
 
-      // -------------------------
-      // 1. Image Quality
-      // -------------------------
-      console.log("Starting quality assessment...");
 
-      const qualityResult = await assessQuality(file);
+    /* =====================================================
+       SET EYE
+       ===================================================== */
 
+    setEye: (eye) =>
       set({
-        quality: qualityResult,
-      });
+        eye,
+      }),
 
-      console.log("Quality result:", qualityResult);
 
-      // -------------------------
-      // 2. Image Enhancement
-      // -------------------------
+    /* =====================================================
+       SET STAGE
+       ===================================================== */
+
+    setStage: (stage) =>
       set({
-        stage: "enhance",
-      });
+        stage,
+      }),
 
-      console.log("Starting image enhancement...");
 
-      const enhanceResult = await enhanceImage(file);
+    /* =====================================================
+       SET QUALITY
+       ===================================================== */
 
+    setQuality: (quality) =>
       set({
-        enhance: enhanceResult,
-      });
+        quality,
+      }),
 
-      console.log("Enhancement result:", enhanceResult);
 
-      // -------------------------
-      // 3. Disease Grading
-      // -------------------------
+    /* =====================================================
+       SET ENHANCEMENT
+       ===================================================== */
+
+    setEnhance: (enhance) =>
       set({
-        stage: "grade",
-      });
+        enhance,
+      }),
 
-      console.log("Starting disease grading...");
 
-      const gradeResult = await gradeImage(file);
+    /* =====================================================
+       SET GRADE
+       ===================================================== */
 
+    setGrade: (grade) =>
       set({
-        grade: gradeResult,
-      });
+        grade,
+      }),
 
-      console.log("Grade result:", gradeResult);
 
-      // -------------------------
-      // 4. Generate Report
-      // -------------------------
+    /* =====================================================
+       SET REPORT
+       ===================================================== */
+
+    setReport: (report) =>
       set({
-        stage: "report",
-      });
-
-      console.log("Generating final report...");
-
-      const reportResult = await generateReport(file);
-
-      set({
-        report: reportResult,
+        report,
         stage: "done",
         error: null,
-      });
+      }),
 
-      console.log("Final report:", reportResult);
 
-      return reportResult;
-    } catch (error) {
-      console.error("Analysis failed:", error);
+    /* =====================================================
+       SET ERROR
+       ===================================================== */
 
-      const message =
-        error?.response?.data?.detail ||
-        error?.response?.data?.message ||
-        error?.message ||
-        "Analysis failed. Please try again.";
+    setError: (error) =>
+      set({
+        error,
+        stage: "error",
+      }),
+
+
+    /* =====================================================
+       FULL ANALYSIS PIPELINE
+       ===================================================== */
+
+    runFullAnalysis: async () => {
+
+      const {
+        file,
+        setStage,
+        setQuality,
+        setEnhance,
+        setGrade,
+        setReport,
+        setError,
+      } = get();
+
+
+      /* ===================================================
+         NO FILE
+         =================================================== */
+
+      if (!file) {
+
+        setError({
+          type: "unknown",
+          message:
+            "Please select a retinal image first.",
+        });
+
+        return;
+      }
+
+
+      /* ===================================================
+         CLEAR PREVIOUS ERROR
+         =================================================== */
 
       set({
-        error: message,
-        stage: "error",
+        error: null,
       });
 
-      throw error;
-    }
-  },
 
-  // =========================
-  // Reset everything
-  // =========================
-  reset: () =>
-    set({
-      file: null,
-      eye: "right",
-      stage: "idle",
-      quality: null,
-      enhance: null,
-      grade: null,
-      report: null,
-      error: null,
-    }),
-}));
+      try {
+
+        /* =================================================
+           STEP 1 — IMAGE QUALITY
+           ================================================= */
+
+        setStage("quality");
+
+
+        const qualityResult =
+          await checkQuality(file);
+
+
+        console.log(
+          "Quality response:",
+          qualityResult
+        );
+
+
+        setQuality(
+          qualityResult
+        );
+
+
+        /* =================================================
+           UNGRADABLE GATE
+           ================================================= */
+
+        if (
+          qualityResult &&
+          qualityResult.gradable === false
+        ) {
+
+          console.log(
+            "Image is UNGRADABLE. Stopping pipeline."
+          );
+
+
+          setError({
+
+            type: "ungradable",
+
+            message:
+              qualityResult.recommendation ||
+              "The retinal image is not suitable for automated screening.",
+
+          });
+
+
+          /*
+           * VERY IMPORTANT:
+           *
+           * STOP HERE.
+           *
+           * These functions WILL NOT execute:
+           *
+           * enhanceImage()
+           * gradeImage()
+           * generateReport()
+           */
+
+          return;
+        }
+
+
+        /* =================================================
+           STEP 2 — IMAGE ENHANCEMENT
+           ================================================= */
+
+        setStage("enhance");
+
+
+        const enhanceResult =
+          await enhanceImage(file);
+
+
+        console.log(
+          "Enhancement response:",
+          enhanceResult
+        );
+
+
+        setEnhance(
+          enhanceResult
+        );
+
+
+        /* =================================================
+           STEP 3 — DR GRADING
+           ================================================= */
+
+        setStage("grade");
+
+
+        const gradeResult =
+          await gradeImage(file);
+
+
+        console.log(
+          "Grade response:",
+          gradeResult
+        );
+
+
+        setGrade(
+          gradeResult
+        );
+
+
+        /* =================================================
+           STEP 4 — CLINICAL REPORT
+           ================================================= */
+
+        setStage("report");
+
+
+        const reportResult =
+          await generateReport(file);
+
+
+        console.log(
+          "Report response:",
+          reportResult
+        );
+
+
+        setReport(
+          reportResult
+        );
+
+
+        /* =================================================
+           COMPLETE
+           ================================================= */
+
+        setStage("done");
+
+
+        console.log(
+          "Analysis pipeline completed successfully."
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Analysis pipeline failed:",
+          error
+        );
+
+
+        /* =================================================
+           TIMEOUT
+           ================================================= */
+
+        const isTimeout =
+          error?.code ===
+            "ECONNABORTED" ||
+          error?.code ===
+            "ETIMEDOUT";
+
+
+        if (isTimeout) {
+
+          setError({
+
+            type: "api_timeout",
+
+            message:
+              "The screening service timed out. Please try the analysis again.",
+
+          });
+
+          return;
+        }
+
+
+        /* =================================================
+           API ERROR
+           ================================================= */
+
+        const isApiError =
+          Boolean(
+            error?.response
+          ) ||
+          error?.code ===
+            "ERR_BAD_RESPONSE";
+
+
+        if (isApiError) {
+
+          setError({
+
+            type: "api_error",
+
+            message:
+              error?.response?.data?.detail ||
+              "The screening service returned an error. Please try again.",
+
+          });
+
+          return;
+        }
+
+
+        /* =================================================
+           UNKNOWN ERROR
+           ================================================= */
+
+        setError({
+
+          type: "unknown",
+
+          message:
+            error?.message ||
+            "An unexpected error occurred during analysis.",
+
+        });
+
+      }
+    },
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
+
+    reset: () =>
+      set({
+
+        file: null,
+
+        eye: "right",
+
+        stage: "idle",
+
+        quality: null,
+
+        enhance: null,
+
+        grade: null,
+
+        report: null,
+
+        error: null,
+
+      }),
+
+  })
+);
+
 
 export default useAnalysisStore;

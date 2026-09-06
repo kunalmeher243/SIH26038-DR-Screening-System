@@ -29,53 +29,48 @@ body {
     font-family: "Inter", Arial, sans-serif;
     color: var(--color-text-primary);
 
+    /* RetinaSense / Heltro-inspired medical blue background */
     background:
         radial-gradient(
-            circle at 5% 5%,
-            rgba(47, 111, 159, 0.32),
-            transparent 28%
-        ),
-
-        radial-gradient(
-            circle at 95% 8%,
-            rgba(42, 168, 137, 0.25),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(77, 148, 195, 0.18),
+            circle at 12% 12%,
+            rgba(190, 220, 231, 0.16) 0%,
             transparent 34%
         ),
-
         radial-gradient(
-            circle at 15% 85%,
-            rgba(76, 139, 190, 0.16),
-            transparent 30%
+            circle at 88% 18%,
+            rgba(198, 225, 231, 0.14) 0%,
+            transparent 34%
         ),
-
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(42, 168, 137, 0.12),
-            transparent 28%
-        ),
-
         linear-gradient(
-            135deg,
-            #d7e9f7 0%,
-            #e8f3fa 35%,
-            #eef7f9 65%,
-            #dcefed 100%
+            180deg,
+            #7295a7 0%,
+            #7b9eaf 42%,
+            #89aabd 100%
         );
 
     background-attachment: fixed;
-
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
     line-height: 1.5;
 }
 
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.035) 0%,
+            rgba(255, 255, 255, 0.00) 55%,
+            rgba(42, 86, 107, 0.045) 100%
+        );
+
+    z-index: -1;
+}
 
 /* =========================================================
    2. ROOT

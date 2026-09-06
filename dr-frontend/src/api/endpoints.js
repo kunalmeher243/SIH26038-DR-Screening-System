@@ -3,98 +3,235 @@ import apiClient from "./client";
 import {
   USE_DUMMY,
   DUMMY_QUALITY,
+  DUMMY_BORDERLINE_QUALITY,
+  DUMMY_UNGRADABLE_QUALITY,
   DUMMY_ENHANCE,
   DUMMY_GRADE,
   DUMMY_REPORT,
 } from "../dummy/mockData";
 
 
-// ----------------------------------------
-// Helper: create FormData
-// ----------------------------------------
+/* =========================================================
+   IMAGE QUALITY
+   ========================================================= */
 
-const createFormData = (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  return formData;
-};
-
-
-// ----------------------------------------
-// 1. IMAGE QUALITY
-// ----------------------------------------
-
-export const assessQuality = async (file) => {
-  // Dummy mode
+export async function checkQuality(file) {
   if (USE_DUMMY) {
-    return DUMMY_QUALITY;
+    await delay(500);
+
+    const filename =
+      file?.name?.toLowerCase() || "";
+
+
+    /* -----------------------------------------------
+       API ERROR TEST
+       ----------------------------------------------- */
+
+    if (
+      filename.includes("api-error") ||
+      filename.includes("error")
+    ) {
+      const error = new Error(
+        "Screening service is temporarily unavailable."
+      );
+
+      error.code = "ERR_BAD_RESPONSE";
+
+      error.response = {
+        status: 500,
+        data: {
+          detail:
+            "Screening service is temporarily unavailable.",
+        },
+      };
+
+      throw error;
+    }
+
+
+    /* -----------------------------------------------
+       TIMEOUT TEST
+       ----------------------------------------------- */
+
+    if (filename.includes("timeout")) {
+      const error = new Error(
+        "The screening service timed out. Please try again."
+      );
+
+      error.code = "ECONNABORTED";
+
+      error.request = {};
+
+      throw error;
+    }
+
+
+    /* -----------------------------------------------
+       UNGRADABLE TEST IMAGE
+       ----------------------------------------------- */
+
+    if (
+      filename.includes("ungradable") ||
+      filename.includes("reject") ||
+      filename.includes("poor")
+    ) {
+      return {
+        ...DUMMY_UNGRADABLE_QUALITY,
+      };
+    }
+
+
+    /* -----------------------------------------------
+       BORDERLINE TEST IMAGE
+       ----------------------------------------------- */
+
+    if (
+      filename.includes("borderline") ||
+      filename.includes("usable")
+    ) {
+      return {
+        ...DUMMY_BORDERLINE_QUALITY,
+      };
+    }
+
+
+    /* -----------------------------------------------
+       NORMAL GRADABLE IMAGE
+       ----------------------------------------------- */
+
+    return {
+      ...DUMMY_QUALITY,
+    };
   }
 
-  // Real API
+
+  /* -----------------------------------------------
+     REAL BACKEND
+     ----------------------------------------------- */
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+
   const response = await apiClient.post(
     "/api/quality",
-    createFormData(file)
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
-};
+}
 
 
-// ----------------------------------------
-// 2. IMAGE ENHANCEMENT
-// ----------------------------------------
+/* =========================================================
+   IMAGE ENHANCEMENT
+   ========================================================= */
 
-export const enhanceImage = async (file) => {
-  // Dummy mode
+export async function enhanceImage(file) {
   if (USE_DUMMY) {
-    return DUMMY_ENHANCE;
+    await delay(700);
+
+    return {
+      ...DUMMY_ENHANCE,
+    };
   }
 
-  // Real API
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+
   const response = await apiClient.post(
     "/api/enhance",
-    createFormData(file)
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
-};
+}
 
 
-// ----------------------------------------
-// 3. DR GRADING
-// ----------------------------------------
+/* =========================================================
+   DR GRADING
+   ========================================================= */
 
-export const gradeImage = async (file) => {
-  // Dummy mode
+export async function gradeImage(file) {
   if (USE_DUMMY) {
-    return DUMMY_GRADE;
+    await delay(900);
+
+    return {
+      ...DUMMY_GRADE,
+    };
   }
 
-  // Real API
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+
   const response = await apiClient.post(
     "/api/grade",
-    createFormData(file)
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
-};
+}
 
 
-// ----------------------------------------
-// 4. SCREENING REPORT
-// ----------------------------------------
+/* =========================================================
+   SCREENING REPORT
+   ========================================================= */
 
-export const generateReport = async (file) => {
-  // Dummy mode
+export async function generateReport(file) {
   if (USE_DUMMY) {
-    return DUMMY_REPORT;
+    await delay(800);
+
+    return {
+      ...DUMMY_REPORT,
+
+      generated_at:
+        new Date().toISOString(),
+    };
   }
 
-  // Real API
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+
   const response = await apiClient.post(
     "/api/report",
-    createFormData(file)
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;
-};
+}
+
+
+/* =========================================================
+   SMALL DELAY FOR DEMO PIPELINE
+   ========================================================= */
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}

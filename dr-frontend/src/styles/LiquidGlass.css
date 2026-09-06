@@ -1,13 +1,3 @@
-/* =========================================================
-   RETINA AI — LIQUID GLASS DESIGN SYSTEM
-   DR Screening Application
-   ========================================================= */
-
-
-/* =========================================================
-   GLOBAL RESET
-   ========================================================= */
-
 * {
     box-sizing: border-box;
 }
@@ -2382,5 +2372,1315 @@ html {
 
     .pipeline-spinner {
         animation: none;
+    }
+}
+
+
+/* =========================================================
+   RETINA AI — FINAL ANALYSIS / RETINAL EVIDENCE OVERRIDES
+   Applied on top of the existing Liquid Glass system
+   ========================================================= */
+
+/* Remove the old nested-evidence visual treatment when the
+   new GradCAMViewer is used directly inside the section. */
+.explainability-section {
+    gap: 18px;
+}
+
+.explainability-section > .section-heading {
+    margin-bottom: 2px;
+}
+
+/* =========================================================
+   RETINAL IMAGE + GRAD-CAM
+   ========================================================= */
+
+.visual-explainability {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.visual-explainability-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+    padding: 0 2px;
+}
+
+.visual-explainability-header h2 {
+    margin: 4px 0 5px;
+    color: var(--color-heading);
+    font-size: 25px;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
+.visual-explainability-header p {
+    margin: 0;
+    max-width: 700px;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.visual-confidence {
+    flex: 0 0 auto;
+    min-width: 112px;
+    padding: 10px 14px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.38);
+    box-shadow: 0 8px 20px rgba(38, 62, 91, 0.07);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.visual-confidence span {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--color-muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+}
+
+.visual-confidence strong {
+    color: var(--color-heading);
+    font-family: "Manrope", Arial, sans-serif;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.retinal-analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.retinal-visual-card {
+    min-width: 0;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.retinal-visual-card > .glass-content {
+    padding: 0 !important;
+}
+
+.retinal-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 91px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(47, 111, 159, 0.10);
+}
+
+.retinal-card-header h3 {
+    margin: 4px 0 3px;
+    color: var(--color-heading);
+    font-size: 19px;
+    line-height: 1.2;
+}
+
+.retinal-card-header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.card-kicker {
+    display: block;
+    color: var(--color-primary);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.image-status-badge {
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    border: 1px solid rgba(47, 111, 159, 0.15);
+    border-radius: 999px;
+    background: rgba(232, 244, 251, 0.70);
+    color: var(--color-primary);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.image-status-badge.ai {
+    background: rgba(42, 168, 137, 0.09);
+    border-color: rgba(42, 168, 137, 0.18);
+    color: var(--color-secondary);
+}
+
+.retinal-image-frame {
+    width: 100%;
+    height: 350px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(47, 111, 159, 0.08), transparent 54%),
+        rgba(237, 245, 250, 0.52);
+}
+
+.retinal-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.gradcam-frame {
+    position: relative;
+}
+
+.gradcam-placeholder {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #111827;
+}
+
+.gradcam-base-image {
+    position: relative;
+    z-index: 1;
+}
+
+.gradcam-overlay-placeholder {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 12px;
+    mix-blend-mode: screen;
+}
+
+.attention-orb {
+    position: absolute;
+    width: 135px;
+    height: 135px;
+    border-radius: 50%;
+    filter: blur(32px);
+    opacity: 0.46;
+    background: rgba(255, 72, 40, 0.70);
+}
+
+.orb-one {
+    top: 28%;
+    left: 38%;
+}
+
+.orb-two {
+    top: 48%;
+    left: 57%;
+    width: 94px;
+    height: 94px;
+    opacity: 0.36;
+    background: rgba(255, 190, 35, 0.72);
+}
+
+.orb-three {
+    top: 20%;
+    left: 58%;
+    width: 78px;
+    height: 78px;
+    opacity: 0.27;
+    background: rgba(255, 75, 55, 0.65);
+}
+
+.gradcam-demo-label {
+    position: absolute;
+    z-index: 4;
+    left: 11px;
+    bottom: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 999px;
+    background: rgba(12, 24, 38, 0.58);
+    color: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: blur(9px);
+    backdrop-filter: blur(9px);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.demo-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff6a45;
+    box-shadow: 0 0 9px rgba(255, 106, 69, 0.72);
+}
+
+.gradcam-explanation {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 16px 16px;
+    padding: 11px 12px;
+    border: 1px solid rgba(47, 111, 159, 0.10);
+    border-radius: 11px;
+    background: rgba(232, 244, 251, 0.40);
+}
+
+.explanation-icon {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(47, 111, 159, 0.09);
+    color: var(--color-primary);
+    font-size: 13px;
+}
+
+.gradcam-explanation strong {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--color-heading);
+    font-size: 11px;
+}
+
+.gradcam-explanation p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.retinal-card-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    padding: 10px 20px 14px;
+    border-top: 1px solid rgba(47, 111, 159, 0.08);
+}
+
+.retinal-card-footer span {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--color-muted);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+}
+
+.retinal-card-footer strong {
+    display: block;
+    max-width: 240px;
+    overflow: hidden;
+    color: var(--color-text-primary);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.retinal-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    border: 1px dashed rgba(47, 111, 159, 0.22);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.34);
+}
+
+.retinal-placeholder-icon {
+    margin-bottom: 8px;
+    color: var(--color-primary);
+    font-size: 34px;
+}
+
+.retinal-placeholder strong {
+    color: var(--color-heading);
+    font-size: 13px;
+}
+
+.retinal-placeholder p {
+    max-width: 300px;
+    margin: 5px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.visual-interpretation-card {
+    margin-top: 18px;
+    padding: 16px 18px;
+}
+
+.visual-interpretation-card > .glass-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 14px;
+}
+
+.interpretation-icon {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(47, 111, 159, 0.13);
+    border-radius: 11px;
+    background: rgba(47, 111, 159, 0.08);
+    color: var(--color-primary);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.interpretation-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.interpretation-content h3 {
+    margin: 2px 0 2px;
+    font-size: 16px;
+}
+
+.interpretation-content p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.interpretation-status {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: 1px solid rgba(42, 168, 137, 0.17);
+    border-radius: 999px;
+    background: rgba(42, 168, 137, 0.07);
+    color: var(--color-secondary);
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.interpretation-status .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--color-secondary);
+    box-shadow: none;
+}
+
+.lesion-overlay-card {
+    margin-top: 18px;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.lesion-overlay-card > .glass-content {
+    padding: 0 !important;
+}
+
+.lesion-overlay-frame {
+    height: 400px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(237, 245, 250, 0.52);
+}
+
+/* =========================================================
+   LESION SUMMARY
+   ========================================================= */
+
+.lesion-summary-shell {
+    margin-top: 18px;
+    padding: 20px !important;
+}
+
+.lesion-summary-shell > .glass-content {
+    padding: 0 !important;
+}
+
+.section-mini-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(130, 155, 185, 0.12);
+}
+
+.section-mini-heading h3 {
+    margin: 3px 0 3px;
+    color: var(--color-heading);
+    font-size: 19px;
+}
+
+.section-mini-heading p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+}
+
+.finding-status-badge {
+    flex: 0 0 auto;
+    padding: 6px 9px;
+    border: 1px solid rgba(47, 111, 159, 0.13);
+    border-radius: 999px;
+    background: rgba(232, 244, 251, 0.58);
+    color: var(--color-primary);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.lesion-summary-shell .lesion-grid {
+    padding: 16px 0 14px;
+    gap: 11px;
+}
+
+.lesion-summary-shell .lesion-metric {
+    padding: 13px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.50);
+}
+
+.finding-details-grid {
+    border-top: 1px solid rgba(130, 155, 185, 0.12);
+}
+
+.lesion-summary-shell .finding-row {
+    margin: 0;
+    padding: 11px 2px;
+}
+
+.finding-empty {
+    padding: 24px 4px 6px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .retinal-analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .visual-explainability-header {
+        align-items: flex-start;
+    }
+
+    .retinal-image-frame {
+        height: 360px;
+    }
+}
+
+@media (max-width: 600px) {
+    .visual-explainability-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .visual-confidence {
+        width: 100%;
+    }
+
+    .retinal-card-header {
+        min-height: 0;
+        padding: 16px;
+    }
+
+    .retinal-card-header h3 {
+        font-size: 18px;
+    }
+
+    .retinal-image-frame {
+        height: 300px;
+        padding: 12px;
+    }
+
+    .retinal-card-footer {
+        padding: 10px 16px 13px;
+    }
+
+    .visual-interpretation-card {
+        padding: 14px;
+    }
+
+    .visual-interpretation-card > .glass-content {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .interpretation-status {
+        margin-left: 52px;
+    }
+
+    .section-mini-heading {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .finding-status-badge {
+        align-self: flex-start;
+    }
+
+    .lesion-summary-shell {
+        padding: 16px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .attention-orb {
+        filter: none;
+    }
+}
+
+/* =========================================================
+   RETINA AI — UPLOAD PAGE
+   FINAL SPACING / LAYOUT
+   ========================================================= */
+
+/* Page */
+.upload-page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 56px 20px 80px;
+}
+
+/* Main glass container */
+.upload-container {
+    width: 100%;
+    max-width: 920px;
+}
+
+.upload-card {
+    width: 100%;
+    padding: 42px !important;
+}
+
+/* Glass content must not collapse the internal spacing */
+.upload-card > .glass-content {
+    width: 100%;
+}
+
+/* Header */
+.upload-header {
+    width: 100%;
+    padding: 0 2px;
+}
+
+.upload-header .brand-kicker {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #55708f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+}
+
+.upload-header h1 {
+    margin: 0;
+    color: #152238;
+    font-size: clamp(34px, 4vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+}
+
+.upload-header p {
+    margin: 12px 0 0;
+    max-width: 720px;
+    color: #667991;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   IMAGE / UPLOAD SECTION
+   ========================================================= */
+
+.upload-card .upload-section {
+    width: 100%;
+    margin-top: 32px !important;
+    padding: 30px !important;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.34);
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    box-shadow:
+        0 12px 30px rgba(38, 62, 91, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Dropzone has its own visual boundary.
+   This creates a clear gap between the outer glass card
+   and the actual upload area. */
+.upload-dropzone {
+    width: 100%;
+    min-height: 215px;
+    padding: 34px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+
+    border: 1px dashed rgba(79, 126, 168, 0.34);
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(247, 252, 255, 0.72),
+            rgba(232, 244, 251, 0.48)
+        );
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.82),
+        0 8px 24px rgba(38, 62, 91, 0.05);
+
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.upload-dropzone:hover {
+    border-color: rgba(47, 111, 159, 0.52);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.84),
+            rgba(235, 247, 253, 0.66)
+        );
+    transform: translateY(-1px);
+}
+
+.upload-dropzone:focus-visible {
+    outline: 2px solid rgba(47, 111, 159, 0.55);
+    outline-offset: 3px;
+}
+
+.upload-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+    background: rgba(47, 111, 159, 0.10);
+    color: #2f6f9f;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.upload-dropzone h3 {
+    margin: 2px 0 0;
+    color: #1b2b40;
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.upload-dropzone p {
+    margin: 0;
+    color: #718197;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.upload-format {
+    margin-top: 5px;
+    color: #526a82;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.choose-image-button {
+    margin-top: 5px;
+}
+
+/* =========================================================
+   SELECTED IMAGE
+   ========================================================= */
+
+.uploaded-image-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upload-preview {
+    width: min(100%, 620px);
+    min-height: 280px;
+    padding: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+    background: rgba(18, 28, 40, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow:
+        0 16px 36px rgba(30, 47, 67, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.retinal-upload-image {
+    width: 100%;
+    max-width: 100%;
+    max-height: 420px;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.upload-image-placeholder {
+    min-height: 250px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 14px;
+}
+
+/* File metadata */
+.file-info {
+    width: min(100%, 620px);
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+}
+
+.file-info-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.file-info-label {
+    color: #8292a5;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.file-info-item strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #1d2e43;
+    font-size: 15px;
+}
+
+.remove-image-button {
+    margin-top: 20px;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.upload-error {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: rgba(255, 241, 241, 0.62);
+    border: 1px solid rgba(220, 92, 92, 0.25);
+}
+
+.upload-error strong {
+    display: block;
+    color: #9d3030;
+    font-size: 14px;
+}
+
+.upload-error p {
+    margin: 5px 0 0;
+    color: #9b5b5b;
+    font-size: 13px;
+}
+
+/* =========================================================
+   EYE SELECTOR
+   ========================================================= */
+
+.upload-card .eye-selector {
+    margin-top: 28px !important;
+    padding: 30px !important;
+}
+
+.eye-selector-header h3 {
+    margin: 0;
+    color: #1b2b40;
+    font-size: 20px;
+}
+
+.eye-selector-header p {
+    margin: 7px 0 0;
+    color: #718197;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.eye-options {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
+
+.eye-option {
+    min-height: 42px;
+    padding: 8px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 12px;
+    color: #334861;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.eye-option input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #2f6f9f;
+}
+
+.eye-option-active {
+    background: rgba(225, 239, 250, 0.62);
+    border-color: rgba(47, 111, 159, 0.18);
+    color: #1d557d;
+    font-weight: 700;
+}
+
+/* =========================================================
+   START ANALYSIS
+   ========================================================= */
+
+.upload-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px !important;
+    padding-top: 0;
+}
+
+.analysis-button {
+    min-width: 190px;
+    min-height: 52px;
+    padding: 13px 28px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   PIPELINE
+   ========================================================= */
+
+.upload-pipeline {
+    width: 100%;
+    margin-top: 30px;
+}
+
+/* =========================================================
+   LIVE PIPELINE HEADER
+   ========================================================= */
+
+.pipeline-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.pipeline-header h3 {
+  margin: 6px 0 4px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.pipeline-header p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.68;
+}
+
+.pipeline-count {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   ORIGINAL IMAGE
+   ========================================================= */
+
+.analysis-original-image-card {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.analysis-original-image {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  max-height: 560px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #101827;
+}
+
+
+/* =========================================================
+   PIPELINE QUALITY RESULT
+   ========================================================= */
+
+.pipeline-quality-result {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pipeline-quality-result strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.pipeline-quality-result p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.68;
+}
+
+.pipeline-quality-score {
+  min-width: 100px;
+  padding: 8px 14px;
+  text-align: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.pipeline-quality-score span {
+  display: block;
+  font-size: 9px;
+  opacity: 0.6;
+  letter-spacing: 0.08em;
+}
+
+.pipeline-quality-score strong {
+  margin: 2px 0 0;
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   UNGRADABLE QUALITY SUMMARY
+   ========================================================= */
+
+.ungradable-quality-summary {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.ungradable-quality-summary > div {
+  min-width: 130px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ungradable-quality-summary span {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}
+
+.ungradable-quality-summary strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .pipeline-header {
+    flex-direction: column;
+  }
+
+  .pipeline-count {
+    align-self: flex-start;
+  }
+
+  .analysis-original-image-card {
+    padding: 14px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .upload-page {
+        padding: 30px 14px 55px;
+    }
+
+    .upload-card {
+        padding: 24px !important;
+    }
+
+    .upload-header h1 {
+        font-size: 30px;
+    }
+
+    .upload-header p {
+        font-size: 14px;
+    }
+
+    .upload-card .upload-section {
+        margin-top: 24px !important;
+        padding: 22px !important;
+    }
+
+    .upload-dropzone {
+        min-height: 205px;
+        padding: 28px 22px;
+    }
+
+    .upload-card .eye-selector {
+        margin-top: 22px !important;
+        padding: 22px !important;
+    }
+
+    .eye-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .file-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .upload-actions {
+        margin-top: 24px !important;
+    }
+
+    .upload-pipeline {
+        margin-top: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-page {
+        padding: 20px 10px 45px;
+    }
+
+    .upload-card {
+        padding: 18px !important;
+    }
+
+    .upload-card .upload-section {
+        margin-top: 20px !important;
+        padding: 18px !important;
+        border-radius: 18px;
+    }
+
+    .upload-dropzone {
+        min-height: 190px;
+        padding: 24px 18px;
+        border-radius: 15px;
+    }
+
+    .upload-dropzone h3 {
+        font-size: 18px;
+    }
+
+    .upload-dropzone p {
+        font-size: 13px;
+    }
+
+    .upload-preview {
+        min-height: 220px;
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+    .retinal-upload-image {
+        max-height: 300px;
+    }
+
+    .eye-option {
+        width: 100%;
+    }
+
+    .analysis-button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .upload-dropzone {
+        transition: none;
+    }
+
+    .upload-dropzone:hover {
+        transform: none;
+    }
+}
+
+/* Final result viewport positioning. Keep the heading close to the
+   top while leaving enough room for the complete metric grid. */
+.screening-result-section {
+  scroll-margin-top: 8px;
+  gap: 10px;
+}
+
+.screening-result-section .section-heading {
+  margin-bottom: 0;
+}
+
+
+
+/* =========================================================
+   RESTORED ERROR ACTION BUTTONS
+   Keep the existing button appearance for recapture/retry.
+   ========================================================= */
+
+.error-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.recapture-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.38);
+    -webkit-backdrop-filter: blur(10px) saturate(1.15);
+    backdrop-filter: blur(10px) saturate(1.15);
+    box-shadow: 0 7px 20px rgba(38, 62, 91, 0.10);
+    color: #1c2d42;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recapture-button:hover {
+    transform: translateY(-2px);
+    background: rgba(19, 138, 202, 0.94);
+    box-shadow: 0 11px 26px rgba(38, 62, 91, 0.15);
+}
+
+.recapture-button:active {
+    transform: translateY(0);
+}
+
+.recapture-button:focus-visible {
+    outline: 2px solid rgba(60, 130, 246, 0.70);
+    outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+    .recapture-button {
+        width: 100%;
     }
 }

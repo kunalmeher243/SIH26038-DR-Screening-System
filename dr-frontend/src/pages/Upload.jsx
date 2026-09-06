@@ -1,31 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import useAnalysisStore from "../store/useAnalysisStore";
-import PipelineFlow from "../components/PipelineFlow";
+
 import LiquidGlass from "../components/LiquidGlass";
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
-const ALLOWED_TYPES = [
-  "image/jpeg",
-  "image/png",
-];
+import PipelineFlow from "../components/PipelineFlow";
 
 function Upload() {
-  const [preview, setPreview] = useState("");
-  const [localError, setLocalError] = useState("");
+  const inputRef = useRef(null);
 
-  // =========================
-  // Store values
-  // =========================
+  // NEW:
+  // Reference to the pipeline section so we can automatically
+  // scroll to it when analysis starts.
+  const pipelineRef = useRef(null);
+
+  // NEW:
+  // Prevent scrolling repeatedly for every pipeline stage.
+  const hasScrolledToPipeline = useRef(false);
 
   const file = useAnalysisStore((state) => state.file);
   const eye = useAnalysisStore((state) => state.eye);
   const stage = useAnalysisStore((state) => state.stage);
-  const error = useAnalysisStore((state) => state.error);
-
-  // =========================
-  // Store actions
-  // =========================
 
   const setFile = useAnalysisStore((state) => state.setFile);
   const setEye = useAnalysisStore((state) => state.setEye);
@@ -34,657 +28,495 @@ function Upload() {
     (state) => state.runFullAnalysis
   );
 
-  const reset = useAnalysisStore((state) => state.reset);
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState("");
 
-  // =========================
-  // Create / cleanup preview
-  // =========================
+  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+  /* =========================================================
+     AUTO SCROLL TO ANALYSIS PIPELINE
+     ========================================================= */
 
   useEffect(() => {
-    return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
+    // When a new file is selected and stage returns to idle,
+    // allow scrolling again for the next analysis.
+    if (stage === "idle") {
+      hasScrolledToPipeline.current = false;
+      return;
+    }
+
+    // Do nothing if there is no file.
+    if (!file) {
+      return;
+    }
+
+    // Only scroll once when analysis starts.
+    if (hasScrolledToPipeline.current) {
+      return;
+    }
+
+    hasScrolledToPipeline.current = true;
+
+    // Wait for the PipelineFlow component to be rendered
+    // before trying to scroll to it.
+    const timer = setTimeout(() => {
+      if (pipelineRef.current) {
+        pipelineRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }
-    };
-  }, [preview]);
+    }, 150);
 
-  // =========================
-  // File selection
-  // =========================
+    return () => clearTimeout(timer);
+  }, [stage, file]);
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files?.[0];
+  /* =========================================================
+     FILE HANDLING
+     ========================================================= */
 
-    setLocalError("");
+  const handleFile = (selectedFile) => {
+    setError("");
 
     if (!selectedFile) {
       return;
     }
 
-    // Validate type
-    if (!ALLOWED_TYPES.includes(selectedFile.type)) {
-      setLocalError(
-        "Please upload a JPG or PNG image."
-      );
+    // JPG / PNG only
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+    ];
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setError("Please upload a JPG or PNG image.");
       return;
     }
 
-    // Validate size
+    // Maximum 10 MB
     if (selectedFile.size > MAX_FILE_SIZE) {
-      setLocalError(
-        "File size must be 10 MB or less."
-      );
+      setError("Image size must be less than 10 MB.");
       return;
     }
 
-    // Set file in Zustand
     setFile(selectedFile);
 
     // Create preview
-    const imageUrl = URL.createObjectURL(selectedFile);
-    setPreview(imageUrl);
-  };
+    const objectUrl = URL.createObjectURL(selectedFile);
 
-  // =========================
-  // Remove image
-  // =========================
-
-  const handleRemove = () => {
+    // Revoke previous preview if one exists
     if (preview) {
       URL.revokeObjectURL(preview);
     }
 
-    setPreview("");
-    setLocalError("");
-
-    reset();
+    setPreview(objectUrl);
   };
 
-  // =========================
-  // Start analysis
-  // =========================
+  const handleInputChange = (event) => {
+    const selectedFile = event.target.files?.[0];
 
-  const handleStartAnalysis = async () => {
-    setLocalError("");
+    if (selectedFile) {
+      handleFile(selectedFile);
+    }
+  };
 
+  /* =========================================================
+     DRAG & DROP
+     ========================================================= */
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const droppedFile = event.dataTransfer.files?.[0];
+
+    if (droppedFile) {
+      handleFile(droppedFile);
+    }
+  };
+
+  /* =========================================================
+     REMOVE IMAGE
+     ========================================================= */
+
+  const removeImage = () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    setPreview(null);
+    setError("");
+
+    // Allow auto-scroll again for the next upload.
+    hasScrolledToPipeline.current = false;
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
+    setFile(null);
+  };
+
+  /* =========================================================
+     START ANALYSIS
+     ========================================================= */
+
+  const startAnalysis = async () => {
     if (!file) {
-      setLocalError(
-        "Please upload a retinal image first."
-      );
       return;
     }
 
-    if (!eye) {
-      setLocalError(
-        "Please select the eye."
-      );
-      return;
-    }
+    setError("");
 
     try {
       await runFullAnalysis(file);
+    } catch (err) {
+      console.error("Analysis failed:", err);
 
-      console.log(
-        "Analysis completed successfully."
-      );
-    } catch (error) {
-      console.error(
-        "Analysis failed:",
-        error
+      setError(
+        "Analysis failed. Please check the backend connection and try again."
       );
     }
   };
 
-  // =========================
-  // Loading state
-  // =========================
+  /* =========================================================
+     ANALYSIS STATE
+     ========================================================= */
 
-  const isAnalyzing =
-    stage !== "idle" &&
-    stage !== "done" &&
-    stage !== "error";
-
-  // =========================
-  // UI
-  // =========================
+  const analysisRunning =
+    stage === "quality" ||
+    stage === "enhance" ||
+    stage === "grade" ||
+    stage === "report";
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px 20px",
-        boxSizing: "border-box",
+    <div className="upload-page">
+      <div className="upload-container">
 
-        background:
-          "linear-gradient(135deg, #dbeafe 0%, #eff6ff 45%, #e0f2fe 100%)",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "900px",
-          margin: "0 auto",
-        }}
-      >
+        <LiquidGlass
+          className="upload-card"
+          variant="strong"
+        >
 
-        {/* =====================================================
-            MAIN GLASS CARD
-            ===================================================== */}
+          {/* =====================================================
+              HEADER
+              ===================================================== */}
 
-        <LiquidGlass className="glass-large">
+          <div className="upload-header">
 
-          <div
-            style={{
-              padding: "40px",
-            }}
-          >
+            <span className="brand-kicker">
+              RETINA AI · DIABETIC RETINOPATHY SCREENING
+            </span>
 
-            {/* =================================================
-                HEADER
-                ================================================= */}
+            <h1>
+              Upload Retinal Image
+            </h1>
 
-            <div
-              style={{
-                marginBottom: "32px",
-              }}
-            >
-              <h1
-                style={{
-                  margin: 0,
-                  fontSize: "32px",
-                  fontWeight: "700",
-                  color: "#0f172a",
-                  letterSpacing: "-0.5px",
-                }}
-              >
-                Retinal Image Upload
-              </h1>
+            <p>
+              Upload a retinal fundus image for automated
+              diabetic retinopathy screening and assessment.
+            </p>
 
-              <p
-                style={{
-                  marginTop: "10px",
-                  marginBottom: 0,
-                  color: "#475569",
-                  fontSize: "16px",
-                  lineHeight: "1.6",
-                }}
-              >
-                Upload a retinal fundus image to
-                begin diabetic retinopathy screening.
-              </p>
-            </div>
+          </div>
 
 
-            {/* =================================================
-                FILE UPLOAD
-                ================================================= */}
+          {/* =====================================================
+              IMAGE UPLOAD / PREVIEW
+              ===================================================== */}
 
-            <LiquidGlass
-              className="glass-light"
-            >
+          <div className="upload-section upload-preview-section">
+
+            {!file ? (
+
               <div
-                style={{
-                  padding: "24px",
+                className="upload-dropzone"
+                onClick={() => inputRef.current?.click()}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                  ) {
+                    inputRef.current?.click();
+                  }
                 }}
               >
 
-                <h3
-                  style={{
-                    marginTop: 0,
-                    marginBottom: "8px",
-                    color: "#0f172a",
-                    fontSize: "18px",
-                  }}
-                >
-                  Select Retinal Image
+                <div className="upload-icon">
+                  ↑
+                </div>
+
+                <h3>
+                  Upload retinal image
                 </h3>
 
-                <p
-                  style={{
-                    marginTop: 0,
-                    marginBottom: "18px",
-                    color: "#64748b",
-                    fontSize: "14px",
-                  }}
-                >
-                  Supported formats: JPG, JPEG and PNG
-                  · Maximum size: 10 MB
+                <p>
+                  Drag & drop your image here or
+                  click to browse
                 </p>
 
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  onChange={handleFileChange}
-                  disabled={isAnalyzing}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    boxSizing: "border-box",
+                <span className="upload-format">
+                  JPG or PNG · Maximum 10 MB
+                </span>
 
-                    borderRadius: "12px",
-
-                    border:
-                      "1px solid rgba(255,255,255,0.35)",
-
-                    background:
-                      "rgba(255,255,255,0.35)",
-
-                    cursor: isAnalyzing
-                      ? "not-allowed"
-                      : "pointer",
+                <button
+                  type="button"
+                  className="glass-button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    inputRef.current?.click();
                   }}
-                />
+                >
+                  Choose Image
+                </button>
 
               </div>
-            </LiquidGlass>
 
+            ) : (
 
-            {/* =================================================
-                ERRORS
-                ================================================= */}
+              <div className="uploaded-image-wrapper">
 
-            {localError && (
-              <div
-                style={{
-                  marginTop: "18px",
-                  padding: "12px 16px",
-                  borderRadius: "12px",
-
-                  background:
-                    "rgba(254,226,226,0.65)",
-
-                  border:
-                    "1px solid rgba(239,68,68,0.25)",
-
-                  color: "#b91c1c",
-
-                  fontSize: "14px",
-                }}
-              >
-                {localError}
-              </div>
-            )}
-
-            {error && (
-              <div
-                style={{
-                  marginTop: "18px",
-                  padding: "12px 16px",
-                  borderRadius: "12px",
-
-                  background:
-                    "rgba(254,226,226,0.65)",
-
-                  border:
-                    "1px solid rgba(239,68,68,0.25)",
-
-                  color: "#b91c1c",
-
-                  fontSize: "14px",
-                }}
-              >
-                {error}
-              </div>
-            )}
-
-
-            {/* =================================================
-                FILE INFORMATION
-                ================================================= */}
-
-            {file && (
-              <div
-                style={{
-                  marginTop: "28px",
-                }}
-              >
-
-                {/* =============================================
+                {/* =================================================
                     IMAGE PREVIEW
-                    ============================================= */}
+                    ================================================= */}
 
-                {preview && (
-                  <LiquidGlass
-                    className="glass-light"
-                  >
-                    <div
-                      style={{
-                        padding: "24px",
-                      }}
-                    >
+                <div className="upload-preview">
 
-                      <h3
-                        style={{
-                          marginTop: 0,
-                          marginBottom: "18px",
-                          color: "#0f172a",
-                          fontSize: "18px",
-                        }}
-                      >
-                        Image Preview
-                      </h3>
+                  {preview ? (
 
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
+                    <img
+                      src={preview}
+                      alt="Uploaded retinal fundus"
+                      className="retinal-upload-image"
+                    />
 
-                          padding: "15px",
+                  ) : (
 
-                          borderRadius: "18px",
-
-                          background:
-                            "rgba(255,255,255,0.25)",
-                        }}
-                      >
-                        <img
-                          src={preview}
-                          alt="Retinal preview"
-                          style={{
-                            width: "400px",
-                            height: "400px",
-
-                            maxWidth: "100%",
-
-                            objectFit: "contain",
-
-                            borderRadius: "14px",
-
-                            display: "block",
-                          }}
-                        />
-                      </div>
-
-
-                      {/* File details */}
-
-                      <div
-                        style={{
-                          marginTop: "20px",
-
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "8px",
-
-                          color: "#475569",
-
-                          fontSize: "14px",
-                        }}
-                      >
-
-                        <div>
-                          <strong
-                            style={{
-                              color: "#1e293b",
-                            }}
-                          >
-                            File:
-                          </strong>{" "}
-                          {file.name}
-                        </div>
-
-                        <div>
-                          <strong
-                            style={{
-                              color: "#1e293b",
-                            }}
-                          >
-                            Size:
-                          </strong>{" "}
-                          {(
-                            file.size /
-                            (1024 * 1024)
-                          ).toFixed(2)}{" "}
-                          MB
-                        </div>
-
-                      </div>
-
-
-                      {/* Remove button */}
-
-                      <button
-                        onClick={handleRemove}
-                        disabled={isAnalyzing}
-                        className="glass-button"
-                        style={{
-                          marginTop: "20px",
-                        }}
-                      >
-                        Remove Image
-                      </button>
-
-                    </div>
-                  </LiquidGlass>
-                )}
-
-
-                {/* =============================================
-                    EYE SELECTION
-                    ============================================= */}
-
-                <LiquidGlass
-                  className="glass-light"
-                >
-                  <div
-                    style={{
-                      padding: "24px",
-                      marginTop: "24px",
-                    }}
-                  >
-
-                    <h3
-                      style={{
-                        marginTop: 0,
-                        marginBottom: "8px",
-                        color: "#0f172a",
-                        fontSize: "18px",
-                      }}
-                    >
-                      Select Eye
-                    </h3>
-
-                    <p
-                      style={{
-                        marginTop: 0,
-                        marginBottom: "18px",
-                        color: "#64748b",
-                        fontSize: "14px",
-                      }}
-                    >
-                      Select which eye the uploaded
-                      retinal image belongs to.
-                    </p>
-
-
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "14px",
-                        flexWrap: "wrap",
-                      }}
-                    >
-
-                      {/* Right eye */}
-
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-
-                          padding:
-                            "10px 16px",
-
-                          borderRadius: "12px",
-
-                          background:
-                            eye === "right"
-                              ? "rgba(255,255,255,0.48)"
-                              : "rgba(255,255,255,0.20)",
-
-                          border:
-                            eye === "right"
-                              ? "1px solid rgba(255,255,255,0.45)"
-                              : "1px solid rgba(255,255,255,0.20)",
-
-                          cursor: isAnalyzing
-                            ? "not-allowed"
-                            : "pointer",
-
-                          color: "#334155",
-
-                          fontWeight:
-                            eye === "right"
-                              ? "600"
-                              : "400",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="eye"
-                          value="right"
-                          checked={
-                            eye === "right"
-                          }
-                          onChange={(e) =>
-                            setEye(
-                              e.target.value
-                            )
-                          }
-                          disabled={isAnalyzing}
-                        />
-
-                        Right Eye
-                      </label>
-
-
-                      {/* Left eye */}
-
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-
-                          padding:
-                            "10px 16px",
-
-                          borderRadius: "12px",
-
-                          background:
-                            eye === "left"
-                              ? "rgba(255,255,255,0.48)"
-                              : "rgba(255,255,255,0.20)",
-
-                          border:
-                            eye === "left"
-                              ? "1px solid rgba(255,255,255,0.45)"
-                              : "1px solid rgba(255,255,255,0.20)",
-
-                          cursor: isAnalyzing
-                            ? "not-allowed"
-                            : "pointer",
-
-                          color: "#334155",
-
-                          fontWeight:
-                            eye === "left"
-                              ? "600"
-                              : "400",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="eye"
-                          value="left"
-                          checked={
-                            eye === "left"
-                          }
-                          onChange={(e) =>
-                            setEye(
-                              e.target.value
-                            )
-                          }
-                          disabled={isAnalyzing}
-                        />
-
-                        Left Eye
-                      </label>
-
+                    <div className="upload-image-placeholder">
+                      Image preview unavailable
                     </div>
 
-                  </div>
-                </LiquidGlass>
-
-
-                {/* =============================================
-                    START ANALYSIS
-                    ============================================= */}
-
-                <div
-                  style={{
-                    marginTop: "28px",
-                    textAlign: "center",
-                  }}
-                >
-
-                  <button
-                    onClick={handleStartAnalysis}
-                    disabled={isAnalyzing}
-                    className="glass-button"
-                    style={{
-                      minWidth: "200px",
-                      padding:
-                        "14px 24px",
-
-                      fontSize: "15px",
-                      fontWeight: "600",
-
-                      color: "#0f172a",
-
-                      opacity:
-                        isAnalyzing
-                          ? 0.6
-                          : 1,
-                    }}
-                  >
-                    {isAnalyzing
-                      ? `Analyzing: ${stage}...`
-                      : "Start Analysis"}
-                  </button>
+                  )}
 
                 </div>
 
-              </div>
-            )}
 
+                {/* =================================================
+                    FILE INFORMATION
+                    ================================================= */}
 
-            {/* =================================================
-                ANALYSIS PIPELINE
-                ================================================= */}
+                <div className="file-info">
 
-            {stage !== "idle" && (
-              <div
-                style={{
-                  marginTop: "32px",
-                }}
-              >
-                <LiquidGlass
-                  className="glass-light"
-                >
-                  <div
-                    style={{
-                      padding: "24px",
-                    }}
-                  >
-                    <PipelineFlow />
+                  <div className="file-info-item">
+
+                    <span className="file-info-label">
+                      FILE
+                    </span>
+
+                    <strong title={file.name}>
+                      {file.name}
+                    </strong>
+
                   </div>
-                </LiquidGlass>
+
+
+                  <div className="file-info-item">
+
+                    <span className="file-info-label">
+                      SIZE
+                    </span>
+
+                    <strong>
+                      {(file.size / (1024 * 1024)).toFixed(2)} MB
+                    </strong>
+
+                  </div>
+
+                </div>
+
+
+                {/* =================================================
+                    REMOVE IMAGE
+                    ================================================= */}
+
+                <button
+                  type="button"
+                  className="glass-button remove-image-button"
+                  onClick={removeImage}
+                  disabled={analysisRunning}
+                >
+                  Remove Image
+                </button>
+
               </div>
+
             )}
+
+
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/jpeg,image/png"
+              onChange={handleInputChange}
+              hidden
+            />
 
           </div>
+
+
+          {/* =====================================================
+              ERROR
+              ===================================================== */}
+
+          {error && (
+
+            <div className="upload-error">
+
+              <strong>
+                Upload Error
+              </strong>
+
+              <p>
+                {error}
+              </p>
+
+            </div>
+
+          )}
+
+
+          {/* =====================================================
+              EYE SELECTION
+              ===================================================== */}
+
+          {file && (
+
+            <div className="upload-section eye-selector">
+
+              <div className="eye-selector-header">
+
+                <h3>
+                  Select Eye
+                </h3>
+
+                <p>
+                  Select which eye the uploaded retinal
+                  image belongs to.
+                </p>
+
+              </div>
+
+
+              <div className="eye-options">
+
+                {/* RIGHT EYE */}
+
+                <label
+                  className={`eye-option ${
+                    eye === "right"
+                      ? "eye-option-active"
+                      : ""
+                  }`}
+                >
+
+                  <input
+                    type="radio"
+                    name="eye"
+                    value="right"
+                    checked={eye === "right"}
+                    onChange={() => setEye("right")}
+                    disabled={analysisRunning}
+                  />
+
+                  <span>
+                    Right Eye
+                  </span>
+
+                </label>
+
+
+                {/* LEFT EYE */}
+
+                <label
+                  className={`eye-option ${
+                    eye === "left"
+                      ? "eye-option-active"
+                      : ""
+                  }`}
+                >
+
+                  <input
+                    type="radio"
+                    name="eye"
+                    value="left"
+                    checked={eye === "left"}
+                    onChange={() => setEye("left")}
+                    disabled={analysisRunning}
+                  />
+
+                  <span>
+                    Left Eye
+                  </span>
+
+                </label>
+
+              </div>
+
+            </div>
+
+          )}
+
+
+          {/* =====================================================
+              START ANALYSIS
+              ===================================================== */}
+
+          {file && (
+
+            <div className="upload-actions">
+
+              <button
+                type="button"
+                className="glass-button analysis-button"
+                onClick={startAnalysis}
+                disabled={analysisRunning}
+              >
+
+                {analysisRunning
+                  ? "Analyzing..."
+                  : "Start Analysis"}
+
+              </button>
+
+            </div>
+
+          )}
+
+
+          {/* =====================================================
+              ANALYSIS PIPELINE
+              ===================================================== */}
+
+          {file && stage !== "idle" && (
+
+            <div
+              ref={pipelineRef}
+              className="upload-pipeline"
+            >
+
+              <PipelineFlow />
+
+            </div>
+
+          )}
 
         </LiquidGlass>
 

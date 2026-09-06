@@ -159,28 +159,26 @@
    ========================================================= */
 
 body {
-
     background:
-
-        radial-gradient(circle at 0% 0%,
-            rgba(111, 169, 220, 0.18),
-            transparent 30%),
-
-        radial-gradient(circle at 100% 5%,
-            rgba(78, 190, 170, 0.14),
-            transparent 30%),
-
-        radial-gradient(circle at 50% 100%,
-            rgba(122, 168, 206, 0.10),
-            transparent 35%),
-
-        linear-gradient(135deg,
-            #f5f9fd 0%,
-            #edf5fa 50%,
-            #f4fbfd 100%);
+        radial-gradient(
+            circle at 12% 12%,
+            rgba(190, 220, 231, 0.16) 0%,
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(198, 225, 231, 0.14) 0%,
+            transparent 34%
+        ),
+        linear-gradient(
+            180deg,
+            #7295a7 0%,
+            #7b9eaf 42%,
+            #89aabd 100%
+        );
 
     background-attachment: fixed;
-}
+} 
 
 
 /* =========================================================

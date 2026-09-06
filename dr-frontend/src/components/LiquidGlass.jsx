@@ -1,4 +1,4 @@
-import "../styles/liquidGlass.css";
+import "../styles/LiquidGlass.css";
 
 function LiquidGlass({
   children,
@@ -6,22 +6,16 @@ function LiquidGlass({
   variant = "default",
   hover = false,
 }) {
-  const variantClass =
-    variant === "light"
-      ? "glass-light"
-      : variant === "strong"
-      ? "glass-strong"
-      : variant === "dark"
-      ? "glass-dark"
-      : "";
-
-  const hoverClass = hover
-    ? "glass-hover"
-    : "";
-
   return (
     <div
-      className={`glass ${variantClass} ${hoverClass} ${className}`.trim()}
+      className={[
+        "glass",
+        `glass-${variant}`,
+        hover ? "glass-hover" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <span
         className="glass-specular"
