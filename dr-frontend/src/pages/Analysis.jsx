@@ -52,6 +52,14 @@ function Analysis() {
       (state) => state.runFullAnalysis
     );
 
+  const handleRecapture = () => {
+    reset();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
 
   /* =========================================================
      IMAGE PREVIEW
@@ -506,28 +514,45 @@ function Analysis() {
 
               <div className="error-actions">
 
-                {errorType === "ungradable" ||
-                  errorType === "human_review" ? (
+                {errorType === "ungradable" ? (
+
+                  <button
+                    type="button"
+                    className="recapture-button"
+                    onClick={handleRecapture}
+                  >
+                    Recapture Image
+                  </button>
+
+                ) : errorType === "human_review" ? (
 
                   <button
                     type="button"
                     className="recapture-button"
                     onClick={reset}
                   >
-                    {errorType === "human_review"
-                      ? "Upload New Image"
-                      : "Recapture / Upload New Image"}
+                    Upload New Image
                   </button>
 
                 ) : (
 
-                  <button
-                    type="button"
-                    className="recapture-button"
-                    onClick={runFullAnalysis}
-                  >
-                    Retry Analysis
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className="recapture-button"
+                      onClick={runFullAnalysis}
+                    >
+                      Retry Analysis
+                    </button>
+
+                    <button
+                      type="button"
+                      className="recapture-button"
+                      onClick={handleRecapture}
+                    >
+                      Upload New Image
+                    </button>
+                  </>
 
                 )}
 
