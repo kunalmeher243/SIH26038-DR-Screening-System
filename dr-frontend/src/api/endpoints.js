@@ -7,6 +7,7 @@ import {
   DUMMY_UNGRADABLE_QUALITY,
   DUMMY_ENHANCE,
   DUMMY_GRADE,
+  DUMMY_HUMAN_REVIEW,
   DUMMY_REPORT,
 } from "../dummy/mockData";
 
@@ -39,6 +40,7 @@ export async function checkQuality(file) {
 
       error.response = {
         status: 500,
+
         data: {
           detail:
             "Screening service is temporarily unavailable.",
@@ -53,7 +55,9 @@ export async function checkQuality(file) {
        TIMEOUT TEST
        ----------------------------------------------- */
 
-    if (filename.includes("timeout")) {
+    if (
+      filename.includes("timeout")
+    ) {
       const error = new Error(
         "The screening service timed out. Please try again."
       );
@@ -109,19 +113,25 @@ export async function checkQuality(file) {
      REAL BACKEND
      ----------------------------------------------- */
 
-  const formData = new FormData();
+  const formData =
+    new FormData();
 
-  formData.append("file", file);
-
-  const response = await apiClient.post(
-    "/api/quality",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+  formData.append(
+    "file",
+    file
   );
+
+  const response =
+    await apiClient.post(
+      "/api/quality",
+      formData,
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+    );
 
   return response.data;
 }
@@ -141,19 +151,25 @@ export async function enhanceImage(file) {
   }
 
 
-  const formData = new FormData();
+  const formData =
+    new FormData();
 
-  formData.append("file", file);
-
-  const response = await apiClient.post(
-    "/api/enhance",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+  formData.append(
+    "file",
+    file
   );
+
+  const response =
+    await apiClient.post(
+      "/api/enhance",
+      formData,
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+    );
 
   return response.data;
 }
@@ -167,25 +183,54 @@ export async function gradeImage(file) {
   if (USE_DUMMY) {
     await delay(900);
 
+    const filename =
+      file?.name?.toLowerCase() || "";
+
+
+    /* -----------------------------------------------
+       HUMAN REVIEW TEST
+       ----------------------------------------------- */
+
+    if (
+      filename.includes("human-review") ||
+      filename.includes("human_review") ||
+      filename.includes("review")
+    ) {
+      return {
+        ...DUMMY_HUMAN_REVIEW,
+      };
+    }
+
+
+    /* -----------------------------------------------
+       NORMAL GRADING
+       ----------------------------------------------- */
+
     return {
       ...DUMMY_GRADE,
     };
   }
 
 
-  const formData = new FormData();
+  const formData =
+    new FormData();
 
-  formData.append("file", file);
-
-  const response = await apiClient.post(
-    "/api/grade",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+  formData.append(
+    "file",
+    file
   );
+
+  const response =
+    await apiClient.post(
+      "/api/grade",
+      formData,
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+    );
 
   return response.data;
 }
@@ -208,19 +253,25 @@ export async function generateReport(file) {
   }
 
 
-  const formData = new FormData();
+  const formData =
+    new FormData();
 
-  formData.append("file", file);
-
-  const response = await apiClient.post(
-    "/api/report",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+  formData.append(
+    "file",
+    file
   );
+
+  const response =
+    await apiClient.post(
+      "/api/report",
+      formData,
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+    );
 
   return response.data;
 }
@@ -231,7 +282,8 @@ export async function generateReport(file) {
    ========================================================= */
 
 function delay(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+  return new Promise(
+    (resolve) =>
+      setTimeout(resolve, ms)
+  );
 }

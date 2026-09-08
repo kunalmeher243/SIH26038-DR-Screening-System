@@ -3,24 +3,18 @@ import {
   useRef,
   useState,
 } from "react";
-
 import "../styles/liquidGlass.css";
-
 import useAnalysisStore from "../store/useAnalysisStore";
-
 import ResultDashboard from "../components/ResultDashboard";
-
 import GradCAMViewer from "../components/GradCAMViewer";
-
 import PipelineFlow from "../components/PipelineFlow";
-
 import LiquidGlass from "../components/LiquidGlass";
 
 
 function Analysis() {
 
   const resultRef = useRef(null);
-  
+
   const file = useAnalysisStore(
     (state) => state.file
   );
@@ -254,6 +248,23 @@ function Analysis() {
 
     }
 
+    /* -------------------------------------------------------
+   HUMAN REVIEW
+   ------------------------------------------------------- */
+
+    if (
+      errorType === "human_review"
+    ) {
+
+      errorKicker =
+        "CLINICAL REVIEW REQUIRED";
+
+      errorTitle =
+        "Flagged for Doctor Review";
+
+      helpText =
+        "The AI screening result requires review by a qualified clinician before a final screening decision is made.";
+    }
 
     /* -------------------------------------------------------
        API ERROR
@@ -447,45 +458,45 @@ function Analysis() {
                 "ungradable" &&
                 quality && (
 
-                <div
-                  className="ungradable-quality-summary"
-                >
+                  <div
+                    className="ungradable-quality-summary"
+                  >
 
-                  <div>
+                    <div>
 
-                    <span>
-                      QUALITY SCORE
-                    </span>
+                      <span>
+                        QUALITY SCORE
+                      </span>
 
 
-                    <strong>
-                      {Math.round(
-                        (quality.quality_score ||
-                          0) * 100
-                      )}
-                      %
-                    </strong>
+                      <strong>
+                        {Math.round(
+                          (quality.quality_score ||
+                            0) * 100
+                        )}
+                        %
+                      </strong>
+
+                    </div>
+
+
+                    <div>
+
+                      <span>
+                        STATUS
+                      </span>
+
+
+                      <strong>
+                        {quality.quality_label ||
+                          "UNGRADABLE"}
+                      </strong>
+
+                    </div>
 
                   </div>
 
-
-                  <div>
-
-                    <span>
-                      STATUS
-                    </span>
-
-
-                    <strong>
-                      {quality.quality_label ||
-                        "UNGRADABLE"}
-                    </strong>
-
-                  </div>
-
-                </div>
-
-              )}
+                )}
 
 
               <p className="error-help-text">
@@ -495,15 +506,17 @@ function Analysis() {
 
               <div className="error-actions">
 
-                {errorType ===
-                "ungradable" ? (
+                {errorType === "ungradable" ||
+                  errorType === "human_review" ? (
 
                   <button
                     type="button"
                     className="recapture-button"
                     onClick={reset}
                   >
-                    Recapture / Upload New Image
+                    {errorType === "human_review"
+                      ? "Upload New Image"
+                      : "Recapture / Upload New Image"}
                   </button>
 
                 ) : (
@@ -627,11 +640,10 @@ function Analysis() {
 
 
           <div
-            className={`analysis-status ${
-              isComplete
-                ? "status-complete"
-                : ""
-            }`}
+            className={`analysis-status ${isComplete
+              ? "status-complete"
+              : ""
+              }`}
           >
 
             <span className="status-dot" />

@@ -39,11 +39,17 @@ const useAnalysisStore = create(
     setFile: (file) =>
       set({
         file,
+
         stage: "idle",
+
         quality: null,
+
         enhance: null,
+
         grade: null,
+
         report: null,
+
         error: null,
       }),
 
@@ -105,7 +111,9 @@ const useAnalysisStore = create(
     setReport: (report) =>
       set({
         report,
+
         stage: "done",
+
         error: null,
       }),
 
@@ -117,6 +125,7 @@ const useAnalysisStore = create(
     setError: (error) =>
       set({
         error,
+
         stage: "error",
       }),
 
@@ -146,6 +155,7 @@ const useAnalysisStore = create(
 
         setError({
           type: "unknown",
+
           message:
             "Please select a retinal image first.",
         });
@@ -169,7 +179,9 @@ const useAnalysisStore = create(
            STEP 1 — IMAGE QUALITY
            ================================================= */
 
-        setStage("quality");
+        setStage(
+          "quality"
+        );
 
 
         const qualityResult =
@@ -202,19 +214,15 @@ const useAnalysisStore = create(
 
 
           setError({
-
             type: "ungradable",
 
             message:
               qualityResult.recommendation ||
               "The retinal image is not suitable for automated screening.",
-
           });
 
 
           /*
-           * VERY IMPORTANT:
-           *
            * STOP HERE.
            *
            * These functions WILL NOT execute:
@@ -232,7 +240,9 @@ const useAnalysisStore = create(
            STEP 2 — IMAGE ENHANCEMENT
            ================================================= */
 
-        setStage("enhance");
+        setStage(
+          "enhance"
+        );
 
 
         const enhanceResult =
@@ -254,7 +264,9 @@ const useAnalysisStore = create(
            STEP 3 — DR GRADING
            ================================================= */
 
-        setStage("grade");
+        setStage(
+          "grade"
+        );
 
 
         const gradeResult =
@@ -273,10 +285,46 @@ const useAnalysisStore = create(
 
 
         /* =================================================
+           HUMAN REVIEW GATE
+           ================================================= */
+
+        if (
+          gradeResult &&
+          gradeResult.routing ===
+            "HUMAN_REVIEW"
+        ) {
+
+          console.log(
+            "Result requires HUMAN_REVIEW. Stopping pipeline."
+          );
+
+
+          setError({
+            type: "human_review",
+
+            message:
+              "The screening result requires review by a qualified clinician before a final screening decision is made.",
+          });
+
+
+          /*
+           * STOP HERE.
+           *
+           * Clinical report is intentionally
+           * NOT generated for HUMAN_REVIEW.
+           */
+
+          return;
+        }
+
+
+        /* =================================================
            STEP 4 — CLINICAL REPORT
            ================================================= */
 
-        setStage("report");
+        setStage(
+          "report"
+        );
 
 
         const reportResult =
@@ -298,7 +346,9 @@ const useAnalysisStore = create(
            COMPLETE
            ================================================= */
 
-        setStage("done");
+        setStage(
+          "done"
+        );
 
 
         console.log(
@@ -327,12 +377,10 @@ const useAnalysisStore = create(
         if (isTimeout) {
 
           setError({
-
             type: "api_timeout",
 
             message:
               "The screening service timed out. Please try the analysis again.",
-
           });
 
           return;
@@ -354,13 +402,11 @@ const useAnalysisStore = create(
         if (isApiError) {
 
           setError({
-
             type: "api_error",
 
             message:
               error?.response?.data?.detail ||
               "The screening service returned an error. Please try again.",
-
           });
 
           return;
@@ -372,15 +418,12 @@ const useAnalysisStore = create(
            ================================================= */
 
         setError({
-
           type: "unknown",
 
           message:
             error?.message ||
             "An unexpected error occurred during analysis.",
-
         });
-
       }
     },
 
@@ -407,7 +450,6 @@ const useAnalysisStore = create(
         report: null,
 
         error: null,
-
       }),
 
   })
