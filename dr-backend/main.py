@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import quality, enhance, grade, report
+
+from routers import quality, enhance, grade, report, whatsapp
 
 app = FastAPI(
     title="DR Screening API",
@@ -16,7 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 app.include_router(
     quality.router,
@@ -37,6 +37,12 @@ app.include_router(
     report.router,
     prefix="/api"
 )
+
+app.include_router(
+    whatsapp.router,
+    prefix="/api"
+)
+
 
 @app.get("/")
 async def root():

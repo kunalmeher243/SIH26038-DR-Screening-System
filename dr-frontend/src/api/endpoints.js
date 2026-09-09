@@ -287,3 +287,80 @@ function delay(ms) {
       setTimeout(resolve, ms)
   );
 }
+
+/* =========================================================
+   CLINICAL REPORT PDF
+   ========================================================= */
+
+export async function generateClinicalReportPdf(file, reportData) {
+  const formData = new FormData();
+
+  if (file) {
+    formData.append("file", file);
+  }
+
+  formData.append("report_data", JSON.stringify(reportData));
+
+  const response = await apiClient.post(
+    "/api/report/pdf",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      responseType: "blob",
+      timeout: 35000,
+    }
+  );
+
+  return response.data;
+}
+
+
+/* =========================================================
+   WHATSAPP NUMBER VALIDATION
+   ========================================================= */
+
+export async function validateWhatsAppNumber(phoneNumber) {
+  const response = await apiClient.post(
+    "/api/whatsapp/validate",
+    {
+      phone_number: phoneNumber,
+    }
+  );
+
+  return response.data;
+}
+
+
+/* =========================================================
+   WHATSAPP CLINICAL REPORT DELIVERY
+   ========================================================= */
+
+export async function sendClinicalReportToWhatsApp(
+  file,
+  phoneNumber,
+  reportData
+) {
+  const formData = new FormData();
+
+  if (file) {
+    formData.append("file", file);
+  }
+
+  formData.append("phone_number", phoneNumber);
+  formData.append("report_data", JSON.stringify(reportData));
+
+  const response = await apiClient.post(
+    "/api/whatsapp/send-report",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      timeout: 35000,
+    }
+  );
+
+  return response.data;
+}

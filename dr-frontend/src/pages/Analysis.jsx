@@ -9,6 +9,7 @@ import ResultDashboard from "../components/ResultDashboard";
 import GradCAMViewer from "../components/GradCAMViewer";
 import PipelineFlow from "../components/PipelineFlow";
 import LiquidGlass from "../components/LiquidGlass";
+import ClinicalReport from "../components/ClinicalReport";
 
 
 function Analysis() {
@@ -835,21 +836,10 @@ function Analysis() {
               <div className="section-heading">
 
                 <div>
-
-                  <span className="section-kicker">
-                    AI EXPLAINABILITY
-                  </span>
-
-
+                  
                   <h2>
                     Clinical Evidence
                   </h2>
-
-
-                  <p>
-                    Visual evidence supporting the
-                    automated retinal screening assessment
-                  </p>
 
                 </div>
 
@@ -924,6 +914,19 @@ function Analysis() {
               </LiquidGlass>
 
             </section>
+
+
+            {/* ===============================================
+                CLINICAL REPORT + WHATSAPP DELIVERY
+                =============================================== */}
+
+            <ClinicalReport
+              file={file}
+              eye={eye}
+              quality={quality}
+              grade={grade}
+              report={report}
+            />
 
 
             {/* ===============================================
