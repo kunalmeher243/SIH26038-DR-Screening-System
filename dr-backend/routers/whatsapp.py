@@ -11,12 +11,17 @@ from fastapi import (
 from services.whatsapp_service import (
     send_pdf,
     validate_recipient,
+    verify_meta_credentials,
 )
 
 from utils.pdf_generator import (
     build_clinical_report_pdf,
 )
 
+
+# =========================================================
+# ROUTER
+# =========================================================
 
 router = APIRouter(
     prefix="/whatsapp",
@@ -30,15 +35,19 @@ router = APIRouter(
 
 @router.post("/validate")
 async def validate_whatsapp_number(
-    payload: dict
+    payload: dict,
 ):
     """
-    Validate the recipient's phone number format.
+    Validate the recipient phone number format.
+
+    This does not claim that the number has a WhatsApp
+    account. Actual deliverability is determined by Meta
+    during message delivery.
     """
 
     phone_number = payload.get(
         "phone_number",
-        ""
+        "",
     )
 
     if not phone_number:
@@ -50,6 +59,23 @@ async def validate_whatsapp_number(
     return await validate_recipient(
         phone_number
     )
+
+
+# =========================================================
+# VERIFY META CONFIGURATION
+# =========================================================
+
+@router.get("/status")
+async def whatsapp_status():
+    """
+    Verify the configured Meta WhatsApp Cloud API
+    credentials.
+
+    Useful for testing the backend independently from
+    the Clinical Report UI.
+    """
+
+    return await verify_meta_credentials()
 
 
 # =========================================================
@@ -65,8 +91,8 @@ async def send_report_to_whatsapp(
     ),
 ):
     """
-    Generate the clinical report PDF and
-    prepare/send it through WhatsApp.
+    Generate the clinical screening PDF and send it
+    through WhatsApp Cloud API.
     """
 
     # -----------------------------------------------------
@@ -85,7 +111,9 @@ async def send_report_to_whatsapp(
 
     try:
 
-        data = json.loads(report_data)
+        data = json.loads(
+            report_data
+        )
 
     except json.JSONDecodeError:
 
@@ -105,7 +133,7 @@ async def send_report_to_whatsapp(
         image_bytes = await file.read()
 
     # -----------------------------------------------------
-    # Generate PDF
+    # Generate clinical report PDF
     # -----------------------------------------------------
 
     try:
@@ -132,13 +160,7 @@ async def send_report_to_whatsapp(
     filename = "SERIX_Clinical_Report.pdf"
 
     # -----------------------------------------------------
-    # Send / prepare WhatsApp report
-    #
-    # IMPORTANT:
-    # send_pdf accepts:
-    #     phone_number
-    #     pdf_bytes
-    #     filename
+    # Send PDF through Meta WhatsApp Cloud API
     # -----------------------------------------------------
 
     return await send_pdf(

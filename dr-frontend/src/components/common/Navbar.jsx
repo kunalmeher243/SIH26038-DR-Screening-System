@@ -11,642 +11,2097 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
+
 import useAuthStore from "../../store/useAuthStore";
-import useLanguageStore, { availableLanguages } from "../../store/useLanguageStore";
+import useLanguageStore, {
+  availableLanguages,
+} from "../../store/useLanguageStore";
 
-export default function Navbar({ currentView, setCurrentView }) {
-  const { user, isAuthenticated, logout, openLogin, openSignUp } = useAuthStore();
-  const { language, setLanguage, t } = useLanguageStore();
+export default function Navbar({
+  currentView,
+  setCurrentView,
+}) {
+  const {
+    user,
+    isAuthenticated,
+    logout,
+    openLogin,
+    openSignUp,
+  } = useAuthStore();
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const {
+    language,
+    setLanguage,
+    t,
+  } = useLanguageStore();
+
+  const [
+    isMobileMenuOpen,
+    setIsMobileMenuOpen,
+  ] = useState(false);
+
+  const [
+    isLangDropdownOpen,
+    setIsLangDropdownOpen,
+  ] = useState(false);
+
   const langDropdownRef = useRef(null);
 
-  const isDoctor = user?.role === "Ophthalmologist";
+  const isDoctor =
+    user?.role === "Ophthalmologist";
 
-  // Close dropdown on outside click
+  /* =========================================================
+     CLOSE LANGUAGE DROPDOWN WHEN CLICKING OUTSIDE
+     ========================================================= */
+
   useEffect(() => {
     function handleClickOutside(event) {
-      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target)) {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target)
+      ) {
         setIsLangDropdownOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
   }, []);
+
+  /* =========================================================
+     CLOSE MOBILE MENU ON RESIZE
+     ========================================================= */
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 900) {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
+
+    return () => {
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+    };
+  }, []);
+
+  /* =========================================================
+     NAVIGATION / SCROLL
+     ========================================================= */
 
   const handleScroll = (id) => {
     setIsMobileMenuOpen(false);
+    setIsLangDropdownOpen(false);
+
     if (currentView !== "landing") {
       if (setCurrentView) {
         setCurrentView("landing");
+
         setTimeout(() => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
+          const element =
+            document.getElementById(id);
+
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
           }
-        }, 100);
+        }, 150);
       }
+
       return;
     }
 
-    const element = document.getElementById(id);
+    const element =
+      document.getElementById(id);
+
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   };
 
-  const currentLangObj = availableLanguages.find((l) => l.code === language) || availableLanguages[0];
+  /* =========================================================
+     LANGUAGE
+     ========================================================= */
+
+  const currentLangObj =
+    availableLanguages.find(
+      (l) => l.code === language
+    ) || availableLanguages[0];
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 40,
-        backgroundColor: "rgba(255, 255, 255, 0.94)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderBottom: "1px solid var(--saas-border)",
-        boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.03)",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "0 24px",
-          height: "72px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* Brand Logo - Badge completely removed */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            cursor: "pointer",
-            userSelect: "none",
-          }}
-          onClick={() => {
-            if (setCurrentView) setCurrentView("landing");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              background: "var(--saas-accent-gradient)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#FFFFFF",
-              boxShadow: "var(--shadow-saas-accent)",
+    <>
+      <header className="rt-liquid-header">
+        <div className="rt-liquid-header-inner">
+
+          {/* =================================================
+              BRAND
+              ================================================= */}
+
+          <button
+            type="button"
+            className="rt-liquid-brand"
+            onClick={() => {
+              if (setCurrentView) {
+                setCurrentView("landing");
+              }
+
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
             }}
           >
-            <Eye size={22} strokeWidth={2.4} />
-          </div>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span
-                style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 800,
-                  letterSpacing: "-0.02em",
-                  color: "var(--saas-fg)",
-                }}
-              >
-                {t("brandName")}<span style={{ color: "var(--saas-accent)" }}>.AI</span>
+            <span className="rt-liquid-brand-icon">
+              <Eye
+                size={22}
+                strokeWidth={2.5}
+              />
+            </span>
+
+            <span className="rt-liquid-brand-text">
+              <span className="rt-liquid-brand-name">
+                {t("brandName")}
+                <span className="rt-liquid-brand-accent">
+                  .AI
+                </span>
               </span>
-            </div>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.72rem",
-                color: "var(--saas-fg-muted)",
-                fontWeight: 500,
-              }}
-            >
-              {t("brandSubtitle")}
-            </p>
-          </div>
-        </div>
 
-        {/* Center Anchor Navigation Tabs (Desktop) */}
-        <nav
-          className="desktop-nav"
-          style={{
-            display: "none",
-            alignItems: "center",
-            gap: "32px",
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => handleScroll("hero")}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              color: currentView === "landing" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
-              cursor: "pointer",
-              transition: "color 0.15s ease",
-              padding: "8px 0",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--saas-accent)")}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color =
-                currentView === "landing" ? "var(--saas-fg)" : "var(--saas-fg-muted)")
-            }
-          >
-            {t("navHome")}
+              <span className="rt-liquid-brand-subtitle">
+                {t("brandSubtitle")}
+              </span>
+            </span>
           </button>
-          <button
-            type="button"
-            onClick={() => handleScroll("about")}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              color: "var(--saas-fg-muted)",
-              cursor: "pointer",
-              transition: "color 0.15s ease",
-              padding: "8px 0",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--saas-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--saas-fg-muted)")}
-          >
-            {t("navAbout")}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleScroll("features")}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "0.9375rem",
-              fontWeight: 600,
-              color: "var(--saas-fg-muted)",
-              cursor: "pointer",
-              transition: "color 0.15s ease",
-              padding: "8px 0",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--saas-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--saas-fg-muted)")}
-          >
-            {t("navFeatures")}
-          </button>
-        </nav>
 
-        {/* Right Controls: Language Selector + Auth Actions (Desktop) */}
-        <div
-          className="desktop-nav"
-          style={{
-            display: "none",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          {/* Language Selector Dropdown */}
-          <div ref={langDropdownRef} style={{ position: "relative" }}>
+
+          {/* =================================================
+              DESKTOP NAVIGATION
+              ================================================= */}
+
+          <nav className="rt-liquid-nav">
             <button
               type="button"
-              onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "7px 12px",
-                borderRadius: "8px",
-                border: "1px solid var(--saas-border)",
-                backgroundColor: "#FFFFFF",
-                fontSize: "0.8125rem",
-                fontWeight: 600,
-                color: "var(--saas-fg)",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--saas-accent)";
-                e.currentTarget.style.backgroundColor = "var(--saas-bg-subtle)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--saas-border)";
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
-              }}
-            >
-              <Globe size={15} color="var(--saas-accent)" />
-              <span>{currentLangObj.nativeName}</span>
-              <ChevronDown size={14} color="var(--saas-fg-muted)" />
-            </button>
-
-            {isLangDropdownOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  top: "calc(100% + 6px)",
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "12px",
-                  border: "1px solid var(--saas-border)",
-                  boxShadow: "0 10px 25px -5px rgba(15, 23, 42, 0.12)",
-                  padding: "6px",
-                  width: "160px",
-                  zIndex: 50,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "2px",
-                }}
-              >
-                {availableLanguages.map((l) => (
-                  <button
-                    key={l.code}
-                    type="button"
-                    onClick={() => {
-                      setLanguage(l.code);
-                      setIsLangDropdownOpen(false);
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "8px 10px",
-                      borderRadius: "6px",
-                      border: "none",
-                      backgroundColor: language === l.code ? "rgba(0, 82, 255, 0.08)" : "transparent",
-                      color: language === l.code ? "var(--saas-accent)" : "var(--saas-fg)",
-                      fontWeight: language === l.code ? 700 : 500,
-                      fontSize: "0.8125rem",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.12s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (language !== l.code) e.currentTarget.style.backgroundColor = "var(--saas-bg-subtle)";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (language !== l.code) e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                  >
-                    <span>{l.nativeName}</span>
-                    {language === l.code && <Check size={14} color="var(--saas-accent)" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {!isAuthenticated ? (
-            <>
-              <button
-                type="button"
-                onClick={() => openLogin()}
-                className="saas-btn-secondary"
-                style={{ padding: "8px 18px", fontSize: "0.875rem" }}
-              >
-                {t("navLogin")}
-              </button>
-              <button
-                type="button"
-                onClick={() => openSignUp()}
-                className="saas-btn-primary"
-                style={{ padding: "8px 18px", fontSize: "0.875rem" }}
-              >
-                {t("navSignUp")}
-              </button>
-            </>
-          ) : (
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              {currentView === "landing" ? (
-                <button
-                  type="button"
-                  onClick={() => setCurrentView && setCurrentView("dashboard")}
-                  className="saas-btn-primary"
-                  style={{
-                    padding: "8px 16px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  <span>{isDoctor ? t("navDoctorPortal") : t("navPatientPortal")}</span>
-                  <ChevronRight size={16} />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setCurrentView && setCurrentView("landing")}
-                  className="saas-btn-secondary"
-                  style={{
-                    padding: "8px 14px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  {t("navLandingPage")}
-                </button>
-              )}
-
-              {/* User Avatar & Name */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  padding: "4px 10px 4px 6px",
-                  backgroundColor: "var(--saas-bg-subtle)",
-                  border: "1px solid var(--saas-border)",
-                  borderRadius: "999px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    backgroundColor: isDoctor ? "rgba(0, 82, 255, 0.12)" : "rgba(16, 185, 129, 0.12)",
-                    color: isDoctor ? "var(--saas-accent)" : "#059669",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {isDoctor ? <Stethoscope size={16} /> : <UserCheck size={16} />}
-                </div>
-
-                <div style={{ textAlign: "left", lineHeight: 1.2 }}>
-                  <span
-                    style={{
-                      fontSize: "0.8125rem",
-                      fontWeight: 600,
-                      color: "var(--saas-fg)",
-                      display: "block",
-                    }}
-                  >
-                    {user?.name || "User"}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.68rem",
-                      fontWeight: 600,
-                      color: isDoctor ? "var(--saas-accent)" : "#059669",
-                    }}
-                  >
-                    {isDoctor ? t("roleDoctor") : t("rolePatient")}
-                  </span>
-                </div>
-              </div>
-
-              {/* Logout Button */}
-              <button
-                type="button"
-                onClick={logout}
-                title={t("navLogout")}
-                style={{
-                  background: "none",
-                  border: "1px solid var(--saas-border)",
-                  borderRadius: "8px",
-                  padding: "8px",
-                  color: "var(--saas-fg-muted)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.15s ease",
-                  backgroundColor: "#FFFFFF",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#EF4444";
-                  e.currentTarget.style.borderColor = "#FCA5A5";
-                  e.currentTarget.style.backgroundColor = "#FEF2F2";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "var(--saas-fg-muted)";
-                  e.currentTarget.style.borderColor = "var(--saas-border)";
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
-                }}
-              >
-                <LogOut size={16} />
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Mobile / Tablet Hamburger Toggle Button */}
-        <div className="mobile-menu-toggle" style={{ display: "none", alignItems: "center", gap: "8px" }}>
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            style={{
-              background: "#FFFFFF",
-              border: "1px solid var(--saas-border)",
-              borderRadius: "8px",
-              padding: "8px",
-              color: "var(--saas-fg)",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          style={{
-            backgroundColor: "#FFFFFF",
-            borderBottom: "1px solid var(--saas-border)",
-            padding: "18px 24px 24px",
-            boxShadow: "0 12px 24px -4px rgba(15, 23, 42, 0.08)",
-          }}
-          className="mobile-drawer"
-        >
-          {/* Navigation Links */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
-            <button
-              type="button"
-              onClick={() => handleScroll("hero")}
-              style={{
-                textAlign: "left",
-                background: "none",
-                border: "none",
-                fontSize: "1rem",
-                fontWeight: 600,
-                color: "var(--saas-fg)",
-                padding: "8px 0",
-                cursor: "pointer",
-              }}
+              className={
+                "rt-liquid-nav-item " +
+                (currentView === "landing"
+                  ? "active"
+                  : "")
+              }
+              onClick={() =>
+                handleScroll("hero")
+              }
             >
               {t("navHome")}
             </button>
+
             <button
               type="button"
-              onClick={() => handleScroll("about")}
-              style={{
-                textAlign: "left",
-                background: "none",
-                border: "none",
-                fontSize: "1rem",
-                fontWeight: 600,
-                color: "var(--saas-fg-muted)",
-                padding: "8px 0",
-                cursor: "pointer",
-              }}
+              className="rt-liquid-nav-item"
+              onClick={() =>
+                handleScroll("about")
+              }
             >
               {t("navAbout")}
             </button>
+
             <button
               type="button"
-              onClick={() => handleScroll("features")}
-              style={{
-                textAlign: "left",
-                background: "none",
-                border: "none",
-                fontSize: "1rem",
-                fontWeight: 600,
-                color: "var(--saas-fg-muted)",
-                padding: "8px 0",
-                cursor: "pointer",
-              }}
+              className="rt-liquid-nav-item"
+              onClick={() =>
+                handleScroll("features")
+              }
             >
               {t("navFeatures")}
             </button>
-          </div>
+          </nav>
 
-          {/* Language Selector (Mobile Segmented) */}
-          <div style={{ marginBottom: "20px" }}>
+
+          {/* =================================================
+              DESKTOP RIGHT CONTROLS
+              ================================================= */}
+
+          <div className="rt-liquid-actions">
+
+            {/* ---------------------------------------------
+                LANGUAGE
+                --------------------------------------------- */}
+
             <div
-              style={{
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "var(--saas-fg-muted)",
-                textTransform: "uppercase",
-                marginBottom: "8px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
+              ref={langDropdownRef}
+              className="rt-liquid-language-wrapper"
             >
-              <Globe size={14} color="var(--saas-accent)" />
-              <span>{t("language")}</span>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
-              {availableLanguages.map((l) => (
-                <button
-                  key={l.code}
-                  type="button"
-                  onClick={() => setLanguage(l.code)}
-                  style={{
-                    padding: "7px 4px",
-                    borderRadius: "8px",
-                    border: language === l.code ? "1.5px solid var(--saas-accent)" : "1px solid var(--saas-border)",
-                    backgroundColor: language === l.code ? "rgba(0, 82, 255, 0.08)" : "#FFFFFF",
-                    color: language === l.code ? "var(--saas-accent)" : "var(--saas-fg)",
-                    fontWeight: 600,
-                    fontSize: "0.78rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  {l.nativeName}
-                </button>
-              ))}
-            </div>
-          </div>
+              <button
+                type="button"
+                className="rt-liquid-language-button"
+                onClick={() =>
+                  setIsLangDropdownOpen(
+                    (previous) => !previous
+                  )
+                }
+              >
+                <Globe
+                  size={15}
+                  strokeWidth={2.2}
+                />
 
-          {/* Auth Actions in Mobile Menu */}
-          <div style={{ paddingTop: "12px", borderTop: "1px solid var(--saas-border-subtle)" }}>
+                <span>
+                  {currentLangObj.nativeName}
+                </span>
+
+                <ChevronDown
+                  size={14}
+                  className={
+                    isLangDropdownOpen
+                      ? "rt-chevron-open"
+                      : ""
+                  }
+                />
+              </button>
+
+
+              {/* -------------------------------------------
+                  LANGUAGE DROPDOWN
+                  ------------------------------------------- */}
+
+              {isLangDropdownOpen && (
+                <div className="rt-liquid-language-menu">
+                  {availableLanguages.map(
+                    (lang) => (
+                      <button
+                        key={lang.code}
+                        type="button"
+                        className={
+                          "rt-liquid-language-option " +
+                          (language === lang.code
+                            ? "selected"
+                            : "")
+                        }
+                        onClick={() => {
+                          setLanguage(
+                            lang.code
+                          );
+
+                          setIsLangDropdownOpen(
+                            false
+                          );
+                        }}
+                      >
+                        <span>
+                          {lang.nativeName}
+                        </span>
+
+                        {language ===
+                          lang.code && (
+                          <Check
+                            size={14}
+                          />
+                        )}
+                      </button>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+
+
+            {/* ---------------------------------------------
+                AUTHENTICATION
+                --------------------------------------------- */}
+
             {!isAuthenticated ? (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              <>
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    openLogin();
-                  }}
-                  className="saas-btn-secondary"
-                  style={{ width: "100%", padding: "10px" }}
+                  className="rt-liquid-login-button"
+                  onClick={() =>
+                    openLogin()
+                  }
                 >
                   {t("navLogin")}
                 </button>
+
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    openSignUp();
-                  }}
-                  className="saas-btn-primary"
-                  style={{ width: "100%", padding: "10px" }}
+                  className="rt-liquid-signup-button"
+                  onClick={() =>
+                    openSignUp()
+                  }
                 >
                   {t("navSignUp")}
                 </button>
-              </div>
+              </>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    if (setCurrentView) {
-                      setCurrentView(currentView === "landing" ? "dashboard" : "landing");
+              <div className="rt-liquid-authenticated">
+
+                {/* Portal button */}
+
+                {currentView ===
+                "landing" ? (
+                  <button
+                    type="button"
+                    className="rt-liquid-portal-button"
+                    onClick={() => {
+                      if (
+                        setCurrentView
+                      ) {
+                        setCurrentView(
+                          "dashboard"
+                        );
+                      }
+                    }}
+                  >
+                    <span>
+                      {isDoctor
+                        ? t(
+                            "navDoctorPortal"
+                          )
+                        : t(
+                            "navPatientPortal"
+                          )}
+                    </span>
+
+                    <ChevronRight
+                      size={16}
+                    />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="rt-liquid-back-button"
+                    onClick={() => {
+                      if (
+                        setCurrentView
+                      ) {
+                        setCurrentView(
+                          "landing"
+                        );
+                      }
+                    }}
+                  >
+                    {t("navLandingPage")}
+                  </button>
+                )}
+
+
+                {/* User information */}
+
+                <div className="rt-liquid-user">
+
+                  <span
+                    className={
+                      "rt-liquid-user-icon " +
+                      (isDoctor
+                        ? "doctor"
+                        : "patient")
                     }
-                  }}
-                  className="saas-btn-primary"
-                  style={{ width: "100%", padding: "10px" }}
-                >
-                  {currentView === "landing"
-                    ? isDoctor
-                      ? t("navDoctorPortal")
-                      : t("navPatientPortal")
-                    : t("navLandingPage")}
-                </button>
+                  >
+                    {isDoctor ? (
+                      <Stethoscope
+                        size={16}
+                      />
+                    ) : (
+                      <UserCheck
+                        size={16}
+                      />
+                    )}
+                  </span>
+
+                  <span className="rt-liquid-user-info">
+                    <span className="rt-liquid-user-name">
+                      {user?.name ||
+                        "User"}
+                    </span>
+
+                    <span
+                      className={
+                        "rt-liquid-user-role " +
+                        (isDoctor
+                          ? "doctor"
+                          : "patient")
+                      }
+                    >
+                      {isDoctor
+                        ? t(
+                            "roleDoctor"
+                          )
+                        : t(
+                            "rolePatient"
+                          )}
+                    </span>
+                  </span>
+                </div>
+
+
+                {/* Logout */}
+
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    logout();
-                  }}
-                  className="saas-btn-secondary"
-                  style={{ width: "100%", padding: "10px", color: "#DC2626", borderColor: "#FCA5A5" }}
+                  className="rt-liquid-logout"
+                  title={t(
+                    "navLogout"
+                  )}
+                  onClick={() =>
+                    logout()
+                  }
                 >
-                  <LogOut size={16} />
-                  <span>{t("navLogout")}</span>
+                  <LogOut
+                    size={16}
+                  />
                 </button>
               </div>
             )}
           </div>
+
+
+          {/* =================================================
+              MOBILE MENU BUTTON
+              ================================================= */}
+
+          <button
+            type="button"
+            className="rt-liquid-mobile-toggle"
+            onClick={() =>
+              setIsMobileMenuOpen(
+                (previous) =>
+                  !previous
+              )
+            }
+            aria-label="Toggle navigation menu"
+            aria-expanded={
+              isMobileMenuOpen
+            }
+          >
+            {isMobileMenuOpen ? (
+              <X size={21} />
+            ) : (
+              <Menu size={21} />
+            )}
+          </button>
         </div>
-      )}
+
+
+        {/* ===================================================
+            MOBILE MENU
+            =================================================== */}
+
+        {isMobileMenuOpen && (
+          <div className="rt-liquid-mobile-panel">
+
+            {/* -----------------------------------------------
+                MOBILE NAVIGATION
+                ----------------------------------------------- */}
+
+            <div className="rt-liquid-mobile-nav">
+
+              <button
+                type="button"
+                className={
+                  "rt-liquid-mobile-nav-item " +
+                  (currentView ===
+                  "landing"
+                    ? "active"
+                    : "")
+                }
+                onClick={() =>
+                  handleScroll(
+                    "hero"
+                  )
+                }
+              >
+                {t("navHome")}
+              </button>
+
+              <button
+                type="button"
+                className="rt-liquid-mobile-nav-item"
+                onClick={() =>
+                  handleScroll(
+                    "about"
+                  )
+                }
+              >
+                {t("navAbout")}
+              </button>
+
+              <button
+                type="button"
+                className="rt-liquid-mobile-nav-item"
+                onClick={() =>
+                  handleScroll(
+                    "features"
+                  )
+                }
+              >
+                {t("navFeatures")}
+              </button>
+            </div>
+
+
+            {/* -----------------------------------------------
+                MOBILE LANGUAGE
+                ----------------------------------------------- */}
+
+            <div className="rt-liquid-mobile-language">
+
+              <div className="rt-liquid-mobile-label">
+                <Globe
+                  size={14}
+                />
+
+                <span>
+                  {t("language")}
+                </span>
+              </div>
+
+              <div className="rt-liquid-mobile-languages">
+                {availableLanguages.map(
+                  (lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      className={
+                        "rt-liquid-mobile-language-option " +
+                        (language ===
+                        lang.code
+                          ? "selected"
+                          : "")
+                      }
+                      onClick={() =>
+                        setLanguage(
+                          lang.code
+                        )
+                      }
+                    >
+                      {lang.nativeName}
+
+                      {language ===
+                        lang.code && (
+                        <Check
+                          size={13}
+                        />
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
+
+            {/* -----------------------------------------------
+                MOBILE AUTH
+                ----------------------------------------------- */}
+
+            <div className="rt-liquid-mobile-auth">
+
+              {!isAuthenticated ? (
+                <div className="rt-liquid-mobile-auth-grid">
+
+                  <button
+                    type="button"
+                    className="rt-liquid-login-button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      openLogin();
+                    }}
+                  >
+                    {t(
+                      "navLogin"
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="rt-liquid-signup-button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      openSignUp();
+                    }}
+                  >
+                    {t(
+                      "navSignUp"
+                    )}
+                  </button>
+
+                </div>
+              ) : (
+                <div className="rt-liquid-mobile-auth-stack">
+
+                  <button
+                    type="button"
+                    className="rt-liquid-portal-button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      if (
+                        setCurrentView
+                      ) {
+                        setCurrentView(
+                          currentView ===
+                            "landing"
+                            ? "dashboard"
+                            : "landing"
+                        );
+                      }
+                    }}
+                  >
+                    <span>
+                      {currentView ===
+                      "landing"
+                        ? isDoctor
+                          ? t(
+                              "navDoctorPortal"
+                            )
+                          : t(
+                              "navPatientPortal"
+                            )
+                        : t(
+                            "navLandingPage"
+                          )}
+                    </span>
+
+                    {currentView ===
+                      "landing" && (
+                      <ChevronRight
+                        size={16}
+                      />
+                    )}
+                  </button>
+
+
+                  <button
+                    type="button"
+                    className="rt-liquid-mobile-logout"
+                    onClick={() => {
+                      setIsMobileMenuOpen(
+                        false
+                      );
+
+                      logout();
+                    }}
+                  >
+                    <LogOut
+                      size={16}
+                    />
+
+                    <span>
+                      {t(
+                        "navLogout"
+                      )}
+                    </span>
+                  </button>
+
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
+
+
+      {/* =====================================================
+          SCOPED LIQUID GLASS NAVBAR STYLES
+          ===================================================== */}
 
       <style>{`
-        @media (min-width: 900px) {
-          .desktop-nav {
-            display: flex !important;
+
+        /* ===================================================
+           HEADER
+           =================================================== */
+
+        .rt-liquid-header {
+          position: sticky;
+          top: 14px;
+          z-index: 100;
+
+          width: calc(100% - 32px);
+          max-width: 1440px;
+
+          margin: 0 auto;
+
+          border:
+            1px solid rgba(255, 255, 255, 0.20);
+
+          border-radius: 22px;
+
+          background:
+            linear-gradient(
+              135deg,
+              rgba(18, 27, 36, 0.76),
+              rgba(38, 40, 48, 0.63)
+            );
+
+          backdrop-filter:
+            blur(26px)
+            saturate(155%);
+
+          -webkit-backdrop-filter:
+            blur(26px)
+            saturate(155%);
+
+          box-shadow:
+            0 18px 45px
+              rgba(0, 0, 0, 0.25),
+
+            0 3px 12px
+              rgba(0, 0, 0, 0.12),
+
+            inset 0 1px 0
+              rgba(255, 255, 255, 0.24),
+
+            inset 0 -1px 0
+              rgba(255, 255, 255, 0.05);
+
+          overflow: visible;
+        }
+
+
+        .rt-liquid-header::before {
+          content: "";
+
+          position: absolute;
+          inset: 0;
+
+          border-radius: inherit;
+
+          background:
+            linear-gradient(
+              115deg,
+              rgb(251, 251, 251),
+              rgba(255,255,255,0.02) 30%,
+              transparent 60%,
+              rgb(255, 255, 255)
+            );
+
+          pointer-events: none;
+
+          z-index: -1;
+        }
+
+
+        /* ===================================================
+           HEADER INNER
+           =================================================== */
+
+        .rt-liquid-header-inner {
+          position: relative;
+
+          min-height: 72px;
+
+          padding:
+            6px 8px 6px 14px;
+
+          display: flex;
+          align-items: center;
+
+          gap: 14px;
+        }
+
+
+        /* ===================================================
+           BRAND
+           =================================================== */
+
+        .rt-liquid-brand {
+          flex-shrink: 0;
+
+          display: flex;
+          align-items: center;
+
+          gap: 10px;
+
+          padding: 5px 9px;
+
+          border: none;
+
+          background: transparent;
+
+          color: white;
+
+          cursor: pointer;
+
+          font-family: inherit;
+
+          text-align: left;
+        }
+
+
+        .rt-liquid-brand-icon {
+          width: 39px;
+          height: 39px;
+
+          flex-shrink: 0;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          border-radius: 12px;
+
+          color: #ffffff;
+
+          background:
+            linear-gradient(
+              135deg,
+              #2f7cff,
+              #1255e8
+            );
+
+          border:
+            1px solid
+              rgba(255,255,255,0.30);
+
+          box-shadow:
+            0 7px 20px
+              rgba(31, 105, 255, 0.34),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.35);
+        }
+
+
+        .rt-liquid-brand-text {
+          display: flex;
+
+          flex-direction: column;
+
+          gap: 1px;
+
+          min-width: 0;
+        }
+
+
+        .rt-liquid-brand-name {
+          color:
+            rgba(255,255,255,0.96);
+
+          font-size:
+            1.08rem;
+
+          line-height: 1.1;
+
+          font-weight: 800;
+
+          letter-spacing:
+            -0.025em;
+
+          white-space: nowrap;
+        }
+
+
+        .rt-liquid-brand-accent {
+          color: #62a0ff;
+        }
+
+
+        .rt-liquid-brand-subtitle {
+          color:
+            rgba(255,255,255,0.50);
+
+          font-size:
+            0.63rem;
+
+          line-height: 1.2;
+
+          font-weight: 500;
+
+          white-space: nowrap;
+        }
+
+
+        /* ===================================================
+           CENTER NAVIGATION PILL
+           =================================================== */
+
+        .rt-liquid-nav {
+          position: absolute;
+
+          left: 50%;
+
+          transform:
+            translateX(-50%);
+
+          display: flex;
+          align-items: center;
+
+          gap: 2px;
+
+          padding: 5px;
+
+          min-width: 350px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.18);
+
+          border-radius: 34px;
+
+          background:
+            linear-gradient(
+              135deg,
+              rgba(7, 15, 22, 0.58),
+              rgba(40, 42, 49, 0.46)
+            );
+
+          backdrop-filter:
+            blur(22px)
+            saturate(155%);
+
+          -webkit-backdrop-filter:
+            blur(22px)
+            saturate(155%);
+
+          box-shadow:
+            0 8px 24px
+              rgba(0,0,0,0.20),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.18);
+        }
+
+
+        .rt-liquid-nav-item {
+          position: relative;
+
+          height: 52px;
+
+          min-width: 100px;
+
+          padding:
+            0 22px;
+
+          border:
+            1px solid transparent;
+
+          border-radius: 28px;
+
+          background: transparent;
+
+          color:
+            rgba(255,255,255,0.62);
+
+          font-family: inherit;
+
+          font-size:
+            0.88rem;
+
+          font-weight: 650;
+
+          cursor: pointer;
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-nav-item:hover {
+          color:
+            rgba(255,255,255,0.96);
+
+          background:
+            rgba(255,255,255,0.07);
+
+          border-color:
+            rgba(255,255,255,0.08);
+        }
+
+
+        .rt-liquid-nav-item.active {
+          color: #ffffff;
+
+          background:
+            linear-gradient(
+              135deg,
+              rgba(8,18,27,0.88),
+              rgba(30,35,43,0.74)
+            );
+
+          border-color:
+            rgba(255,255,255,0.28);
+
+          box-shadow:
+            0 4px 14px
+              rgba(0,0,0,0.25),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.20);
+        }
+
+
+        .rt-liquid-nav-item.active::before {
+          content: "";
+
+          position: absolute;
+
+          inset: 1px;
+
+          border-radius:
+            inherit;
+
+          background:
+            linear-gradient(
+              180deg,
+              rgba(255,255,255,0.08),
+              transparent 52%
+            );
+
+          pointer-events: none;
+        }
+
+
+        /* ===================================================
+           RIGHT ACTIONS
+           =================================================== */
+
+        .rt-liquid-actions {
+          margin-left: auto;
+
+          display: flex;
+          align-items: center;
+
+          gap: 8px;
+        }
+
+
+        /* ===================================================
+           LANGUAGE
+           =================================================== */
+
+        .rt-liquid-language-wrapper {
+          position: relative;
+        }
+
+
+        .rt-liquid-language-button {
+          display: inline-flex;
+          align-items: center;
+
+          gap: 6px;
+
+          height: 40px;
+
+          padding:
+            0 12px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.16);
+
+          border-radius: 13px;
+
+          background:
+            rgba(255,255,255,0.055);
+
+          color:
+            rgba(255,255,255,0.84);
+
+          font-family: inherit;
+
+          font-size:
+            0.78rem;
+
+          font-weight: 600;
+
+          cursor: pointer;
+
+          backdrop-filter:
+            blur(14px);
+
+          -webkit-backdrop-filter:
+            blur(14px);
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-language-button:hover {
+          background:
+            rgba(255,255,255,0.10);
+
+          border-color:
+            rgba(255,255,255,0.27);
+        }
+
+
+        .rt-liquid-language-button > svg:first-child {
+          color:
+            #65a2ff;
+        }
+
+
+        .rt-chevron-open {
+          transform:
+            rotate(180deg);
+        }
+
+
+        /* ===================================================
+           LANGUAGE DROPDOWN
+           =================================================== */
+
+        .rt-liquid-language-menu {
+          position: absolute;
+
+          right: 0;
+
+          top:
+            calc(100% + 9px);
+
+          width: 170px;
+
+          padding: 6px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.20);
+
+          border-radius: 16px;
+
+          background:
+            linear-gradient(
+              135deg,
+              rgba(22,29,37,0.92),
+              rgba(42,43,51,0.88)
+            );
+
+          backdrop-filter:
+            blur(24px)
+            saturate(150%);
+
+          -webkit-backdrop-filter:
+            blur(24px)
+            saturate(150%);
+
+          box-shadow:
+            0 18px 40px
+              rgba(0,0,0,0.30),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.17);
+        }
+
+
+        .rt-liquid-language-option {
+          width: 100%;
+
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          padding:
+            10px 11px;
+
+          border: none;
+
+          border-radius: 10px;
+
+          background: transparent;
+
+          color:
+            rgba(255,255,255,0.72);
+
+          font-family: inherit;
+
+          font-size:
+            0.80rem;
+
+          font-weight: 550;
+
+          cursor: pointer;
+
+          text-align: left;
+
+          transition:
+            all 150ms ease;
+        }
+
+
+        .rt-liquid-language-option:hover {
+          color: #ffffff;
+
+          background:
+            rgba(255,255,255,0.08);
+        }
+
+
+        .rt-liquid-language-option.selected {
+          color: #ffffff;
+
+          background:
+            rgba(60,130,255,0.18);
+
+          font-weight: 700;
+        }
+
+
+        .rt-liquid-language-option.selected svg {
+          color: #69a5ff;
+        }
+
+
+        /* ===================================================
+           LOGIN BUTTON
+           =================================================== */
+
+        .rt-liquid-login-button {
+          height: 40px;
+
+          padding:
+            0 16px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.17);
+
+          border-radius: 13px;
+
+          background:
+            rgba(255,255,255,0.055);
+
+          color:
+            rgba(255,255,255,0.87);
+
+          font-family: inherit;
+
+          font-size:
+            0.80rem;
+
+          font-weight: 650;
+
+          cursor: pointer;
+
+          backdrop-filter:
+            blur(14px);
+
+          -webkit-backdrop-filter:
+            blur(14px);
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-login-button:hover {
+          background:
+            rgba(255,255,255,0.10);
+
+          border-color:
+            rgba(255,255,255,0.27);
+
+          color: #ffffff;
+        }
+
+
+        /* ===================================================
+           SIGN UP
+           =================================================== */
+
+        .rt-liquid-signup-button {
+          height: 40px;
+
+          padding:
+            0 17px;
+
+          border:
+            1px solid
+              rgba(112,163,255,0.52);
+
+          border-radius: 13px;
+
+          background:
+            linear-gradient(
+              135deg,
+              #317cff,
+              #1658eb
+            );
+
+          color: #ffffff;
+
+          font-family: inherit;
+
+          font-size:
+            0.80rem;
+
+          font-weight: 700;
+
+          cursor: pointer;
+
+          box-shadow:
+            0 7px 20px
+              rgba(35,105,255,0.30),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.30);
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-signup-button:hover {
+          transform:
+            translateY(-1px);
+
+          box-shadow:
+            0 10px 26px
+              rgba(35,105,255,0.38),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.34);
+        }
+
+
+        /* ===================================================
+           AUTHENTICATED AREA
+           =================================================== */
+
+        .rt-liquid-authenticated {
+          display: flex;
+          align-items: center;
+
+          gap: 7px;
+        }
+
+
+        .rt-liquid-portal-button {
+          height: 40px;
+
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          gap: 5px;
+
+          padding:
+            0 13px;
+
+          border:
+            1px solid
+              rgba(86,151,255,0.42);
+
+          border-radius: 13px;
+
+          background:
+            linear-gradient(
+              135deg,
+              rgba(49,124,255,0.85),
+              rgba(22,88,235,0.78)
+            );
+
+          color: #ffffff;
+
+          font-family: inherit;
+
+          font-size:
+            0.78rem;
+
+          font-weight: 700;
+
+          cursor: pointer;
+
+          box-shadow:
+            0 6px 18px
+              rgba(35,105,255,0.26),
+
+            inset 0 1px 0
+              rgba(255,255,255,0.26);
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-portal-button:hover {
+          transform:
+            translateY(-1px);
+
+          box-shadow:
+            0 9px 23px
+              rgba(35,105,255,0.34);
+        }
+
+
+        .rt-liquid-back-button {
+          height: 40px;
+
+          padding:
+            0 13px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.17);
+
+          border-radius: 13px;
+
+          background:
+            rgba(255,255,255,0.055);
+
+          color:
+            rgba(255,255,255,0.84);
+
+          font-family: inherit;
+
+          font-size:
+            0.78rem;
+
+          font-weight: 650;
+
+          cursor: pointer;
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-back-button:hover {
+          background:
+            rgba(255,255,255,0.10);
+
+          border-color:
+            rgba(255,255,255,0.27);
+        }
+
+
+        /* ===================================================
+           USER
+           =================================================== */
+
+        .rt-liquid-user {
+          display: flex;
+          align-items: center;
+
+          gap: 7px;
+
+          min-width: 0;
+
+          padding:
+            3px 9px 3px 4px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.13);
+
+          border-radius: 999px;
+
+          background:
+            rgba(255,255,255,0.045);
+        }
+
+
+        .rt-liquid-user-icon {
+          width: 31px;
+          height: 31px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          flex-shrink: 0;
+
+          border-radius: 50%;
+
+          background:
+            rgba(255,255,255,0.09);
+
+          color:
+            #76adff;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.12);
+        }
+
+
+        .rt-liquid-user-icon.patient {
+          color:
+            #4adea1;
+        }
+
+
+        .rt-liquid-user-info {
+          display: flex;
+          flex-direction: column;
+
+          min-width: 0;
+
+          line-height: 1.15;
+        }
+
+
+        .rt-liquid-user-name {
+          max-width: 100px;
+
+          overflow: hidden;
+
+          text-overflow: ellipsis;
+
+          white-space: nowrap;
+
+          color:
+            rgba(255,255,255,0.92);
+
+          font-size:
+            0.74rem;
+
+          font-weight: 650;
+        }
+
+
+        .rt-liquid-user-role {
+          color:
+            #76adff;
+
+          font-size:
+            0.59rem;
+
+          font-weight: 650;
+        }
+
+
+        .rt-liquid-user-role.patient {
+          color:
+            #4adea1;
+        }
+
+
+        /* ===================================================
+           LOGOUT
+           =================================================== */
+
+        .rt-liquid-logout {
+          width: 39px;
+          height: 39px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.15);
+
+          border-radius: 12px;
+
+          background:
+            rgba(255,255,255,0.045);
+
+          color:
+            rgba(255,255,255,0.60);
+
+          cursor: pointer;
+
+          transition:
+            all 180ms ease;
+        }
+
+
+        .rt-liquid-logout:hover {
+          color:
+            #ff7676;
+
+          border-color:
+            rgba(255,100,100,0.35);
+
+          background:
+            rgba(255,80,80,0.09);
+        }
+
+
+        /* ===================================================
+           MOBILE TOGGLE
+           =================================================== */
+
+        .rt-liquid-mobile-toggle {
+          display: none;
+
+          width: 43px;
+          height: 43px;
+
+          margin-left: auto;
+
+          align-items: center;
+          justify-content: center;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.18);
+
+          border-radius: 13px;
+
+          background:
+            rgba(255,255,255,0.06);
+
+          color:
+            rgba(255,255,255,0.90);
+
+          cursor: pointer;
+
+          backdrop-filter:
+            blur(15px);
+
+          -webkit-backdrop-filter:
+            blur(15px);
+        }
+
+
+        /* ===================================================
+           MOBILE PANEL
+           =================================================== */
+
+        .rt-liquid-mobile-panel {
+          display: none;
+
+          margin:
+            0 8px 8px;
+
+          padding:
+            12px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.13);
+
+          border-radius: 18px;
+
+          background:
+            rgba(10,18,26,0.55);
+
+          backdrop-filter:
+            blur(25px)
+            saturate(150%);
+
+          -webkit-backdrop-filter:
+            blur(25px)
+            saturate(150%);
+
+          box-shadow:
+            inset 0 1px 0
+              rgba(255,255,255,0.10);
+        }
+
+
+        .rt-liquid-mobile-nav {
+          display: flex;
+          flex-direction: column;
+
+          gap: 4px;
+
+          padding-bottom: 12px;
+
+          border-bottom:
+            1px solid
+              rgba(255,255,255,0.10);
+        }
+
+
+        .rt-liquid-mobile-nav-item {
+          width: 100%;
+
+          padding:
+            12px 14px;
+
+          border:
+            1px solid transparent;
+
+          border-radius: 12px;
+
+          background: transparent;
+
+          color:
+            rgba(255,255,255,0.68);
+
+          font-family: inherit;
+
+          font-size:
+            0.92rem;
+
+          font-weight: 600;
+
+          text-align: left;
+
+          cursor: pointer;
+
+          transition:
+            all 150ms ease;
+        }
+
+
+        .rt-liquid-mobile-nav-item:hover,
+        .rt-liquid-mobile-nav-item.active {
+          color: #ffffff;
+
+          background:
+            rgba(255,255,255,0.08);
+
+          border-color:
+            rgba(255,255,255,0.10);
+        }
+
+
+        /* ===================================================
+           MOBILE LANGUAGE
+           =================================================== */
+
+        .rt-liquid-mobile-language {
+          padding:
+            14px 0;
+
+          border-bottom:
+            1px solid
+              rgba(255,255,255,0.10);
+        }
+
+
+        .rt-liquid-mobile-label {
+          display: flex;
+          align-items: center;
+
+          gap: 6px;
+
+          margin-bottom: 9px;
+
+          color:
+            rgba(255,255,255,0.50);
+
+          font-size:
+            0.70rem;
+
+          font-weight: 700;
+
+          text-transform:
+            uppercase;
+
+          letter-spacing:
+            0.06em;
+        }
+
+
+        .rt-liquid-mobile-label svg {
+          color:
+            #69a5ff;
+        }
+
+
+        .rt-liquid-mobile-languages {
+          display: grid;
+
+          grid-template-columns:
+            repeat(4, 1fr);
+
+          gap: 6px;
+        }
+
+
+        .rt-liquid-mobile-language-option {
+          min-height: 36px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          gap: 4px;
+
+          padding:
+            5px 4px;
+
+          border:
+            1px solid
+              rgba(255,255,255,0.12);
+
+          border-radius: 9px;
+
+          background:
+            rgba(255,255,255,0.04);
+
+          color:
+            rgba(255,255,255,0.65);
+
+          font-family: inherit;
+
+          font-size:
+            0.72rem;
+
+          font-weight: 600;
+
+          cursor: pointer;
+        }
+
+
+        .rt-liquid-mobile-language-option.selected {
+          color: #ffffff;
+
+          border-color:
+            rgba(75,140,255,0.48);
+
+          background:
+            rgba(55,125,255,0.16);
+        }
+
+
+        /* ===================================================
+           MOBILE AUTH
+           =================================================== */
+
+        .rt-liquid-mobile-auth {
+          padding-top: 13px;
+        }
+
+
+        .rt-liquid-mobile-auth-grid {
+          display: grid;
+
+          grid-template-columns:
+            1fr 1fr;
+
+          gap: 8px;
+        }
+
+
+        .rt-liquid-mobile-auth-stack {
+          display: flex;
+          flex-direction: column;
+
+          gap: 8px;
+        }
+
+
+        .rt-liquid-mobile-logout {
+          width: 100%;
+
+          min-height: 42px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          gap: 7px;
+
+          border:
+            1px solid
+              rgba(255,100,100,0.28);
+
+          border-radius: 12px;
+
+          background:
+            rgba(255,70,70,0.07);
+
+          color:
+            #ff8585;
+
+          font-family: inherit;
+
+          font-size:
+            0.80rem;
+
+          font-weight: 650;
+
+          cursor: pointer;
+        }
+
+
+        /* ===================================================
+           TABLET
+           =================================================== */
+
+        @media (max-width: 1180px) {
+
+          .rt-liquid-brand-subtitle {
+            display: none;
           }
-          .mobile-menu-toggle {
-            display: none !important;
+
+          .rt-liquid-brand-name {
+            font-size:
+              1rem;
           }
-          .mobile-drawer {
-            display: none !important;
+
+          .rt-liquid-nav {
+            min-width:
+              315px;
+          }
+
+          .rt-liquid-nav-item {
+            min-width:
+              90px;
+
+            padding:
+              0 15px;
+          }
+
+          .rt-liquid-user-info {
+            display: none;
+          }
+
+          .rt-liquid-user {
+            padding:
+              4px;
           }
         }
+
+
+        /* ===================================================
+           MOBILE / TABLET
+           =================================================== */
+
         @media (max-width: 899px) {
-          .desktop-nav {
-            display: none !important;
+
+          .rt-liquid-header {
+            top: 8px;
+
+            width:
+              calc(100% - 16px);
+
+            border-radius:
+              19px;
           }
-          .mobile-menu-toggle {
-            display: flex !important;
+
+
+          .rt-liquid-header-inner {
+            min-height:
+              62px;
+
+            padding:
+              5px 7px 5px 10px;
+          }
+
+
+          .rt-liquid-brand {
+            padding:
+              4px 6px;
+          }
+
+
+          .rt-liquid-brand-icon {
+            width: 37px;
+            height: 37px;
+          }
+
+
+          .rt-liquid-brand-name {
+            font-size:
+              0.98rem;
+          }
+
+
+          .rt-liquid-nav,
+          .rt-liquid-actions {
+            display: none;
+          }
+
+
+          .rt-liquid-mobile-toggle {
+            display: flex;
+          }
+
+
+          .rt-liquid-mobile-panel {
+            display: block;
           }
         }
+
+
+        /* ===================================================
+           SMALL MOBILE
+           =================================================== */
+
+        @media (max-width: 480px) {
+
+          .rt-liquid-header {
+            width:
+              calc(100% - 10px);
+
+            top: 5px;
+
+            border-radius:
+              17px;
+          }
+
+
+          .rt-liquid-brand-subtitle {
+            display: none;
+          }
+
+
+          .rt-liquid-brand-name {
+            font-size:
+              0.92rem;
+          }
+
+
+          .rt-liquid-brand-icon {
+            width: 35px;
+            height: 35px;
+
+            border-radius:
+              10px;
+          }
+
+
+          .rt-liquid-mobile-panel {
+            margin:
+              0 5px 5px;
+
+            padding:
+              10px;
+          }
+        }
+
+
+        /* ===================================================
+           REDUCED MOTION
+           =================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+          .rt-liquid-nav-item,
+          .rt-liquid-language-button,
+          .rt-liquid-language-option,
+          .rt-liquid-login-button,
+          .rt-liquid-signup-button,
+          .rt-liquid-portal-button,
+          .rt-liquid-back-button,
+          .rt-liquid-logout {
+            transition: none;
+          }
+
+          .rt-liquid-signup-button:hover,
+          .rt-liquid-portal-button:hover {
+            transform: none;
+          }
+        }
+
       `}</style>
-    </header>
+    </>
   );
 }
