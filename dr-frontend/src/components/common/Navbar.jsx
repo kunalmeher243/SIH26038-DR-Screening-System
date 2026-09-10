@@ -177,17 +177,13 @@ export default function Navbar({
             }}
           >
             <span className="rt-liquid-brand-icon">
-              <Eye
-                size={22}
-                strokeWidth={2.5}
-              />
+              <img src="../../../dist/assets/Retina.png" alt="Logo" width={30} height={30}/>
             </span>
 
             <span className="rt-liquid-brand-text">
               <span className="rt-liquid-brand-name">
-                {t("brandName")}
-                <span className="rt-liquid-brand-accent">
-                  .AI
+                <span>
+                  SERIX
                 </span>
               </span>
 

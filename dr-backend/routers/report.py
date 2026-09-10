@@ -6,6 +6,7 @@ from fastapi.responses import StreamingResponse
 from dummy.dummy_responses import DUMMY_REPORT
 from utils.pdf_generator import build_clinical_report_pdf
 
+
 router = APIRouter()
 
 
@@ -22,25 +23,35 @@ async def generate_clinical_report_pdf(
     try:
         data = json.loads(report_data)
     except json.JSONDecodeError as exc:
-        raise HTTPException(status_code=400, detail="Invalid report data.") from exc
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid report data.",
+        ) from exc
 
     image_bytes = None
+
     if file is not None:
         image_bytes = await file.read()
 
     try:
-        pdf_bytes = build_clinical_report_pdf(data, image_bytes)
+        pdf_bytes = build_clinical_report_pdf(
+            data,
+            image_bytes,
+        )
     except Exception as exc:
         raise HTTPException(
             status_code=500,
             detail=f"Clinical PDF generation failed: {exc}",
         ) from exc
 
-    filename = "SERIX_Clinical_Report.pdf"
+    filename = "RetinaTrack_Clinical_Report.pdf"
+
     return StreamingResponse(
         iter([pdf_bytes]),
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="{filename}"'
+            "Content-Disposition": (
+                f'attachment; filename="{filename}"'
+            )
         },
     )

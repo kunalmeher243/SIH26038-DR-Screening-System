@@ -4028,6 +4028,112 @@ html {
     }
 }
 
+/* =====================================================
+   WHATSAPP SUCCESS
+   ===================================================== */
+
+.clinical-whatsapp-success {
+  margin-top: 12px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  padding: 13px 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 169, 104, 0.10),
+      rgba(32, 169, 104, 0.045)
+    ) !important;
+
+  border:
+    1px solid
+    rgba(32, 169, 104, 0.30) !important;
+
+  border-radius:
+    10px;
+}
+
+
+.clinical-whatsapp-success-icon {
+  width: 27px;
+  height: 27px;
+
+  flex: 0 0 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    #20a968;
+
+  color:
+    #ffffff;
+
+  font-size:
+    14px;
+
+  font-weight:
+    800;
+
+  box-shadow:
+    0 5px 14px
+    rgba(32, 169, 104, 0.25);
+}
+
+
+.clinical-whatsapp-success strong {
+  display: block;
+
+  color:
+    #167047;
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+}
+
+
+.clinical-whatsapp-success p {
+  margin:
+    3px 0 0;
+
+  color:
+    #5d806f;
+
+  font-size:
+    10px;
+
+  line-height:
+    1.45;
+}
+
+
+.clinical-whatsapp-success
+.clinical-whatsapp-number {
+  margin-top:
+    5px;
+
+  color:
+    #167047;
+
+  font-size:
+    12px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    0.02em;
+}
 
 @media (max-width: 700px) {
     .clinical-report-card {
@@ -4061,404 +4167,5 @@ html {
 
     .clinical-report-header h3 {
         font-size: 21px;
-    }
-}
-
-/* =========================================================
-   LIQUID GLASS REFERENCE NAVIGATION
-   Reference: dark translucent floating pill
-   ========================================================= */
-
-.liquid-glass-nav {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: min(650px, calc(100% - 40px));
-    min-height: 70px;
-
-    padding: 6px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(18, 27, 36, 0.78),
-            rgba(42, 43, 50, 0.64)
-        );
-
-    -webkit-backdrop-filter:
-        blur(28px)
-        saturate(155%);
-
-    backdrop-filter:
-        blur(28px)
-        saturate(155%);
-
-    border:
-        1px solid rgba(255, 255, 255, 0.23);
-
-    border-radius:
-        38px;
-
-    box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.30),
-        0 3px 12px rgba(0, 0, 0, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.06);
-
-    overflow: hidden;
-
-    isolation: isolate;
-}
-
-
-/* Top glass reflection */
-.liquid-glass-nav::before {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            115deg,
-            rgba(255, 255, 255, 0.15),
-            rgba(255, 255, 255, 0.025) 32%,
-            transparent 58%,
-            rgba(255, 255, 255, 0.045)
-        );
-
-    pointer-events: none;
-
-    z-index: 0;
-}
-
-
-/* =========================================================
-   REFERENCE NAV ITEM
-   ========================================================= */
-
-.liquid-glass-nav-item {
-    position: relative;
-    z-index: 1;
-
-    flex: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    height: 56px;
-
-    padding:
-        0 22px;
-
-    margin: 0;
-
-    border:
-        1px solid transparent;
-
-    border-radius:
-        30px;
-
-    background:
-        transparent;
-
-    color:
-        rgba(255, 255, 255, 0.67);
-
-    font-family:
-        inherit;
-
-    font-size:
-        16px;
-
-    font-weight:
-        600;
-
-    line-height:
-        1;
-
-    white-space:
-        nowrap;
-
-    cursor:
-        pointer;
-
-    transition:
-        color 0.18s ease,
-        background 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease,
-        transform 0.18s ease;
-}
-
-
-/* Hover */
-.liquid-glass-nav-item:hover {
-    color:
-        rgba(255, 255, 255, 0.96);
-
-    background:
-        rgba(255, 255, 255, 0.075);
-
-    border-color:
-        rgba(255, 255, 255, 0.10);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.10);
-}
-
-
-/* =========================================================
-   ACTIVE ITEM
-   ========================================================= */
-
-.liquid-glass-nav-item.active {
-    color:
-        #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(8, 18, 27, 0.88),
-            rgba(29, 34, 42, 0.72)
-        );
-
-    border-color:
-        rgba(255, 255, 255, 0.30);
-
-    box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.20),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.045);
-}
-
-
-/* Active item highlight */
-.liquid-glass-nav-item.active::before {
-    content: "";
-
-    position: absolute;
-    inset: 1px;
-
-    border-radius:
-        inherit;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.09),
-            transparent 48%
-        );
-
-    pointer-events:
-        none;
-}
-
-
-/* Keyboard accessibility */
-.liquid-glass-nav-item:focus-visible {
-    outline:
-        2px solid rgba(255, 255, 255, 0.65);
-
-    outline-offset:
-        2px;
-}
-
-
-/* =========================================================
-   REFERENCE GLASS CARD
-   ========================================================= */
-
-.liquid-glass-card {
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.14),
-            rgba(255, 255, 255, 0.055)
-        );
-
-    -webkit-backdrop-filter:
-        blur(24px)
-        saturate(145%);
-
-    backdrop-filter:
-        blur(24px)
-        saturate(145%);
-
-    border:
-        1px solid rgba(255, 255, 255, 0.20);
-
-    border-radius:
-        24px;
-
-    box-shadow:
-        0 14px 38px rgba(0, 0, 0, 0.20),
-        inset 0 1px 0 rgba(255, 255, 255, 0.20),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.05);
-
-    overflow:
-        hidden;
-
-    isolation:
-        isolate;
-}
-
-
-/* =========================================================
-   REFERENCE GLASS BUTTON
-   ========================================================= */
-
-.liquid-glass-button {
-    position: relative;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    padding:
-        12px 22px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.22);
-
-    border-radius:
-        16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.15),
-            rgba(255, 255, 255, 0.055)
-        );
-
-    -webkit-backdrop-filter:
-        blur(18px)
-        saturate(150%);
-
-    backdrop-filter:
-        blur(18px)
-        saturate(150%);
-
-    color:
-        #ffffff;
-
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.20),
-        inset 0 1px 0 rgba(255, 255, 255, 0.20);
-
-    cursor:
-        pointer;
-
-    transition:
-        transform 0.18s ease,
-        background 0.18s ease,
-        box-shadow 0.18s ease;
-}
-
-.liquid-glass-button:hover {
-    transform:
-        translateY(-1px);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.20),
-            rgba(255, 255, 255, 0.075)
-        );
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.24),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-.liquid-glass-button:active {
-    transform:
-        translateY(0);
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 768px) {
-
-    .liquid-glass-nav {
-        width:
-            calc(100% - 24px);
-
-        min-height:
-            62px;
-
-        padding:
-            5px;
-
-        border-radius:
-            32px;
-    }
-
-    .liquid-glass-nav-item {
-        height:
-            50px;
-
-        padding:
-            0 12px;
-
-        font-size:
-            14px;
-    }
-}
-
-@media (max-width: 480px) {
-
-    .liquid-glass-nav {
-        width:
-            calc(100% - 16px);
-
-        min-height:
-            58px;
-
-        border-radius:
-            30px;
-    }
-
-    .liquid-glass-nav-item {
-        height:
-            46px;
-
-        padding:
-            0 8px;
-
-        font-size:
-            12px;
-    }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    .liquid-glass-nav-item,
-    .liquid-glass-button {
-        transition:
-            none;
-    }
-
-    .liquid-glass-button:hover {
-        transform:
-            none;
     }
 }
