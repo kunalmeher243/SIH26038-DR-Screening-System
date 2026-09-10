@@ -1,37 +1,42 @@
-import Upload from "./pages/Upload";
-import Analysis from "./pages/Analysis";
+import { useState, useEffect } from "react";
+import LandingPage from "./pages/LandingPage";
+import DashboardRouter from "./pages/DashboardRouter";
+import Toast from "./components/common/Toast";
+import useAuthStore from "./store/useAuthStore";
 import useAnalysisStore from "./store/useAnalysisStore";
 
-
 function App() {
+  const { isAuthenticated } = useAuthStore();
+  const stage = useAnalysisStore((state) => state.stage);
 
-  const stage = useAnalysisStore(
-    (state) => state.stage
+  const [currentView, setCurrentView] = useState("landing"); // "landing" | "dashboard"
+
+  // If analysis starts or is active, ensure we are in dashboard view
+  useEffect(() => {
+    if (stage && stage !== "idle") {
+      setCurrentView("dashboard");
+    }
+  }, [stage]);
+
+  return (
+    <div className="retinatrack-app">
+      {/* Top-Center Floating Flash Toast Notification */}
+      <Toast />
+
+      {/* Main View Router */}
+      {currentView === "landing" ? (
+        <LandingPage
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+        />
+      ) : (
+        <DashboardRouter
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+        />
+      )}
+    </div>
   );
-
-
-  const analysisStages = [
-    "quality",
-    "enhance",
-    "grade",
-    "report",
-    "done",
-    "error",
-  ];
-
-
-  /*
-   * As soon as analysis starts, open the Analysis page.
-   * This allows the user to see the live pipeline.
-   */
-
-  if (analysisStages.includes(stage)) {
-    return <Analysis />;
-  }
-
-
-  return <Upload />;
 }
-
 
 export default App;

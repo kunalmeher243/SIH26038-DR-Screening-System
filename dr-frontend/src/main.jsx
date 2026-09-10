@@ -6,6 +6,7 @@ import App from './App.jsx'
 import "./styles/global.css";
 import "./styles/theme.css";
 import "./styles/LiquidGlass.css";
+import "./styles/saas-theme.css";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

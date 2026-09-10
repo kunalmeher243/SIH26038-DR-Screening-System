@@ -1,0 +1,280 @@
+/* =========================================================
+   RETINATRACK AI — MINIMALIST MEDICAL SAAS DESIGN SYSTEM
+   Clean White + Medical/Electric Blue (#0052FF / #2563EB)
+   ========================================================= */
+
+:root {
+  /* Surface & Canvas */
+  --saas-bg: #FAFAFA;
+  --saas-bg-pure: #FFFFFF;
+  --saas-bg-subtle: #F8FAFC;
+  --saas-bg-muted: #F1F5F9;
+  
+  /* Text & Foreground */
+  --saas-fg: #0F172A;
+  --saas-fg-secondary: #334155;
+  --saas-fg-muted: #64748B;
+  --saas-fg-light: #94A3B8;
+
+  /* Accent - Crisp Medical / Electric Blue */
+  --saas-accent: #0052FF;
+  --saas-accent-hover: #0045D8;
+  --saas-accent-light: #EFF6FF;
+  --saas-accent-subtle: rgba(0, 82, 255, 0.08);
+  --saas-accent-secondary: #4D7CFF;
+  --saas-accent-gradient: linear-gradient(135deg, #0052FF 0%, #4D7CFF 100%);
+  --saas-accent-gradient-subtle: linear-gradient(135deg, rgba(0, 82, 255, 0.06) 0%, rgba(77, 124, 255, 0.02) 100%);
+
+  /* Borders & Dividers */
+  --saas-border: #E2E8F0;
+  --saas-border-subtle: #F1F5F9;
+  --saas-border-accent: rgba(0, 82, 255, 0.25);
+
+  /* Status Colors */
+  --saas-success: #10B981;
+  --saas-success-bg: #ECFDF5;
+  --saas-warning: #F59E0B;
+  --saas-warning-bg: #FFFBEB;
+  --saas-danger: #EF4444;
+  --saas-danger-bg: #FEF2F2;
+
+  /* Typography */
+  --font-display: "Calistoga", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Shadows */
+  --shadow-saas-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-saas-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --shadow-saas-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-saas-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --shadow-saas-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  --shadow-saas-accent: 0 6px 20px -2px rgba(0, 82, 255, 0.28);
+  --shadow-saas-accent-lg: 0 12px 28px -4px rgba(0, 82, 255, 0.35);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+}
+
+/* Global Reset & Typography Baseline */
+body {
+  font-family: var(--font-body);
+  background-color: var(--saas-bg);
+  color: var(--saas-fg);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Display Headlines */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-saas {
+  font-family: var(--font-mono);
+}
+
+/* Gradient Text */
+.gradient-text-saas {
+  background: linear-gradient(135deg, #0052FF 0%, #4D7CFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Floating Animations */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+@keyframes rotateSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideDownToast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4.5s ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 2.2s infinite ease-in-out;
+}
+
+.animate-rotate-slow {
+  animation: rotateSlow 45s linear infinite;
+}
+
+.animate-toast-slide {
+  animation: slideDownToast 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-pop {
+  animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glassmorphic Light Cards */
+.saas-card {
+  background: var(--saas-bg-pure);
+  border: 1px solid var(--saas-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-saas-sm);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.saas-card:hover {
+  border-color: rgba(0, 82, 255, 0.28);
+  box-shadow: var(--shadow-saas-md);
+  transform: translateY(-2px);
+}
+
+/* Pill Badges */
+.saas-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 82, 255, 0.06);
+  border: 1px solid rgba(0, 82, 255, 0.18);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--saas-accent);
+}
+
+/* Buttons */
+.saas-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--saas-accent-gradient);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 22px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-saas-accent);
+  transition: all 0.2s ease-out;
+  text-decoration: none;
+}
+
+.saas-btn-primary:hover {
+  transform: translateY(-1.5px);
+  box-shadow: var(--shadow-saas-accent-lg);
+  filter: brightness(1.05);
+}
+
+.saas-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.saas-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FFFFFF;
+  color: var(--saas-fg);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 22px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--saas-border);
+  cursor: pointer;
+  box-shadow: var(--shadow-saas-xs);
+  transition: all 0.2s ease-out;
+  text-decoration: none;
+}
+
+.saas-btn-secondary:hover {
+  background: var(--saas-bg-subtle);
+  border-color: rgba(0, 82, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.saas-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
