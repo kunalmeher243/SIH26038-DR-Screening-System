@@ -3,7 +3,7 @@ import {
   useRef,
   useState,
 } from "react";
-import "../styles/liquidGlass.css";
+import "../styles/LiquidGlass.css";
 import useAnalysisStore from "../store/useAnalysisStore";
 import ResultDashboard from "../components/ResultDashboard";
 import GradCAMViewer from "../components/GradCAMViewer";
