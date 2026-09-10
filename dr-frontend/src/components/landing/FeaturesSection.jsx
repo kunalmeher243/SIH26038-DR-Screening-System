@@ -6,58 +6,48 @@ import {
   GitFork,
   Radio,
   Check,
-  TrendingUp,
 } from "lucide-react";
+import useLanguageStore from "../../store/useLanguageStore";
 
 export default function FeaturesSection() {
+  const { t } = useLanguageStore();
+
   const features = [
     {
       icon: CameraOff,
-      title: "Automated Image Quality Assessment (IQA)",
-      tag: "Focus & Illumination Gate",
-      description:
-        "Instant rejection of blurred, overexposed, or ungradeable captures at the camera stage to eliminate false predictions and guide field operators to immediate recapture.",
-      stat: "Zero ungradeable misclassifications",
+      title: t("feat1Title"),
+      description: t("feat1Desc"),
+      stat: t("feat1Stat"),
     },
     {
       icon: Wand2,
-      title: "Adaptive Retinal Enhancement",
-      tag: "Contrast Optimization",
-      description:
-        "Local contrast optimization via CLAHE, illumination-field normalization, and artifact suppression for borderline fundus images without hallucinating false lesions.",
-      stat: "Preserves native tissue fidelity",
+      title: t("feat2Title"),
+      description: t("feat2Desc"),
+      stat: t("feat2Stat"),
     },
     {
       icon: ScanEye,
-      title: "Sub-Pixel Lesion Detection",
-      tag: "MA / EX / HE Localization",
-      description:
-        "High-sensitivity localization of tiny capillary outpouchings (microaneurysms), hard/soft exudates, and retinal hemorrhages with distance metrics from optic disc and fovea.",
-      stat: "Validated on IDRiD Indian dataset",
+      title: t("feat3Title"),
+      description: t("feat3Desc"),
+      stat: t("feat3Stat"),
     },
     {
       icon: Eye,
-      title: "Explainable AI (XAI) Heatmaps",
-      tag: "Grad-CAM Evidence",
-      description:
-        "Transparent visual proof of neural network activations. Doctors verify model attention and lesion density in under 30 seconds before approving final diagnosis.",
-      stat: "< 30s clinician validation",
+      title: t("feat4Title"),
+      description: t("feat4Desc"),
+      stat: t("feat4Stat"),
     },
     {
       icon: GitFork,
-      title: "Risk-Prioritized Triage Routing",
-      tag: "3-Tier Routing Matrix",
-      description:
-        "Automated routing between Routine Screening (Low Risk), Uncertainty Escrow (Human Review), and Immediate Ophthalmology Escalation (High Risk).",
-      stat: ">90% sensitivity on referable DR",
+      title: t("feat5Title"),
+      description: t("feat5Desc"),
+      stat: t("feat5Stat"),
     },
     {
       icon: Radio,
-      title: "Telemedicine Scalability",
-      tag: "100,000+ Patients / Year",
-      description:
-        "Architected to simulate and balance district-level patient flow (274 patients/day), optimizing camera utilization, bandwidth constraints, and doctor workloads.",
-      stat: "District-wide load balancing",
+      title: t("feat6Title"),
+      description: t("feat6Desc"),
+      stat: t("feat6Stat"),
     },
   ];
 
@@ -65,8 +55,8 @@ export default function FeaturesSection() {
     <section
       id="features"
       style={{
-        paddingTop: "96px",
-        paddingBottom: "96px",
+        paddingTop: "80px",
+        paddingBottom: "80px",
         backgroundColor: "var(--saas-bg)",
       }}
     >
@@ -77,23 +67,8 @@ export default function FeaturesSection() {
           padding: "0 24px",
         }}
       >
-        {/* Section Pill Badge */}
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
-          <div className="saas-pill-badge">
-            <span
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                backgroundColor: "var(--saas-accent)",
-              }}
-            />
-            <span>End-to-End Capabilities</span>
-          </div>
-        </div>
-
-        {/* Section Headline */}
-        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 64px" }}>
+        {/* Section Headline - Pill badge removed */}
+        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 56px" }}>
           <h2
             className="font-display"
             style={{
@@ -103,8 +78,8 @@ export default function FeaturesSection() {
               margin: "0 0 16px 0",
             }}
           >
-            Engineering Rigor for{" "}
-            <span className="gradient-text-saas">Clinical Reliability</span>
+            {t("featuresHeadlinePrefix")}{" "}
+            <span className="gradient-text-saas">{t("featuresHeadlineGradient")}</span>
           </h2>
           <p
             style={{
@@ -114,7 +89,7 @@ export default function FeaturesSection() {
               margin: 0,
             }}
           >
-            An integrated multi-stage pipeline where image quality, anatomical segmentation, sub-pixel detection, and calibrated explainability outperform isolated single-model techniques.
+            {t("featuresDescription")}
           </p>
         </div>
 
@@ -141,12 +116,12 @@ export default function FeaturesSection() {
                 }}
               >
                 <div>
-                  {/* Top Row: Icon & Tag */}
+                  {/* Top Row: Icon Only - Tag badge removed */}
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
+                      justifyContent: "flex-start",
                       marginBottom: "20px",
                     }}
                   >
@@ -165,21 +140,6 @@ export default function FeaturesSection() {
                     >
                       <Icon size={22} strokeWidth={2.2} />
                     </div>
-
-                    <span
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "0.72rem",
-                        fontWeight: 600,
-                        color: "var(--saas-accent)",
-                        backgroundColor: "rgba(0, 82, 255, 0.06)",
-                        padding: "4px 10px",
-                        borderRadius: "999px",
-                        border: "1px solid rgba(0, 82, 255, 0.15)",
-                      }}
-                    >
-                      {feat.tag}
-                    </span>
                   </div>
 
                   {/* Title */}
@@ -208,7 +168,7 @@ export default function FeaturesSection() {
                   </p>
                 </div>
 
-                {/* Bottom Proof Metric Tag */}
+                {/* Bottom Proof Metric */}
                 <div
                   style={{
                     display: "flex",

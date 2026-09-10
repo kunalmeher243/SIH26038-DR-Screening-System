@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import LiquidGlass from "./LiquidGlass";
+import useLanguageStore from "../store/useLanguageStore";
 
 import {
   generateClinicalReportPdf,
   sendClinicalReportToWhatsApp,
 } from "../api/endpoints";
-
 
 function ClinicalReport({
   file,
@@ -14,6 +14,7 @@ function ClinicalReport({
   grade,
   report,
 }) {
+  const { t } = useLanguageStore();
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfReady, setPdfReady] = useState(false);
   const [pdfError, setPdfError] = useState("");
@@ -24,19 +25,16 @@ function ClinicalReport({
   const [sendLoading, setSendLoading] = useState(false);
   const [sendStatus, setSendStatus] = useState(null);
 
-
   const lesions = report?.lesions || {};
   const confidence = report?.confidence_breakdown || {};
-
 
   // ---------------------------------------------------------
   // REPORT DATA
   // ---------------------------------------------------------
-
   const reportData = useMemo(
     () => ({
       report_title:
-        "SERIX Clinical Screening Report",
+        "RetinaTrack Clinical Screening Report",
 
       generated_at:
         report?.generated_at ||
@@ -146,17 +144,9 @@ function ClinicalReport({
     ]
   );
 
-
-  // ---------------------------------------------------------
-  // PHONE INPUT
-  // ---------------------------------------------------------
-
-
-
   // ---------------------------------------------------------
   // GENERATE PDF
   // ---------------------------------------------------------
-
   const handleGeneratePdf = async () => {
     setPdfLoading(true);
     setPdfError("");
@@ -178,7 +168,7 @@ function ClinicalReport({
       anchor.href = url;
 
       anchor.download =
-        `SERIX_Clinical_Report_${Date.now()}.pdf`;
+        `RetinaTrack_Clinical_Report_${Date.now()}.pdf`;
 
       document.body.appendChild(anchor);
 
@@ -194,7 +184,7 @@ function ClinicalReport({
       setPdfError(
         error?.response?.data?.detail ||
         error?.message ||
-        "Unable to generate the clinical report."
+        t("serviceUnavailableHelp")
       );
 
     } finally {
@@ -202,11 +192,9 @@ function ClinicalReport({
     }
   };
 
-
   // ---------------------------------------------------------
   // AUTOMATIC PHONE FORMAT CHECK
   // ---------------------------------------------------------
-
   const validatePhoneLocally = (value) => {
     const normalized = value.replace(/\D/g, "");
 
@@ -220,7 +208,6 @@ function ClinicalReport({
       normalized,
     };
   };
-
 
   const handlePhoneChange = (event) => {
     const digitsOnly = event.target.value
@@ -242,16 +229,14 @@ function ClinicalReport({
       ok: valid,
       normalized,
       message: valid
-        ? "Number format verified."
-        : "Enter a valid international phone number with country code.",
+        ? t("numberValidMsg")
+        : t("numberInvalidMsg"),
     });
   };
-
 
   // ---------------------------------------------------------
   // SEND WHATSAPP REPORT
   // ---------------------------------------------------------
-
   const handleSendWhatsApp = async () => {
     if (!phoneStatus?.ok) {
       return;
@@ -274,17 +259,16 @@ function ClinicalReport({
         ok: true,
         message:
           result.message ||
-          "Clinical report processed successfully.",
+          t("whatsappSuccess"),
       });
 
     } catch (error) {
       setSendStatus({
         ok: false,
-
         message:
           error?.response?.data?.detail ||
           error?.message ||
-          "Unable to send the clinical report to WhatsApp.",
+          t("serviceUnavailableHelp"),
       });
 
     } finally {
@@ -292,112 +276,83 @@ function ClinicalReport({
     }
   };
 
-
   // ---------------------------------------------------------
   // UI
   // ---------------------------------------------------------
-
   return (
     <section
       className="dashboard-section clinical-report-section"
     >
-
-      {/* =====================================================
-          SECTION HEADER
-          ===================================================== */}
-
+      {/* SECTION HEADER */}
       <div className="section-heading">
         <div>
-
           <span className="section-kicker">
-            CLINICAL REPORT
+            {t("clinicalReportSectionKicker")}
           </span>
 
           <h2>
-            Generate & Share Clinical Report
+            {t("genShareReportTitle")}
           </h2>
 
           <p>
-            Create a structured screening report
-            from the completed AI assessment and
-            securely share the PDF through WhatsApp.
+            {t("genShareReportDesc")}
           </p>
-
         </div>
       </div>
-
 
       <LiquidGlass
         variant="light"
         className="clinical-report-card"
       >
-
-        {/* ===================================================
-            REPORT HEADER
-            =================================================== */}
-
+        {/* REPORT HEADER */}
         <div className="clinical-report-header">
-
           <div>
-
             <span className="card-kicker">
-              SERIX SCREENING REPORT
+              {t("serixScreeningReportKicker")}
             </span>
 
             <h3>
-              Clinical Screening Report
+              {t("clinicalScreeningReportTitle")}
             </h3>
 
             <p>
-              A clinician-oriented summary of the
-              retinal screening result.
+              {t("clinicalScreeningReportDesc")}
             </p>
-
           </div>
-
 
           <div className="clinical-report-status">
-
             <span className="status-dot" />
-
             {pdfReady
-              ? "PDF Ready"
-              : "Report Available"}
-
+              ? t("pdfReady")
+              : t("reportAvailable")}
           </div>
-
         </div>
 
-
-        {/* ===================================================
-            REPORT METRICS
-            =================================================== */}
-
+        {/* REPORT METRICS */}
         <div className="clinical-report-grid">
-
           <ReportValue
-            label="Eye"
-            value={reportData.eye}
+            label={t("eyeLabel")}
+            value={eye === "right" ? t("rightEye") : t("leftEye")}
           />
 
           <ReportValue
-            label="DR Level"
+            label={t("drLevelLabel")}
             value={
-              `Level ${
-                reportData.dr_level ?? "—"
-              }`
+              reportData.dr_level !== null
+                ? `${t("levelPrefix")} ${reportData.dr_level}`
+                : "—"
             }
           />
 
           <ReportValue
-            label="Classification"
+            label={t("classificationLabel")}
             value={
               reportData.dr_label
             }
           />
 
           <ReportValue
-            label="Confidence"
+            label={t("confidenceLabel")}
             value={
               `${Math.round(
                 reportData.confidence * 100
@@ -406,123 +361,93 @@ function ClinicalReport({
           />
 
           <ReportValue
-            label="Referral"
+            label={t("referralLabel")}
             value={
               reportData.refer
-                ? "Recommended"
-                : "Not indicated"
+                ? t("recommendedLabel")
+                : t("notIndicatedLabel")
             }
           />
 
           <ReportValue
-            label="Routing"
+            label={t("routingLabel")}
             value={
               reportData.routing
             }
           />
-
         </div>
 
-
-        {/* ===================================================
-            CLINICAL FINDINGS
-            =================================================== */}
-
+        {/* CLINICAL FINDINGS */}
         <div className="clinical-report-findings">
-
           <div className="clinical-report-block">
-
             <span className="clinical-report-block-label">
-              CLINICAL SUMMARY
+              {t("clinicalFindingsUpper")}
             </span>
 
             <p>
               {reportData.clinical_summary}
             </p>
-
           </div>
 
-
           <div className="clinical-report-block">
-
             <span className="clinical-report-block-label">
-              AI EVIDENCE
+              {t("aiEvidenceKicker")}
             </span>
 
             <p>
               {reportData.evidence_statement}
             </p>
-
           </div>
-
         </div>
 
-
-        {/* ===================================================
-            DETECTED LESIONS
-            =================================================== */}
-
+        {/* DETECTED LESIONS */}
         <div className="clinical-report-lesions">
-
           <span className="clinical-report-block-label">
-            DETECTED FINDINGS
+            {t("detectedFindingsUpper")}
           </span>
 
-
           <div className="clinical-report-lesion-grid">
-
             <Finding
-              label="Microaneurysms"
+              label={t("microaneurysmsLabel")}
               value={
                 lesions.microaneurysms ?? 0
               }
             />
 
             <Finding
-              label="Hemorrhages"
+              label={t("hemorrhagesLabel")}
               value={
                 lesions.hemorrhages ?? 0
               }
             />
 
             <Finding
-              label="Hard Exudates"
+              label={t("hardExudatesLabel")}
               value={
                 lesions.hard_exudates ?? 0
               }
             />
 
             <Finding
-              label="Soft Exudates"
+              label={t("softExudatesLabel")}
               value={
                 lesions.soft_exudates ?? 0
               }
             />
-
           </div>
-
         </div>
 
-
-        {/* ===================================================
-            PDF GENERATION
-            =================================================== */}
-
+        {/* PDF GENERATION */}
         <div className="clinical-report-actions">
-
           <div>
-
             <span className="clinical-report-block-label">
-              PDF REPORT
+              {t("pdfReportUpper")}
             </span>
 
             <p>
-              Generate the complete clinical report
-              as a downloadable PDF.
+              {t("pdfReportDesc")}
             </p>
-
           </div>
-
 
           <button
             type="button"
@@ -530,20 +455,13 @@ function ClinicalReport({
             onClick={handleGeneratePdf}
             disabled={pdfLoading}
           >
-
             {pdfLoading
-              ? "Generating PDF..."
-              : "Generate Clinical Report"}
-
+              ? t("generatingPdf")
+              : t("generateClinicalReportBtn")}
           </button>
-
         </div>
 
-
-        {/* ===================================================
-            PDF ERROR
-            =================================================== */}
-
+        {/* PDF ERROR */}
         {pdfError && (
           <div
             className="clinical-report-message error"
@@ -552,49 +470,29 @@ function ClinicalReport({
           </div>
         )}
 
-
-        {/* ===================================================
-            WHATSAPP
-            =================================================== */}
-
+        {/* WHATSAPP */}
         <div className="whatsapp-share-panel">
-
           <div className="whatsapp-heading">
-
             <div>
-
               <div className="whatsapp-label-row">
-
                 <span className="clinical-report-block-label">
-                  WHATSAPP DELIVERY
+                  {t("whatsappDeliveryUpper")}
                 </span>
-
               </div>
 
-
               <h4>
-                Send Clinical Report to WhatsApp
+                {t("sendReportWhatsAppTitle")}
               </h4>
 
-
               <p>
-                Enter the recipient's international
-                phone number to send the PDF.
+                {t("sendReportWhatsAppDesc")}
               </p>
-
             </div>
-
           </div>
 
-
-          {/* =================================================
-              PHONE INPUT
-              ================================================= */}
-
+          {/* PHONE INPUT */}
           <div className="whatsapp-form-row">
-
             <div className="whatsapp-input-wrapper">
-
               <span className="phone-prefix">
                 +
               </span>
@@ -606,18 +504,12 @@ function ClinicalReport({
                 onChange={handlePhoneChange}
                 placeholder="919876543210"
                 maxLength={15}
-                aria-label="WhatsApp phone number"
+                aria-label={t("whatsappPhoneLabel")}
               />
-
             </div>
-
           </div>
 
-
-          {/* =================================================
-              PHONE STATUS
-              ================================================= */}
-
+          {/* PHONE STATUS */}
           {phoneStatus && (
             <div
               className={
@@ -628,64 +520,44 @@ function ClinicalReport({
                 }`
               }
             >
-
               <span>
                 {phoneStatus.ok
                   ? "✓"
                   : "!"}
               </span>
 
-
               <div>
-
                 <strong>
-
                   {phoneStatus.ok
-                    ? "Number Format Verified"
-                    : "Number Not Verified"}
-
+                    ? t("numberVerified")
+                    : t("numberNotVerified")}
                 </strong>
-
 
                 <p>
                   {phoneStatus.message}
                 </p>
-
               </div>
-
             </div>
           )}
 
-
-          {/* =================================================
-              SEND BUTTON
-              ================================================= */}
-
+          {/* SEND BUTTON */}
           <button
             type="button"
             className="whatsapp-send-button"
-
             onClick={
               handleSendWhatsApp
             }
-
             disabled={
               sendLoading ||
               !phoneStatus?.ok
             }
           >
-
             {sendLoading
-              ? "Sending Report..."
-              : "Send Report via WhatsApp"}
-
+              ? t("sendingReportBtn")
+              : t("sendReportBtn")}
           </button>
 
-
-          {/* =================================================
-              SEND STATUS
-              ================================================= */}
-
+          {/* SEND STATUS */}
           {sendStatus && (
             <div
               className={
@@ -696,48 +568,31 @@ function ClinicalReport({
                 }`
               }
             >
-
               <span>
                 {sendStatus.message}
               </span>
-
             </div>
           )}
-
         </div>
 
-
-        {/* ===================================================
-            DISCLAIMER
-            =================================================== */}
-
+        {/* DISCLAIMER */}
         <div className="clinical-report-disclaimer">
-
-          Screening report generated from the current
-          AI screening result. This report is intended
-          to support clinical review and does not replace
-          a qualified ophthalmologist's diagnosis.
-
+          {t("clinicalReportDisclaimer")}
         </div>
-
       </LiquidGlass>
-
     </section>
   );
 }
 
-
 // ===========================================================
 // REPORT VALUE COMPONENT
 // ===========================================================
-
 function ReportValue({
   label,
   value,
 }) {
   return (
     <div className="clinical-report-value">
-
       <span>
         {label}
       </span>
@@ -745,23 +600,19 @@ function ReportValue({
       <strong>
         {value}
       </strong>
-
     </div>
   );
 }
 
-
 // ===========================================================
 // FINDING COMPONENT
 // ===========================================================
-
 function Finding({
   label,
   value,
 }) {
   return (
     <div className="clinical-report-finding">
-
       <span>
         {label}
       </span>
@@ -769,10 +620,8 @@ function Finding({
       <strong>
         {value}
       </strong>
-
     </div>
   );
 }
-
 
 export default ClinicalReport;

@@ -1,16 +1,17 @@
-import { useState } from "react";
 import useAuthStore from "../store/useAuthStore";
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 import Upload from "./Upload";
 import Analysis from "./Analysis";
 import PatientDashboard from "../components/patient/PatientDashboard";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import AuthModal from "../components/auth/AuthModal";
-import { Stethoscope, User, RefreshCw, ArrowLeft, ShieldCheck, Sparkles } from "lucide-react";
+import { RefreshCw, ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function DashboardRouter({ currentView, setCurrentView }) {
   const { user, isAuthenticated, switchRole, openLogin } = useAuthStore();
+  const { t } = useLanguageStore();
   const stage = useAnalysisStore((state) => state.stage);
 
   const isDoctor = user?.role === "Ophthalmologist";
@@ -65,10 +66,10 @@ export default function DashboardRouter({ currentView, setCurrentView }) {
               <ShieldCheck size={28} />
             </div>
             <h3 style={{ margin: "0 0 8px 0", fontSize: "1.35rem", fontWeight: 800, color: "var(--saas-fg)" }}>
-              Authentication Required
+              {t("authRequiredTitle")}
             </h3>
             <p style={{ fontSize: "0.875rem", color: "var(--saas-fg-muted)", lineHeight: 1.5, margin: "0 0 24px 0" }}>
-              Please sign in to access the clinical screening workspace or patient portal.
+              {t("authRequiredDesc")}
             </p>
             <button
               type="button"
@@ -76,7 +77,7 @@ export default function DashboardRouter({ currentView, setCurrentView }) {
               className="saas-btn-primary"
               style={{ width: "100%", padding: "12px" }}
             >
-              Sign In to Continue
+              {t("signInToContinue")}
             </button>
           </div>
         </div>
@@ -129,25 +130,23 @@ export default function DashboardRouter({ currentView, setCurrentView }) {
               }}
             >
               <ArrowLeft size={14} />
-              <span>Back to Landing</span>
+              <span>{t("backToLanding")}</span>
             </button>
 
             <span style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--saas-fg)" }}>
-              {isDoctor ? "Ophthalmologist Screening Engine" : "Patient Tele-Triage Portal"}
+              {isDoctor ? t("doctorEngineTitle") : t("patientPortalTitle")}
             </span>
           </div>
 
-          {/* Quick Role Switcher for Developer / Tester Verification */}
+          {/* Quick Role Switcher */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <span
               style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.72rem",
+                fontSize: "0.75rem",
                 color: "var(--saas-fg-muted)",
-                textTransform: "uppercase",
               }}
             >
-              Active Role:
+              {t("activeRole")}
             </span>
             <button
               type="button"
@@ -168,7 +167,7 @@ export default function DashboardRouter({ currentView, setCurrentView }) {
               }}
             >
               <RefreshCw size={12} />
-              <span>Switch to {isDoctor ? "Patient View" : "Doctor View"}</span>
+              <span>{isDoctor ? t("switchToPatient") : t("switchToDoctor")}</span>
             </button>
           </div>
         </div>
@@ -177,12 +176,10 @@ export default function DashboardRouter({ currentView, setCurrentView }) {
       {/* Main Workspace Body */}
       <main style={{ flex: 1 }}>
         {isDoctor ? (
-          /* Doctor Role: Render Existing Screening Engine (Upload or Live Analysis) */
           <div>
             {isAnalyzing ? <Analysis /> : <Upload />}
           </div>
         ) : (
-          /* Patient Role: Render Patient Diagnostic Records & Specialist Directory */
           <PatientDashboard />
         )}
       </main>

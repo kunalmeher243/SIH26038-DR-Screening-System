@@ -1,7 +1,9 @@
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 import LiquidGlass from "./LiquidGlass";
 
 function ResultDashboard() {
+  const { t } = useLanguageStore();
   const grade = useAnalysisStore((state) => state.grade);
   const report = useAnalysisStore((state) => state.report);
   const quality = useAnalysisStore((state) => state.quality);
@@ -10,7 +12,7 @@ function ResultDashboard() {
     return null;
   }
 
-  const drLabel = grade.dr_label || "Assessment unavailable";
+  const drLabel = grade.dr_label || t("screeningResultTitle");
 
   const confidence = grade.confidence ?? 0;
 
@@ -28,17 +30,14 @@ function ResultDashboard() {
       {/* =====================================================
           MAIN ASSESSMENT CARD
       ===================================================== */}
-
       <LiquidGlass
         className="assessment-card"
         variant="strong"
       >
         <div className="assessment-content">
-
           <div className="assessment-text">
-
             <span className="assessment-label">
-              FINAL ASSESSMENT
+              {t("finalAssessment")}
             </span>
 
             <h1>
@@ -46,18 +45,14 @@ function ResultDashboard() {
             </h1>
 
             <p>
-              AI-based retinal image screening result
+              {t("aiScreeningResult")}
             </p>
-
           </div>
 
-
           {/* Confidence */}
-
           <div className="confidence-card">
-
             <span>
-              Confidence
+              {t("confidenceLabel")}
             </span>
 
             <strong>
@@ -65,23 +60,19 @@ function ResultDashboard() {
             </strong>
 
             <small>
-              Calibrated:{" "}
+              {t("calibratedLabel")}{" "}
               {Math.round(
                 calibratedConfidence * 100
               )}
               %
             </small>
-
           </div>
-
         </div>
       </LiquidGlass>
-
 
       {/* =====================================================
           REFERRAL
       ===================================================== */}
-
       {grade.refer && (
         <LiquidGlass
           className="referral-card"
@@ -92,38 +83,33 @@ function ResultDashboard() {
           </div>
 
           <div className="referral-content">
-
             <span className="referral-title">
-              Referral Recommended
+              {t("referralRecommended")}
             </span>
 
             <p>
-              Routing:{" "}
+              {t("routingLabel")}{" "}
               <strong>
                 {grade.routing || "STANDARD_REFERRAL"}
               </strong>
             </p>
 
             <p>
-              Urgency:{" "}
+              {t("urgencyLabel")}{" "}
               <strong>
                 {grade.referral_urgency || "standard"}
               </strong>
             </p>
-
           </div>
         </LiquidGlass>
       )}
 
-
       {/* =====================================================
           KEY METRICS
       ===================================================== */}
-
       <div className="metrics-grid">
-
         <Metric
-          label="Image Quality"
+          label={t("imageQualityStage")}
           value={`${Math.round(
             imageQuality * 100
           )}%`}
@@ -131,7 +117,7 @@ function ResultDashboard() {
         />
 
         <Metric
-          label="Classification"
+          label={t("classificationStage")}
           value={`${Math.round(
             confidence * 100
           )}%`}
@@ -139,31 +125,29 @@ function ResultDashboard() {
         />
 
         <Metric
-          label="Microaneurysms"
+          label={t("microaneurysmsLabel")}
           value={lesions.microaneurysms ?? 0}
         />
 
         <Metric
-          label="Hemorrhages"
+          label={t("hemorrhagesLabel")}
           value={lesions.hemorrhages ?? 0}
         />
 
         <Metric
-          label="Hard Exudates"
+          label={t("hardExudatesLabel")}
           value={lesions.hard_exudates ?? 0}
         />
 
         <Metric
-          label="Soft Exudates"
+          label={t("softExudatesLabel")}
           value={lesions.soft_exudates ?? 0}
         />
-
       </div>
 
     </section>
   );
 }
-
 
 /* =========================================================
    METRIC COMPONENT
@@ -181,7 +165,6 @@ function Metric({
       hover
     >
       <div className="metric-inner">
-
         <span className="metric-label">
           {label}
         </span>
@@ -192,7 +175,6 @@ function Metric({
 
         {percentage !== null && (
           <div className="metric-bar">
-
             <div
               className="metric-bar-fill"
               style={{
@@ -202,14 +184,11 @@ function Metric({
                 )}%`,
               }}
             />
-
           </div>
         )}
-
       </div>
     </LiquidGlass>
   );
 }
-
 
 export default ResultDashboard;

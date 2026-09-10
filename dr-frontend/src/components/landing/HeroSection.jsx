@@ -1,20 +1,14 @@
 import { useState } from "react";
 import {
   ArrowRight,
-  ShieldCheck,
-  Zap,
-  Activity,
-  CheckCircle2,
-  Sliders,
   Layers,
-  Sparkles,
-  Eye,
-  FileText,
 } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
+import useLanguageStore from "../../store/useLanguageStore";
 
-export default function HeroSection({ onAccessDashboard, onExploreClick }) {
+export default function HeroSection({ onAccessDashboard }) {
   const { isAuthenticated, user, openLogin } = useAuthStore();
+  const { t } = useLanguageStore();
   const [activeLayer, setActiveLayer] = useState("gradcam"); // "raw" | "enhanced" | "gradcam" | "lesions"
 
   const handleCtaClick = () => {
@@ -31,7 +25,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
       style={{
         position: "relative",
         overflow: "hidden",
-        paddingTop: "64px",
+        paddingTop: "48px",
         paddingBottom: "80px",
         background:
           "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 82, 255, 0.08), transparent 70%), #FAFAFA",
@@ -53,55 +47,34 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
           }}
           className="hero-grid-layout"
         >
-          {/* Left Column: Narrative & CTA */}
+          {/* Left Column: Narrative & CTA - Pill badge removed */}
           <div>
-            {/* Live Indicator Pill Badge */}
-            <div
-              className="saas-pill-badge"
-              style={{
-                marginBottom: "24px",
-                boxShadow: "0 1px 2px rgba(0, 82, 255, 0.05)",
-              }}
-            >
-              <span
-                className="animate-pulse-subtle"
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--saas-accent)",
-                  display: "inline-block",
-                }}
-              />
-              <span>AI-Powered Rural Healthcare Screening</span>
-            </div>
-
             {/* Main Headline */}
             <h1
               className="font-display"
               style={{
-                fontSize: "clamp(2.5rem, 4.5vw, 3.75rem)",
-                lineHeight: 1.08,
+                fontSize: "clamp(2.4rem, 4.2vw, 3.75rem)",
+                lineHeight: 1.1,
                 letterSpacing: "-0.02em",
                 color: "var(--saas-fg)",
                 margin: "0 0 20px 0",
               }}
             >
-              Explainable Retinal Screening. Built for{" "}
-              <span className="gradient-text-saas">Rural Triage.</span>
+              {t("heroHeadingPrefix")}{" "}
+              <span className="gradient-text-saas">{t("heroHeadingGradient")}</span>
             </h1>
 
             {/* Subtitle */}
             <p
               style={{
-                fontSize: "1.125rem",
+                fontSize: "1.0625rem",
                 lineHeight: 1.65,
                 color: "var(--saas-fg-muted)",
                 margin: "0 0 32px 0",
                 maxWidth: "580px",
               }}
             >
-              Empowering primary health centers with real-time image quality assessment, adaptive CLAHE enhancement, sub-pixel lesion detection, and Grad-CAM explanations for clinician validation in <strong style={{ color: "var(--saas-fg)", fontWeight: 600 }}>under 30 seconds</strong>.
+              {t("heroSubheading")}
             </p>
 
             {/* CTA Buttons */}
@@ -126,9 +99,9 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                 <span>
                   {isAuthenticated
                     ? user?.role === "Ophthalmologist"
-                      ? "Open Screening Dashboard"
-                      : "Open Patient Portal"
-                    : "Access Dashboard"}
+                      ? t("heroCtaDoctor")
+                      : t("heroCtaPatient")
+                    : t("heroCtaUnauth")}
                 </span>
                 <ArrowRight size={18} />
               </button>
@@ -146,7 +119,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                 }}
               >
                 <Layers size={18} color="var(--saas-accent)" />
-                <span>Explore AI Architecture</span>
+                <span>{t("heroExploreBtn")}</span>
               </button>
             </div>
 
@@ -169,7 +142,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  &gt; 93%
+                  {t("heroStat1Val")}
                 </div>
                 <div
                   style={{
@@ -178,7 +151,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     lineHeight: 1.3,
                   }}
                 >
-                  Referable DR Sensitivity
+                  {t("heroStat1Label")}
                 </div>
               </div>
 
@@ -191,7 +164,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  &lt; 30s
+                  {t("heroStat2Val")}
                 </div>
                 <div
                   style={{
@@ -200,7 +173,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     lineHeight: 1.3,
                   }}
                 >
-                  Clinician Validation Time
+                  {t("heroStat2Label")}
                 </div>
               </div>
 
@@ -213,7 +186,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  100k+
+                  {t("heroStat3Val")}
                 </div>
                 <div
                   style={{
@@ -222,7 +195,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     lineHeight: 1.3,
                   }}
                 >
-                  Annual Patient Tele-Triage
+                  {t("heroStat3Label")}
                 </div>
               </div>
             </div>
@@ -281,24 +254,18 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     style={{
                       fontSize: "0.8125rem",
                       fontWeight: 700,
-                      fontFamily: "var(--font-mono)",
                       color: "var(--saas-fg)",
-                      textTransform: "uppercase",
                     }}
                   >
-                    Triage Engine Live View
+                    {t("liveViewTitle")}
                   </span>
                 </div>
 
                 <span
                   style={{
-                    fontSize: "0.72rem",
-                    padding: "3px 8px",
-                    borderRadius: "6px",
-                    backgroundColor: "rgba(16, 185, 129, 0.1)",
+                    fontSize: "0.75rem",
                     color: "#059669",
                     fontWeight: 700,
-                    fontFamily: "var(--font-mono)",
                   }}
                 >
                   IQA: 0.91 (GRADABLE)
@@ -325,105 +292,75 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                   style={{ width: "100%", height: "100%" }}
                 >
                   <defs>
-                    {/* Fundus Orange/Red Glow */}
                     <radialGradient id="fundusGlow" cx="45%" cy="50%" r="55%">
                       <stop offset="0%" stopColor="#8A1C14" />
                       <stop offset="60%" stopColor="#4A0E0B" />
                       <stop offset="100%" stopColor="#1C0605" />
                     </radialGradient>
 
-                    {/* Optic Disc Glow */}
                     <radialGradient id="opticDisc" cx="50%" cy="50%" r="50%">
                       <stop offset="0%" stopColor="#FFEAA7" />
                       <stop offset="70%" stopColor="#FDCB6E" />
                       <stop offset="100%" stopColor="#E17055" />
                     </radialGradient>
 
-                    {/* Grad-CAM Heatmap Radial */}
                     <radialGradient id="gradcamHeat" cx="62%" cy="48%" r="40%">
                       <stop offset="0%" stopColor="#FF0055" stopOpacity="0.85" />
                       <stop offset="45%" stopColor="#FF7700" stopOpacity="0.65" />
                       <stop offset="75%" stopColor="#FFDD00" stopOpacity="0.4" />
                       <stop offset="100%" stopColor="#0052FF" stopOpacity="0" />
                     </radialGradient>
-
-                    {/* Vessel Stroke Filter */}
-                    <filter id="glowFilter">
-                      <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
-                      <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
                   </defs>
 
-                  {/* Fundus Globe */}
                   <circle cx="200" cy="170" r="150" fill="url(#fundusGlow)" />
 
-                  {/* Vasculature Network */}
                   <g stroke="#C0392B" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.8">
-                    {/* Main Arches from Optic Disc (cx=120, cy=170) */}
                     <path d="M 120 170 Q 140 100 200 80 T 310 90" />
                     <path d="M 120 170 Q 150 70 240 60 T 330 80" />
                     <path d="M 120 170 Q 135 230 190 260 T 300 250" />
                     <path d="M 120 170 Q 160 270 250 280 T 320 255" />
-                    {/* Nasal branches */}
                     <path d="M 120 170 Q 90 120 60 110" />
                     <path d="M 120 170 Q 85 220 55 230" />
-                    {/* Sub-branches */}
                     <path d="M 180 85 Q 210 110 240 120" strokeWidth="1.5" stroke="#E74C3C" />
                     <path d="M 230 65 Q 270 95 285 130" strokeWidth="1.5" stroke="#E74C3C" />
                     <path d="M 175 250 Q 210 220 250 210" strokeWidth="1.5" stroke="#E74C3C" />
                     <path d="M 240 275 Q 280 235 295 190" strokeWidth="1.5" stroke="#E74C3C" />
                   </g>
 
-                  {/* Optic Disc Location */}
                   <circle cx="120" cy="170" r="28" fill="url(#opticDisc)" opacity="0.95" />
                   <circle cx="120" cy="170" r="32" fill="none" stroke="#0052FF" strokeWidth="1.5" strokeDasharray="3 3" />
-                  <text x="120" y="218" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontFamily="var(--font-mono)" fontWeight="600">
-                    Optic Disc
+                  <text x="120" y="218" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="600">
+                    {t("opticDiscLabel")}
                   </text>
 
-                  {/* Fovea / Macula Center */}
                   <circle cx="250" cy="170" r="18" fill="none" stroke="#F1C40F" strokeWidth="1.5" strokeDasharray="2 2" opacity="0.75" />
                   <circle cx="250" cy="170" r="3" fill="#F39C12" />
-                  <text x="250" y="200" textAnchor="middle" fill="#F1C40F" fontSize="10" fontFamily="var(--font-mono)" fontWeight="600">
-                    Fovea
+                  <text x="250" y="200" textAnchor="middle" fill="#F1C40F" fontSize="10" fontWeight="600">
+                    {t("foveaLabel")}
                   </text>
 
-                  {/* Layer: Grad-CAM Heatmap */}
                   {activeLayer === "gradcam" && (
                     <circle cx="245" cy="165" r="95" fill="url(#gradcamHeat)" />
                   )}
 
-                  {/* Layer: Lesions Overlay (Microaneurysms & Hemorrhages) */}
                   {(activeLayer === "lesions" || activeLayer === "gradcam") && (
                     <g>
-                      {/* Microaneurysms (Red dots with yellow target rings) */}
                       <circle cx="210" cy="130" r="3" fill="#E74C3C" />
                       <circle cx="210" cy="130" r="7" fill="none" stroke="#0052FF" strokeWidth="1.5" />
-
                       <circle cx="270" cy="140" r="3" fill="#E74C3C" />
                       <circle cx="270" cy="140" r="7" fill="none" stroke="#0052FF" strokeWidth="1.5" />
-
                       <circle cx="280" cy="190" r="3.5" fill="#E74C3C" />
                       <circle cx="280" cy="190" r="8" fill="none" stroke="#0052FF" strokeWidth="1.5" />
-
                       <circle cx="220" cy="210" r="3" fill="#E74C3C" />
                       <circle cx="220" cy="210" r="7" fill="none" stroke="#0052FF" strokeWidth="1.5" />
-
-                      {/* Hemorrhages (Blots) */}
                       <ellipse cx="295" cy="165" rx="9" ry="6" fill="#900C3F" stroke="#E74C3C" strokeWidth="1" />
                       <ellipse cx="195" cy="160" rx="7" ry="5" fill="#900C3F" stroke="#E74C3C" strokeWidth="1" />
-
-                      {/* Hard Exudates (Bright yellow waxy spots) */}
                       <circle cx="240" cy="120" r="2.5" fill="#FFF700" />
                       <circle cx="245" cy="124" r="2.5" fill="#FFF700" />
                       <circle cx="250" cy="118" r="2" fill="#FFF700" />
                     </g>
                   )}
 
-                  {/* Rotating Optical Calibration Reticle */}
                   <circle
                     cx="200"
                     cy="170"
@@ -437,7 +374,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                   />
                 </svg>
 
-                {/* Floating Severity Callout Card */}
+                {/* Severity Callout Box */}
                 <div
                   style={{
                     position: "absolute",
@@ -463,17 +400,16 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                         color: "#FFFFFF",
                         fontWeight: 800,
                         fontSize: "0.75rem",
-                        fontFamily: "var(--font-mono)",
                       }}
                     >
-                      LEVEL 2
+                      {t("severityLevel2")}
                     </div>
                     <div>
                       <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--saas-fg)" }}>
-                        Moderate NPDR
+                        {t("moderateNpdr")}
                       </div>
                       <div style={{ fontSize: "0.68rem", color: "var(--saas-fg-muted)" }}>
-                        8 Microaneurysms • 3 Hemorrhages
+                        {t("lesionsSummary")}
                       </div>
                     </div>
                   </div>
@@ -493,16 +429,15 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                         fontSize: "0.65rem",
                         fontWeight: 700,
                         color: "#DC2626",
-                        fontFamily: "var(--font-mono)",
                       }}
                     >
-                      ● REFERRAL REQ.
+                      {t("referralReq")}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Interactive Layer Switcher Bar */}
+              {/* Layer Switcher Buttons */}
               <div
                 style={{
                   display: "grid",
@@ -531,7 +466,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     boxShadow: activeLayer === "raw" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
-                  Raw Fundus
+                  {t("layerRaw")}
                 </button>
 
                 <button
@@ -550,7 +485,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     boxShadow: activeLayer === "enhanced" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
-                  CLAHE Filter
+                  {t("layerClahe")}
                 </button>
 
                 <button
@@ -569,7 +504,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     boxShadow: activeLayer === "gradcam" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
-                  Grad-CAM
+                  {t("layerGradcam")}
                 </button>
 
                 <button
@@ -588,7 +523,7 @@ export default function HeroSection({ onAccessDashboard, onExploreClick }) {
                     boxShadow: activeLayer === "lesions" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
-                  Lesion Maps
+                  {t("layerLesions")}
                 </button>
               </div>
             </div>

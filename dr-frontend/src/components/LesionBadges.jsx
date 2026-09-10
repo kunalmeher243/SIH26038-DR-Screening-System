@@ -1,6 +1,8 @@
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 
 function LesionBadges() {
+  const { t } = useLanguageStore();
   const report = useAnalysisStore((state) => state.report);
 
   if (!report || !report.lesions) {
@@ -19,49 +21,48 @@ function LesionBadges() {
     <section style={containerStyle}>
       <div style={headerStyle}>
         <div>
-          <h2 style={{ margin: 0 }}>Detected Lesions</h2>
+          <h2 style={{ margin: 0 }}>{t("lesionsDetectedTitle")}</h2>
 
           <p style={subtitleStyle}>
-            Retinal abnormalities identified by the screening system
+            {t("lesionOverlayDesc")}
           </p>
         </div>
       </div>
 
       <div style={badgesGridStyle}>
         <LesionBadge
-          label="Microaneurysms"
+          label={t("microaneurysmsLabel")}
           value={microaneurysms}
           type="lesion"
         />
 
         <LesionBadge
-          label="Hemorrhages"
+          label={t("hemorrhagesLabel")}
           value={hemorrhages}
           type="lesion"
         />
 
         <LesionBadge
-          label="Hard Exudates"
+          label={t("hardExudatesLabel")}
           value={hard_exudates}
           type="lesion"
         />
 
         <LesionBadge
-          label="Soft Exudates"
+          label={t("softExudatesLabel")}
           value={soft_exudates}
           type="lesion"
         />
 
         <LesionBadge
-          label="Neovascularization"
-          value={neovascularization ? "Detected" : "Not Detected"}
+          label={t("neovascularizationLabel")}
+          value={neovascularization ? t("detected") : t("notDetected")}
           type="status"
         />
       </div>
     </section>
   );
 }
-
 
 /* =========================
    Lesion Badge
@@ -70,7 +71,7 @@ function LesionBadges() {
 function LesionBadge({ label, value, type }) {
   const isDetected =
     type === "status"
-      ? value === "Detected"
+      ? value !== "Not Detected" && value !== "नहीं पाया गया" && value !== "ଚିହ୍ନଟ ହୋଇନାହିଁ"
       : Number(value) > 0;
 
   return (
@@ -96,7 +97,6 @@ function LesionBadge({ label, value, type }) {
     </div>
   );
 }
-
 
 /* =========================
    Styles

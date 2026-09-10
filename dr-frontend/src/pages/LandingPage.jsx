@@ -6,10 +6,8 @@ import Footer from "../components/common/Footer";
 import AuthModal from "../components/auth/AuthModal";
 import useAuthStore from "../store/useAuthStore";
 
-export default function LandingPage({ onAccessDashboard, currentView, setCurrentView }) {
-  const { isAuthenticated, user } = useAuthStore();
-
-  const handleAuthSuccess = (authenticatedUser) => {
+export default function LandingPage({ currentView, setCurrentView }) {
+  const handleAuthSuccess = () => {
     // Navigate automatically to dashboard after successful authentication
     if (setCurrentView) {
       setCurrentView("dashboard");
@@ -17,12 +15,16 @@ export default function LandingPage({ onAccessDashboard, currentView, setCurrent
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#FAFAFA" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#FAFAFA",
+      }}
+    >
       {/* Navigation Bar */}
-      <Navbar
-        currentView={currentView}
-        setCurrentView={setCurrentView}
-      />
+      <Navbar currentView={currentView} setCurrentView={setCurrentView} />
 
       {/* Hero Section */}
       <HeroSection

@@ -1,6 +1,8 @@
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 
 function ReportPanel() {
+  const { t } = useLanguageStore();
   const report = useAnalysisStore((state) => state.report);
   const grade = useAnalysisStore((state) => state.grade);
 
@@ -15,95 +17,89 @@ function ReportPanel() {
   return (
     <section style={containerStyle}>
       {/* Header */}
-
       <div style={headerStyle}>
         <div>
           <h2 style={{ margin: 0 }}>
-            Clinical Screening Summary
+            {t("clinicalScreeningReportTitle")}
           </h2>
 
           <p style={subtitleStyle}>
-            AI-generated screening interpretation and supporting evidence
+            {t("clinicalScreeningReportDesc")}
           </p>
         </div>
       </div>
 
       {/* Clinical Summary */}
-
       <div style={summaryCardStyle}>
         <div style={sectionLabelStyle}>
-          Clinical Summary
+          {t("clinicalSummaryTitle")}
         </div>
 
         <p style={summaryTextStyle}>
-          {summary || "No clinical summary available."}
+          {summary || t("screeningSummaryDesc")}
         </p>
       </div>
 
       {/* Evidence */}
-
       <div style={evidenceCardStyle}>
         <div style={sectionLabelStyle}>
-          Supporting Evidence
+          {t("aiEvidenceKicker")}
         </div>
 
         <p style={evidenceTextStyle}>
-          {evidence || "No evidence statement available."}
+          {evidence || t("screeningSummaryDesc")}
         </p>
       </div>
 
       {/* Confidence */}
-
       <div style={confidenceSectionStyle}>
         <div style={sectionLabelStyle}>
-          Confidence Breakdown
+          {t("confidenceBreakdownTitle")}
         </div>
 
         <div style={confidenceGridStyle}>
           <ConfidenceCard
-            label="Image Quality"
+            label={t("imageQualityStage")}
             value={confidence.image_quality}
           />
 
           <ConfidenceCard
-            label="Classification"
+            label={t("classificationStage")}
             value={confidence.classification}
           />
 
           <ConfidenceCard
-            label="Lesion Detection"
+            label={t("lesionDetectionStage")}
             value={confidence.lesion_detection}
           />
         </div>
       </div>
 
       {/* Referral */}
-
       {grade && (
         <div style={referralCardStyle}>
           <div>
             <div style={sectionLabelStyle}>
-              Referral Recommendation
+              {t("referralLabel")}
             </div>
 
             <h3 style={{ margin: "8px 0" }}>
-              {grade.routing || "No routing information"}
+              {grade.routing || "STANDARD_REFERRAL"}
             </h3>
 
             <p style={{ margin: 0, color: "#666" }}>
-              Urgency:{" "}
-              {grade.referral_urgency || "Not specified"}
+              {t("urgencyLabel")}{" "}
+              {grade.referral_urgency || "standard"}
             </p>
           </div>
 
           <div style={referralBadgeStyle}>
-            {grade.refer ? "REFER" : "NO REFERRAL"}
+            {grade.refer ? t("referralRecommended") : t("referralNotRequired")}
           </div>
         </div>
       )}
 
       {/* Generated Time */}
-
       {report.generated_at && (
         <p style={timestampStyle}>
           Report generated:{" "}
@@ -113,7 +109,6 @@ function ReportPanel() {
     </section>
   );
 }
-
 
 /* =========================
    Confidence Card
@@ -146,7 +141,6 @@ function ConfidenceCard({ label, value }) {
     </div>
   );
 }
-
 
 /* =========================
    Styles

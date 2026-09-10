@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Stethoscope, MapPin, Calendar, Star, CheckCircle, Clock, Award, ShieldCheck, Send, Phone, MessageSquare } from "lucide-react";
+import { Stethoscope, MapPin, Calendar, Star, Award, Clock, Send } from "lucide-react";
 import useToastStore from "../../store/useToastStore";
+import useLanguageStore from "../../store/useLanguageStore";
 
 export default function DoctorDirectory() {
   const { showToast } = useToastStore();
+  const { t } = useLanguageStore();
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
   const [notes, setNotes] = useState("");
@@ -19,7 +21,6 @@ export default function DoctorDirectory() {
       location: "New Delhi & Rural Outreach Network",
       experience: "14+ Years",
       rating: "4.95",
-      reviewsCount: 142,
       availability: "Available Today for Rural Triage",
       avatarBg: "#EFF6FF",
       avatarColor: "#0052FF",
@@ -33,7 +34,6 @@ export default function DoctorDirectory() {
       location: "Madurai & Southern PHC Cluster",
       experience: "18+ Years",
       rating: "4.92",
-      reviewsCount: 210,
       availability: "Next Tele-Slot: Tomorrow 10:00 AM",
       avatarBg: "#ECFDF5",
       avatarColor: "#059669",
@@ -47,7 +47,6 @@ export default function DoctorDirectory() {
       location: "Chennai & East India PHC Portal",
       experience: "11+ Years",
       rating: "4.89",
-      reviewsCount: 98,
       availability: "Available for Emergency Referral",
       avatarBg: "#FFFBEB",
       avatarColor: "#D97706",
@@ -71,6 +70,7 @@ export default function DoctorDirectory() {
 
   return (
     <div style={{ marginTop: "40px" }}>
+      {/* Header - Badge removed */}
       <div
         style={{
           display: "flex",
@@ -91,7 +91,7 @@ export default function DoctorDirectory() {
               letterSpacing: "-0.01em",
             }}
           >
-            Verified Retinal Specialists Directory
+            {t("specialistsDirectoryTitle")}
           </h3>
           <p
             style={{
@@ -100,27 +100,8 @@ export default function DoctorDirectory() {
               color: "var(--saas-fg-muted)",
             }}
           >
-            Board-certified ophthalmologists affiliated with the district tele-screening network for follow-up review
+            {t("specialistsDirectorySub")}
           </p>
-        </div>
-
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "6px 12px",
-            backgroundColor: "rgba(16, 185, 129, 0.08)",
-            borderRadius: "999px",
-            border: "1px solid rgba(16, 185, 129, 0.2)",
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            color: "#059669",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          <ShieldCheck size={14} />
-          <span>3 Doctors On-Duty</span>
         </div>
       </div>
 
@@ -288,7 +269,7 @@ export default function DoctorDirectory() {
               }}
             >
               <Calendar size={16} />
-              <span>Request Follow-up Tele-Consult</span>
+              <span>{t("specialistCardBtn")}</span>
             </button>
           </div>
         ))}
@@ -335,10 +316,10 @@ export default function DoctorDirectory() {
             >
               <div>
                 <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--saas-fg)" }}>
-                  Request Specialist Consultation
+                  {t("reqSpecialistModalTitle")}
                 </h3>
                 <p style={{ margin: "2px 0 0 0", fontSize: "0.78rem", color: "var(--saas-fg-muted)" }}>
-                  Connecting with {selectedDoctor.name}
+                  {t("connectingWith")} {selectedDoctor.name}
                 </p>
               </div>
               <button
@@ -367,7 +348,7 @@ export default function DoctorDirectory() {
                     color: "var(--saas-fg)",
                   }}
                 >
-                  Consultation Urgency
+                  {t("consultationUrgency")}
                 </label>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                   <button
@@ -384,7 +365,7 @@ export default function DoctorDirectory() {
                       cursor: "pointer",
                     }}
                   >
-                    Routine / Follow-up
+                    {t("routineFollowUp")}
                   </button>
                   <button
                     type="button"
@@ -400,7 +381,7 @@ export default function DoctorDirectory() {
                       cursor: "pointer",
                     }}
                   >
-                    Priority (High DR Risk)
+                    {t("priorityRisk")}
                   </button>
                 </div>
               </div>
@@ -415,13 +396,13 @@ export default function DoctorDirectory() {
                     color: "var(--saas-fg)",
                   }}
                 >
-                  Symptoms or Notes for the Doctor
+                  {t("symptomsNotesLabel")}
                 </label>
                 <textarea
                   rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="E.g., Experiencing blurry vision in right eye, recent blood sugar 210 mg/dL..."
+                  placeholder={t("symptomsPlaceholder")}
                   style={{
                     width: "100%",
                     boxSizing: "border-box",
@@ -442,7 +423,7 @@ export default function DoctorDirectory() {
                 style={{ width: "100%", padding: "10px" }}
               >
                 <Send size={16} />
-                <span>Submit Tele-Consult Request</span>
+                <span>{t("submitTeleConsultBtn")}</span>
               </button>
             </form>
           </div>

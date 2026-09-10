@@ -1,6 +1,9 @@
-import { Eye, ShieldCheck, Activity, HeartHandshake, Database } from "lucide-react";
+import { Eye, ShieldCheck, Activity } from "lucide-react";
+import useLanguageStore from "../../store/useLanguageStore";
 
 export default function Footer() {
+  const { t } = useLanguageStore();
+
   return (
     <footer
       style={{
@@ -60,7 +63,7 @@ export default function Footer() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                RetinaTrack<span style={{ color: "var(--saas-accent)" }}>.AI</span>
+                {t("brandName")}<span style={{ color: "var(--saas-accent)" }}>.AI</span>
               </span>
             </div>
             <p
@@ -71,7 +74,7 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Intelligent, explainable diabetic retinopathy screening engineered to empower rural primary health centers and safeguard vision through rapid clinical triage.
+              {t("footerDesc")}
             </p>
             <div
               style={{
@@ -88,7 +91,7 @@ export default function Footer() {
               }}
             >
               <Activity size={14} color="var(--saas-accent)" />
-              <span>Calibrated for 100k+ Annual Patients</span>
+              <span>{t("footerCapacity")}</span>
             </div>
           </div>
 
@@ -101,11 +104,10 @@ export default function Footer() {
                 color: "var(--saas-fg)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontFamily: "var(--font-mono)",
                 marginBottom: "18px",
               }}
             >
-              Clinical Datasets
+              {t("footerDatasets")}
             </h4>
             <ul
               style={{
@@ -134,11 +136,10 @@ export default function Footer() {
                 color: "var(--saas-fg)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontFamily: "var(--font-mono)",
                 marginBottom: "18px",
               }}
             >
-              AI Triage Pipeline
+              {t("footerPipeline")}
             </h4>
             <ul
               style={{
@@ -167,11 +168,10 @@ export default function Footer() {
                 color: "var(--saas-fg)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontFamily: "var(--font-mono)",
                 marginBottom: "18px",
               }}
             >
-              Safety Standard
+              {t("footerSafety")}
             </h4>
             <div
               style={{
@@ -196,7 +196,7 @@ export default function Footer() {
                 <ShieldCheck size={16} color="#10B981" />
                 <span>Clinical Triage Safety Net</span>
               </div>
-              Assists ophthalmologists with sub-30s case validation. Does not replace dilated clinical ophthalmic examinations.
+              {t("footerSafetyText")}
             </div>
           </div>
         </div>

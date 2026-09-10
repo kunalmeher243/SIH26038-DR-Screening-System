@@ -1,12 +1,42 @@
-import { Eye, LogOut, User, Stethoscope, UserCheck, Shield, ChevronRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import {
+  Eye,
+  LogOut,
+  Stethoscope,
+  UserCheck,
+  ChevronRight,
+  Globe,
+  Menu,
+  X,
+  ChevronDown,
+  Check,
+} from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
+import useLanguageStore, { availableLanguages } from "../../store/useLanguageStore";
 
-export default function Navbar({ onNavigateSection, currentView, setCurrentView }) {
-  const { user, isAuthenticated, logout, openLogin, openSignUp, switchRole } = useAuthStore();
+export default function Navbar({ currentView, setCurrentView }) {
+  const { user, isAuthenticated, logout, openLogin, openSignUp } = useAuthStore();
+  const { language, setLanguage, t } = useLanguageStore();
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const langDropdownRef = useRef(null);
 
   const isDoctor = user?.role === "Ophthalmologist";
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target)) {
+        setIsLangDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleScroll = (id) => {
+    setIsMobileMenuOpen(false);
     if (currentView !== "landing") {
       if (setCurrentView) {
         setCurrentView("landing");
@@ -26,13 +56,15 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
     }
   };
 
+  const currentLangObj = availableLanguages.find((l) => l.code === language) || availableLanguages[0];
+
   return (
     <header
       style={{
         position: "sticky",
         top: 0,
         zIndex: 40,
-        backgroundColor: "rgba(255, 255, 255, 0.92)",
+        backgroundColor: "rgba(255, 255, 255, 0.94)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--saas-border)",
@@ -50,7 +82,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
           justifyContent: "space-between",
         }}
       >
-        {/* Brand Logo */}
+        {/* Brand Logo - Badge completely removed */}
         <div
           style={{
             display: "flex",
@@ -83,28 +115,13 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span
                 style={{
-                  fontSize: "1.18rem",
+                  fontSize: "1.2rem",
                   fontWeight: 800,
                   letterSpacing: "-0.02em",
                   color: "var(--saas-fg)",
                 }}
               >
-                RetinaTrack<span style={{ color: "var(--saas-accent)" }}>.AI</span>
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.65rem",
-                  fontWeight: 700,
-                  padding: "2px 7px",
-                  borderRadius: "999px",
-                  backgroundColor: "rgba(0, 82, 255, 0.08)",
-                  color: "var(--saas-accent)",
-                  border: "1px solid rgba(0, 82, 255, 0.2)",
-                  textTransform: "uppercase",
-                }}
-              >
-                Rural Triage
+                {t("brandName")}<span style={{ color: "var(--saas-accent)" }}>.AI</span>
               </span>
             </div>
             <p
@@ -115,19 +132,19 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                 fontWeight: 500,
               }}
             >
-              Intelligent Fundus Screening
+              {t("brandSubtitle")}
             </p>
           </div>
         </div>
 
-        {/* Center Anchor Navigation Tabs */}
+        {/* Center Anchor Navigation Tabs (Desktop) */}
         <nav
+          className="desktop-nav"
           style={{
             display: "none",
             alignItems: "center",
             gap: "32px",
           }}
-          className="md-nav-block"
         >
           <button
             type="button"
@@ -148,7 +165,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                 currentView === "landing" ? "var(--saas-fg)" : "var(--saas-fg-muted)")
             }
           >
-            Home
+            {t("navHome")}
           </button>
           <button
             type="button"
@@ -166,7 +183,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--saas-accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--saas-fg-muted)")}
           >
-            About Us
+            {t("navAbout")}
           </button>
           <button
             type="button"
@@ -184,12 +201,108 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--saas-accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--saas-fg-muted)")}
           >
-            Features
+            {t("navFeatures")}
           </button>
         </nav>
 
-        {/* Right Section: Auth State */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* Right Controls: Language Selector + Auth Actions (Desktop) */}
+        <div
+          className="desktop-nav"
+          style={{
+            display: "none",
+            alignItems: "center",
+            gap: "12px",
+          }}
+        >
+          {/* Language Selector Dropdown */}
+          <div ref={langDropdownRef} style={{ position: "relative" }}>
+            <button
+              type="button"
+              onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "7px 12px",
+                borderRadius: "8px",
+                border: "1px solid var(--saas-border)",
+                backgroundColor: "#FFFFFF",
+                fontSize: "0.8125rem",
+                fontWeight: 600,
+                color: "var(--saas-fg)",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--saas-accent)";
+                e.currentTarget.style.backgroundColor = "var(--saas-bg-subtle)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--saas-border)";
+                e.currentTarget.style.backgroundColor = "#FFFFFF";
+              }}
+            >
+              <Globe size={15} color="var(--saas-accent)" />
+              <span>{currentLangObj.nativeName}</span>
+              <ChevronDown size={14} color="var(--saas-fg-muted)" />
+            </button>
+
+            {isLangDropdownOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "calc(100% + 6px)",
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "12px",
+                  border: "1px solid var(--saas-border)",
+                  boxShadow: "0 10px 25px -5px rgba(15, 23, 42, 0.12)",
+                  padding: "6px",
+                  width: "160px",
+                  zIndex: 50,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2px",
+                }}
+              >
+                {availableLanguages.map((l) => (
+                  <button
+                    key={l.code}
+                    type="button"
+                    onClick={() => {
+                      setLanguage(l.code);
+                      setIsLangDropdownOpen(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 10px",
+                      borderRadius: "6px",
+                      border: "none",
+                      backgroundColor: language === l.code ? "rgba(0, 82, 255, 0.08)" : "transparent",
+                      color: language === l.code ? "var(--saas-accent)" : "var(--saas-fg)",
+                      fontWeight: language === l.code ? 700 : 500,
+                      fontSize: "0.8125rem",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "all 0.12s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (language !== l.code) e.currentTarget.style.backgroundColor = "var(--saas-bg-subtle)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (language !== l.code) e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                  >
+                    <span>{l.nativeName}</span>
+                    {language === l.code && <Check size={14} color="var(--saas-accent)" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {!isAuthenticated ? (
             <>
               <button
@@ -198,7 +311,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                 className="saas-btn-secondary"
                 style={{ padding: "8px 18px", fontSize: "0.875rem" }}
               >
-                Log In
+                {t("navLogin")}
               </button>
               <button
                 type="button"
@@ -206,12 +319,11 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                 className="saas-btn-primary"
                 style={{ padding: "8px 18px", fontSize: "0.875rem" }}
               >
-                Sign Up
+                {t("navSignUp")}
               </button>
             </>
           ) : (
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              {/* Portal Toggle Button */}
               {currentView === "landing" ? (
                 <button
                   type="button"
@@ -222,7 +334,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                     fontSize: "0.875rem",
                   }}
                 >
-                  <span>{isDoctor ? "Doctor Portal" : "Patient Portal"}</span>
+                  <span>{isDoctor ? t("navDoctorPortal") : t("navPatientPortal")}</span>
                   <ChevronRight size={16} />
                 </button>
               ) : (
@@ -235,11 +347,11 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                     fontSize: "0.875rem",
                   }}
                 >
-                  Landing Page
+                  {t("navLandingPage")}
                 </button>
               )}
 
-              {/* User Badge & Role indicator */}
+              {/* User Avatar & Name */}
               <div
                 style={{
                   display: "flex",
@@ -279,14 +391,12 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
                   </span>
                   <span
                     style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.65rem",
+                      fontSize: "0.68rem",
                       fontWeight: 600,
                       color: isDoctor ? "var(--saas-accent)" : "#059669",
-                      textTransform: "uppercase",
                     }}
                   >
-                    {user?.role}
+                    {isDoctor ? t("roleDoctor") : t("rolePatient")}
                   </span>
                 </div>
               </div>
@@ -295,7 +405,7 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
               <button
                 type="button"
                 onClick={logout}
-                title="Log Out"
+                title={t("navLogout")}
                 style={{
                   background: "none",
                   border: "1px solid var(--saas-border)",
@@ -325,11 +435,214 @@ export default function Navbar({ onNavigateSection, currentView, setCurrentView 
             </div>
           )}
         </div>
+
+        {/* Mobile / Tablet Hamburger Toggle Button */}
+        <div className="mobile-menu-toggle" style={{ display: "none", alignItems: "center", gap: "8px" }}>
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            style={{
+              background: "#FFFFFF",
+              border: "1px solid var(--saas-border)",
+              borderRadius: "8px",
+              padding: "8px",
+              color: "var(--saas-fg)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
+      {/* Mobile Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderBottom: "1px solid var(--saas-border)",
+            padding: "18px 24px 24px",
+            boxShadow: "0 12px 24px -4px rgba(15, 23, 42, 0.08)",
+          }}
+          className="mobile-drawer"
+        >
+          {/* Navigation Links */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
+            <button
+              type="button"
+              onClick={() => handleScroll("hero")}
+              style={{
+                textAlign: "left",
+                background: "none",
+                border: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "var(--saas-fg)",
+                padding: "8px 0",
+                cursor: "pointer",
+              }}
+            >
+              {t("navHome")}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleScroll("about")}
+              style={{
+                textAlign: "left",
+                background: "none",
+                border: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "var(--saas-fg-muted)",
+                padding: "8px 0",
+                cursor: "pointer",
+              }}
+            >
+              {t("navAbout")}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleScroll("features")}
+              style={{
+                textAlign: "left",
+                background: "none",
+                border: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "var(--saas-fg-muted)",
+                padding: "8px 0",
+                cursor: "pointer",
+              }}
+            >
+              {t("navFeatures")}
+            </button>
+          </div>
+
+          {/* Language Selector (Mobile Segmented) */}
+          <div style={{ marginBottom: "20px" }}>
+            <div
+              style={{
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                color: "var(--saas-fg-muted)",
+                textTransform: "uppercase",
+                marginBottom: "8px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <Globe size={14} color="var(--saas-accent)" />
+              <span>{t("language")}</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+              {availableLanguages.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => setLanguage(l.code)}
+                  style={{
+                    padding: "7px 4px",
+                    borderRadius: "8px",
+                    border: language === l.code ? "1.5px solid var(--saas-accent)" : "1px solid var(--saas-border)",
+                    backgroundColor: language === l.code ? "rgba(0, 82, 255, 0.08)" : "#FFFFFF",
+                    color: language === l.code ? "var(--saas-accent)" : "var(--saas-fg)",
+                    fontWeight: 600,
+                    fontSize: "0.78rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  {l.nativeName}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Auth Actions in Mobile Menu */}
+          <div style={{ paddingTop: "12px", borderTop: "1px solid var(--saas-border-subtle)" }}>
+            {!isAuthenticated ? (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openLogin();
+                  }}
+                  className="saas-btn-secondary"
+                  style={{ width: "100%", padding: "10px" }}
+                >
+                  {t("navLogin")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openSignUp();
+                  }}
+                  className="saas-btn-primary"
+                  style={{ width: "100%", padding: "10px" }}
+                >
+                  {t("navSignUp")}
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    if (setCurrentView) {
+                      setCurrentView(currentView === "landing" ? "dashboard" : "landing");
+                    }
+                  }}
+                  className="saas-btn-primary"
+                  style={{ width: "100%", padding: "10px" }}
+                >
+                  {currentView === "landing"
+                    ? isDoctor
+                      ? t("navDoctorPortal")
+                      : t("navPatientPortal")
+                    : t("navLandingPage")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    logout();
+                  }}
+                  className="saas-btn-secondary"
+                  style={{ width: "100%", padding: "10px", color: "#DC2626", borderColor: "#FCA5A5" }}
+                >
+                  <LogOut size={16} />
+                  <span>{t("navLogout")}</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <style>{`
-        @media (min-width: 768px) {
-          .md-nav-block {
+        @media (min-width: 900px) {
+          .desktop-nav {
+            display: flex !important;
+          }
+          .mobile-menu-toggle {
+            display: none !important;
+          }
+          .mobile-drawer {
+            display: none !important;
+          }
+        }
+        @media (max-width: 899px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .mobile-menu-toggle {
             display: flex !important;
           }
         }

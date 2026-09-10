@@ -7,13 +7,14 @@ import {
   X,
 } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
+import useLanguageStore from "../../store/useLanguageStore";
 import DoctorDirectory from "./DoctorDirectory";
 
 export default function PatientDashboard() {
   const { user } = useAuthStore();
+  const { t } = useLanguageStore();
   const [selectedReport, setSelectedReport] = useState(null);
 
-  // Sample historical screening reports for the patient
   const reports = [
     {
       id: "REP-2026-0891",
@@ -65,23 +66,6 @@ export default function PatientDashboard() {
     },
   ];
 
-  const getLevelBadge = (level) => {
-    switch (level) {
-      case 0:
-        return { bg: "#ECFDF5", color: "#059669", border: "#A7F3D0", label: "Level 0 • No DR" };
-      case 1:
-        return { bg: "#EFF6FF", color: "#0052FF", border: "#BFDBFE", label: "Level 1 • Mild NPDR" };
-      case 2:
-        return { bg: "#FFFBEB", color: "#D97706", border: "#FDE68A", label: "Level 2 • Moderate NPDR" };
-      case 3:
-        return { bg: "#FFF1F2", color: "#E11D48", border: "#FECDD3", label: "Level 3 • Severe NPDR" };
-      case 4:
-        return { bg: "#FEF2F2", color: "#DC2626", border: "#FCA5A5", label: "Level 4 • Proliferative DR" };
-      default:
-        return { bg: "#F1F5F9", color: "#475569", border: "#E2E8F0", label: `Level ${level}` };
-    }
-  };
-
   const handlePrint = () => {
     window.print();
   };
@@ -94,7 +78,7 @@ export default function PatientDashboard() {
         padding: "40px 24px 80px",
       }}
     >
-      {/* Patient Profile Card */}
+      {/* Patient Profile Card - Decorative pill badges removed */}
       <div
         className="saas-card"
         style={{
@@ -138,21 +122,8 @@ export default function PatientDashboard() {
                   letterSpacing: "-0.01em",
                 }}
               >
-                {user?.name || "Patient Record"}
+                {user?.name || t("patientRecordTitle")}
               </h2>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  padding: "3px 8px",
-                  borderRadius: "6px",
-                  backgroundColor: "rgba(0, 82, 255, 0.08)",
-                  color: "var(--saas-accent)",
-                }}
-              >
-                ID: PT-892410
-              </span>
             </div>
             <div
               style={{
@@ -164,11 +135,11 @@ export default function PatientDashboard() {
                 color: "var(--saas-fg-muted)",
               }}
             >
-              <span>Email: {user?.email || "patient@ruralphc.in"}</span>
+              <span>{t("emailLabelShort")} {user?.email || "patient@ruralphc.in"}</span>
               <span>•</span>
-              <span>Primary PHC: Ward 4 Community Center</span>
+              <span>{t("primaryPhc")}</span>
               <span>•</span>
-              <span>Age/Gender: 54 / M</span>
+              <span>{t("ageGender")}</span>
             </div>
           </div>
         </div>
@@ -183,8 +154,8 @@ export default function PatientDashboard() {
               textAlign: "right",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontFamily: "var(--font-mono)", fontWeight: 700 }}>
-              Last Screening
+            <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontWeight: 700 }}>
+              {t("lastScreening")}
             </div>
             <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--saas-fg)" }}>
               Sep 08, 2026
@@ -215,7 +186,7 @@ export default function PatientDashboard() {
                 letterSpacing: "-0.01em",
               }}
             >
-              Diagnostic Screening History & Reports
+              {t("screeningHistoryTitle")}
             </h3>
             <p
               style={{
@@ -224,7 +195,7 @@ export default function PatientDashboard() {
                 color: "var(--saas-fg-muted)",
               }}
             >
-              Official clinical triage records validated by accredited ophthalmologists
+              {t("screeningHistorySub")}
             </p>
           </div>
 
@@ -235,14 +206,13 @@ export default function PatientDashboard() {
               color: "var(--saas-fg-muted)",
             }}
           >
-            {reports.length} Reports Found
+            {reports.length} {t("reportsFound")}
           </span>
         </div>
 
         {/* Reports Table / Card List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {reports.map((rep) => {
-            const badge = getLevelBadge(rep.drLevel);
             return (
               <div
                 key={rep.id}
@@ -265,7 +235,6 @@ export default function PatientDashboard() {
                       gap: "6px",
                       fontSize: "0.75rem",
                       fontWeight: 700,
-                      fontFamily: "var(--font-mono)",
                       color: "var(--saas-fg-light)",
                       marginBottom: "4px",
                     }}
@@ -286,46 +255,13 @@ export default function PatientDashboard() {
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                     <span
                       style={{
-                        padding: "3px 10px",
-                        borderRadius: "999px",
-                        backgroundColor: badge.bg,
-                        color: badge.color,
-                        border: `1px solid ${badge.border}`,
-                        fontSize: "0.78rem",
                         fontWeight: 700,
+                        fontSize: "0.875rem",
+                        color: rep.referable ? "#DC2626" : "#059669",
                       }}
                     >
-                      {badge.label}
+                      Level {rep.drLevel} • {rep.drLabel}
                     </span>
-                    {rep.referable ? (
-                      <span
-                        style={{
-                          fontSize: "0.72rem",
-                          fontWeight: 700,
-                          color: "#DC2626",
-                          backgroundColor: "#FEF2F2",
-                          padding: "3px 8px",
-                          borderRadius: "6px",
-                          fontFamily: "var(--font-mono)",
-                        }}
-                      >
-                        ● REFERRAL REQUIRED
-                      </span>
-                    ) : (
-                      <span
-                        style={{
-                          fontSize: "0.72rem",
-                          fontWeight: 700,
-                          color: "#059669",
-                          backgroundColor: "#ECFDF5",
-                          padding: "3px 8px",
-                          borderRadius: "6px",
-                          fontFamily: "var(--font-mono)",
-                        }}
-                      >
-                        ● NON-REFERABLE
-                      </span>
-                    )}
                   </div>
                   <p
                     style={{
@@ -341,14 +277,14 @@ export default function PatientDashboard() {
 
                 {/* Column 3: Reviewer */}
                 <div>
-                  <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
-                    Reviewing Clinician
+                  <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontWeight: 600 }}>
+                    {t("reviewingDoctor")}
                   </div>
                   <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--saas-fg)" }}>
                     {rep.doctorName}
                   </div>
                   <div style={{ fontSize: "0.75rem", color: "var(--saas-fg-muted)" }}>
-                    AI Confidence: {rep.confidence}
+                    {t("aiConfidence")} {rep.confidence}
                   </div>
                 </div>
 
@@ -363,7 +299,7 @@ export default function PatientDashboard() {
                       fontSize: "0.8125rem",
                     }}
                   >
-                    <span>View Full Report</span>
+                    <span>{t("viewFullReport")}</span>
                     <ExternalLink size={14} />
                   </button>
                 </div>
@@ -421,17 +357,16 @@ export default function PatientDashboard() {
               <div>
                 <span
                   style={{
-                    fontFamily: "var(--font-mono)",
                     fontSize: "0.72rem",
                     fontWeight: 700,
                     color: "var(--saas-accent)",
                     textTransform: "uppercase",
                   }}
                 >
-                  Clinical Screening Summary • {selectedReport.id}
+                  {t("modalReportSub")} • {selectedReport.id}
                 </span>
                 <h3 style={{ margin: "2px 0 0 0", fontSize: "1.25rem", fontWeight: 800, color: "var(--saas-fg)" }}>
-                  Diabetic Retinopathy Screening Report
+                  {t("modalReportTitle")}
                 </h3>
               </div>
 
@@ -443,7 +378,7 @@ export default function PatientDashboard() {
                   style={{ padding: "6px 12px", fontSize: "0.75rem" }}
                 >
                   <Printer size={14} />
-                  <span>Print</span>
+                  <span>{t("printBtn")}</span>
                 </button>
                 <button
                   type="button"
@@ -477,14 +412,14 @@ export default function PatientDashboard() {
                 }}
               >
                 <div>
-                  <strong>Patient Name:</strong> {user?.name || "Ramesh Patil"}<br />
-                  <strong>Patient ID:</strong> PT-892410<br />
-                  <strong>Screening Date:</strong> {selectedReport.date}
+                  <strong>{t("patientLabel")}</strong> {user?.name || "Ramesh Patil"}<br />
+                  <strong>{t("idLabel")}</strong> PT-892410<br />
+                  <strong>{t("dateLabel")}</strong> {selectedReport.date}
                 </div>
                 <div>
-                  <strong>Eye Examined:</strong> {selectedReport.eye}<br />
-                  <strong>PHC Center:</strong> {selectedReport.center}<br />
-                  <strong>Reviewing Doctor:</strong> {selectedReport.doctorName}
+                  <strong>{t("eyeColon")}</strong> {selectedReport.eye}<br />
+                  <strong>{t("phcColon")}</strong> {selectedReport.center}<br />
+                  <strong>{t("doctorColon")}</strong> {selectedReport.doctorName}
                 </div>
               </div>
 
@@ -500,8 +435,8 @@ export default function PatientDashboard() {
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                   <div>
-                    <div style={{ fontSize: "0.75rem", textTransform: "uppercase", fontFamily: "var(--font-mono)", fontWeight: 700, color: "var(--saas-fg-muted)" }}>
-                      Assigned ICDR Severity
+                    <div style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: 700, color: "var(--saas-fg-muted)" }}>
+                      {t("severityLabel")}
                     </div>
                     <div style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--saas-fg)" }}>
                       {selectedReport.drLabel}
@@ -510,7 +445,7 @@ export default function PatientDashboard() {
                   <span
                     style={{
                       padding: "6px 14px",
-                      borderRadius: "999px",
+                      borderRadius: "8px",
                       fontSize: "0.8125rem",
                       fontWeight: 800,
                       backgroundColor: selectedReport.referable ? "#FEF2F2" : "#ECFDF5",
@@ -518,21 +453,21 @@ export default function PatientDashboard() {
                       border: `1px solid ${selectedReport.referable ? "#FCA5A5" : "#A7F3D0"}`,
                     }}
                   >
-                    {selectedReport.referable ? "Referral Required" : "Routine Follow-up"}
+                    {selectedReport.referable ? t("referralRequiredBadge") : t("routineFollowUpBadge")}
                   </span>
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", fontSize: "0.8125rem", color: "var(--saas-fg-secondary)" }}>
-                  <div><strong>Quality:</strong> {selectedReport.qualityScore}</div>
-                  <div><strong>Model Conf:</strong> {selectedReport.confidence}</div>
-                  <div><strong>Lesions:</strong> {selectedReport.lesionsFound}</div>
+                  <div><strong>{t("qualityColon")}</strong> {selectedReport.qualityScore}</div>
+                  <div><strong>{t("modelConfColon")}</strong> {selectedReport.confidence}</div>
+                  <div><strong>{t("lesionsColon")}</strong> {selectedReport.lesionsFound}</div>
                 </div>
               </div>
 
               {/* Clinical Remarks */}
               <div style={{ marginBottom: "24px" }}>
                 <h4 style={{ margin: "0 0 8px 0", fontSize: "0.9375rem", fontWeight: 700, color: "var(--saas-fg)" }}>
-                  Ophthalmologist Clinical Note & Recommendation:
+                  {t("doctorNotesTitle")}
                 </h4>
                 <div
                   style={{
@@ -559,7 +494,7 @@ export default function PatientDashboard() {
                   paddingTop: "16px",
                 }}
               >
-                ⚠️ <em>AI-Assisted Rural Triage Notice:</em> This report was generated through deep learning fundus analysis and signed off by a qualified tele-ophthalmologist. It does not replace dilated slit-lamp ophthalmic evaluation.
+                ⚠️ <em>{t("triageNoticePrefix")}</em> {t("disclaimerText")}
               </div>
             </div>
           </div>

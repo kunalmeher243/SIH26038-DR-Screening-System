@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 import LiquidGlass from "./LiquidGlass";
 
 function GradCAMViewer() {
+  const { t } = useLanguageStore();
   const file = useAnalysisStore((state) => state.file);
   const eye = useAnalysisStore((state) => state.eye);
   const report = useAnalysisStore((state) => state.report);
@@ -22,7 +23,6 @@ function GradCAMViewer() {
     }
 
     const imageUrl = URL.createObjectURL(file);
-
     setOriginalImage(imageUrl);
 
     return () => {
@@ -50,7 +50,7 @@ function GradCAMViewer() {
 
   const drLabel =
     grade?.dr_label ||
-    "Diabetic Retinopathy Assessment";
+    t("drAnalysisTitle");
 
   const confidence =
     grade?.confidence != null
@@ -67,28 +67,25 @@ function GradCAMViewer() {
       {/* =====================================================
           SECTION HEADER
           ===================================================== */}
-
       <div className="visual-explainability-header">
-
         <div>
           <span className="section-kicker">
-            VISUAL AI EVIDENCE
+            {t("visualAiEvidence")}
           </span>
 
           <h2>
-            Retinal Image Analysis
+            {t("retinalImageAnalysisTitle")}
           </h2>
 
           <p>
-            Original retinal image and AI-generated visual
-            evidence supporting the screening result.
+            {t("retinalImageAnalysisDesc")}
           </p>
         </div>
 
         {confidence !== null && (
           <div className="visual-confidence">
             <span>
-              AI CONFIDENCE
+              {t("aiConfidenceUpper")}
             </span>
 
             <strong>
@@ -96,48 +93,41 @@ function GradCAMViewer() {
             </strong>
           </div>
         )}
-
       </div>
 
       {/* =====================================================
           IMAGE ANALYSIS GRID
           ===================================================== */}
-
       <div className="retinal-analysis-grid">
 
         {/* ===================================================
             ORIGINAL RETINAL IMAGE
             =================================================== */}
-
         <LiquidGlass
           variant="light"
           className="retinal-visual-card"
         >
-
           <div className="retinal-card-header">
-
             <div>
               <span className="card-kicker">
-                INPUT IMAGE
+                {t("inputImageKicker")}
               </span>
 
               <h3>
-                Original Retinal Image
+                {t("originalRetinalImageTitle")}
               </h3>
 
               <p>
-                Fundus image provided for AI screening
+                {t("originalRetinalImageDesc")}
               </p>
             </div>
 
             <span className="image-status-badge">
-              ORIGINAL
+              {t("originalBadge")}
             </span>
-
           </div>
 
           <div className="retinal-image-frame">
-
             {originalImage ? (
               <img
                 src={originalImage}
@@ -146,18 +136,16 @@ function GradCAMViewer() {
               />
             ) : (
               <ImagePlaceholder
-                title="Retinal image unavailable"
-                description="The uploaded retinal image could not be displayed."
+                title={t("retinalImageUnavailable")}
+                description={t("retinalImageUnavailableDesc")}
               />
             )}
-
           </div>
 
           <div className="retinal-card-footer">
-
             <div>
               <span>
-                FILE
+                {t("fileLabel")}
               </span>
 
               <strong title={file?.name || "N/A"}>
@@ -167,61 +155,48 @@ function GradCAMViewer() {
 
             <div>
               <span>
-                EYE
+                {t("eyeLabel")}
               </span>
 
               <strong>
                 {eye === "right"
-                  ? "Right Eye"
-                  : "Left Eye"}
+                  ? t("rightEye")
+                  : t("leftEye")}
               </strong>
             </div>
-
           </div>
-
         </LiquidGlass>
 
         {/* ===================================================
             GRAD-CAM / AI ATTENTION
             =================================================== */}
-
         <LiquidGlass
           variant="light"
           className="retinal-visual-card"
         >
-
           <div className="retinal-card-header">
-
             <div>
               <span className="card-kicker">
-                AI EXPLANATION
+                {t("aiExplanationKicker")}
               </span>
 
               <h3>
-                Grad-CAM Attention Map
+                {t("gradcamAttentionMapTitle")}
               </h3>
 
               <p>
-                Regions contributing to the AI classification
+                {t("gradcamAttentionMapDesc")}
               </p>
             </div>
 
             <span className="image-status-badge ai">
               AI
             </span>
-
           </div>
 
           <div className="retinal-image-frame gradcam-frame">
-
-            {/* ===============================================
-                REAL GRAD-CAM
-                =============================================== */}
-
             {gradcamImage ? (
-
               <div className="real-gradcam-container">
-
                 <img
                   src={gradcamImage}
                   alt="Grad-CAM attention heatmap"
@@ -232,17 +207,9 @@ function GradCAMViewer() {
                   <span className="demo-dot" />
                   GRAD-CAM
                 </div>
-
               </div>
-
             ) : originalImage ? (
-
-              /* =============================================
-                 DEMO AI ATTENTION PREVIEW
-                 ============================================= */
-
               <div className="gradcam-placeholder">
-
                 <img
                   src={originalImage}
                   alt="Retinal image used for AI analysis"
@@ -253,82 +220,53 @@ function GradCAMViewer() {
                   className="gradcam-overlay-placeholder"
                   aria-hidden="true"
                 >
-
                   <div className="attention-orb orb-one" />
-
                   <div className="attention-orb orb-two" />
-
                   <div className="attention-orb orb-three" />
-
                 </div>
 
                 <div className="gradcam-demo-label">
-
                   <span className="demo-dot" />
-
-                  AI ATTENTION PREVIEW
-
+                  {t("aiAttentionPreview")}
                 </div>
-
               </div>
-
             ) : (
-
               <ImagePlaceholder
-                title="Grad-CAM unavailable"
-                description="The AI attention map will appear when model visualization is generated."
+                title={t("gradcamUnavailable")}
+                description={t("gradcamUnavailableDesc")}
               />
-
             )}
-
           </div>
 
-          {/* =================================================
-              HEATMAP LEGEND
-              ================================================= */}
-
+          {/* HEATMAP LEGEND */}
           <div className="attention-legend">
-
             <span className="attention-legend-title">
-              ATTENTION INTENSITY
+              {t("attentionIntensity")}
             </span>
 
             <div className="attention-gradient">
-              <span>Lower</span>
-
+              <span>{t("lowerIntensity")}</span>
               <div className="attention-gradient-bar" />
-
-              <span>Higher</span>
+              <span>{t("higherIntensity")}</span>
             </div>
-
           </div>
 
-          {/* =================================================
-              EXPLANATION
-              ================================================= */}
-
+          {/* EXPLANATION */}
           <div className="gradcam-explanation">
-
             <div className="explanation-icon">
               ✦
             </div>
 
             <div>
-
               <strong>
-                What is the AI focusing on?
+                {t("whatAiFocusing")}
               </strong>
 
               <p>
-                Grad-CAM highlights retinal regions that
-                contribute most strongly to the predicted
-                diabetic retinopathy classification.
+                {t("whatAiFocusingDesc")}
               </p>
-
             </div>
-
           </div>
-
         </LiquidGlass>
 
       </div>
@@ -336,20 +274,17 @@ function GradCAMViewer() {
       {/* =====================================================
           MODEL INTERPRETATION
           ===================================================== */}
-
       <LiquidGlass
         variant="light"
         className="visual-interpretation-card"
       >
-
         <div className="interpretation-icon">
           AI
         </div>
 
         <div className="interpretation-content">
-
           <span className="card-kicker">
-            MODEL INTERPRETATION
+            {t("modelInterpretationKicker")}
           </span>
 
           <h3>
@@ -357,71 +292,52 @@ function GradCAMViewer() {
           </h3>
 
           <p>
-            The visual explanation shows retinal regions
-            contributing to the automated screening
-            assessment. It supports clinical review and
-            does not replace professional diagnosis.
+            {t("modelInterpretationDesc")}
           </p>
-
         </div>
 
         <div className="interpretation-status">
-
           <span className="status-dot" />
-
-          Explainable AI
-
+          {t("explainableAi")}
         </div>
-
       </LiquidGlass>
 
       {/* =====================================================
           REAL LESION OVERLAY
           ===================================================== */}
-
       {lesionOverlayImage && (
-
         <LiquidGlass
           variant="light"
           className="lesion-overlay-card"
         >
-
           <div className="retinal-card-header">
-
             <div>
-
               <span className="card-kicker">
-                RETINAL FINDINGS
+                {t("retinalFindingsKicker")}
               </span>
 
               <h3>
-                Lesion Detection Overlay
+                {t("lesionOverlayTitle")}
               </h3>
 
               <p>
-                Visual representation of detected retinal lesions
+                {t("lesionOverlayDesc")}
               </p>
-
             </div>
 
             <span className="image-status-badge">
-              DETECTED
+              {t("detectedUpper")}
             </span>
-
           </div>
 
           <div className="lesion-overlay-frame">
-
             <img
               src={lesionOverlayImage}
               alt="Detected retinal lesion overlay"
               className="retinal-image"
             />
-
           </div>
-
         </LiquidGlass>
-
       )}
 
     </section>
@@ -438,7 +354,6 @@ function ImagePlaceholder({
 }) {
   return (
     <div className="retinal-placeholder">
-
       <div className="retinal-placeholder-icon">
         ◎
       </div>
@@ -450,7 +365,6 @@ function ImagePlaceholder({
       <p>
         {description}
       </p>
-
     </div>
   );
 }

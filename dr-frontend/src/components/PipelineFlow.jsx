@@ -1,39 +1,9 @@
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 import LiquidGlass from "./LiquidGlass";
 
-
-const stages = [
-  {
-    key: "quality",
-    title: "Image Quality",
-    description: "Waiting for quality check",
-    activeText: "Checking image quality...",
-  },
-
-  {
-    key: "enhance",
-    title: "Image Enhancement",
-    description: "Waiting for image quality",
-    activeText: "Enhancing retinal image...",
-  },
-
-  {
-    key: "grade",
-    title: "DR Grading",
-    description: "Waiting for enhancement",
-    activeText: "Assessing diabetic retinopathy...",
-  },
-
-  {
-    key: "report",
-    title: "Clinical Report",
-    description: "Waiting for grading",
-    activeText: "Generating clinical report...",
-  },
-];
-
-
 function PipelineFlow() {
+  const { t } = useLanguageStore();
 
   const stage = useAnalysisStore(
     (state) => state.stage
@@ -59,6 +29,32 @@ function PipelineFlow() {
     (state) => state.error
   );
 
+  const stages = [
+    {
+      key: "quality",
+      title: t("pipeQualityTitle"),
+      description: t("pipeQualityDesc"),
+      activeText: t("pipeQualityActive"),
+    },
+    {
+      key: "enhance",
+      title: t("pipeEnhanceTitle"),
+      description: t("pipeEnhanceDesc"),
+      activeText: t("pipeEnhanceActive"),
+    },
+    {
+      key: "grade",
+      title: t("pipeGradeTitle"),
+      description: t("pipeGradeDesc"),
+      activeText: t("pipeGradeActive"),
+    },
+    {
+      key: "report",
+      title: t("pipeReportTitle"),
+      description: t("pipeReportDesc"),
+      activeText: t("pipeReportActive"),
+    },
+  ];
 
   const results = {
     quality,
@@ -67,117 +63,76 @@ function PipelineFlow() {
     report,
   };
 
-
   const getStatus = (stageKey) => {
-
-    /* -----------------------------------------------
-       ERROR
-       ----------------------------------------------- */
-
     if (stage === "error") {
-
       if (results[stageKey]) {
         return "completed";
       }
-
       return "pending";
     }
-
-
-    /* -----------------------------------------------
-       COMPLETE
-       ----------------------------------------------- */
 
     if (stage === "done") {
       return "completed";
     }
 
-
-    /* -----------------------------------------------
-       ACTIVE
-       ----------------------------------------------- */
-
     if (stageKey === stage) {
       return "active";
     }
-
-
-    /* -----------------------------------------------
-       COMPLETED
-       ----------------------------------------------- */
 
     if (results[stageKey]) {
       return "completed";
     }
 
-
     return "pending";
   };
-
 
   const currentStage =
     stages.find(
       (item) => item.key === stage
     );
 
-
   return (
-
     <LiquidGlass
       className="pipeline-card"
       variant="light"
     >
-
       <div className="pipeline-inner">
-
 
         {/* =================================================
             HEADER
             ================================================= */}
-
         <div className="pipeline-header">
-
           <div>
-
             <span className="section-kicker">
-              PROCESSING PIPELINE
+              {t("pipeProcessingKicker")}
             </span>
 
-
             <h3>
-
               {stage === "done"
-                ? "Analysis Complete"
+                ? t("analysisComplete")
                 : stage === "error"
-                ? "Analysis Stopped"
+                ? t("analysisStopped")
                 : currentStage
                 ? currentStage.title
-                : "Preparing Analysis"}
-
+                : t("pipePreparing")}
             </h3>
 
-
             <p>
-
               {stage === "done"
-                ? "All four screening stages have completed successfully."
+                ? t("pipeCompleteDesc")
                 : stage === "error"
-                ? "The screening pipeline was interrupted."
+                ? t("pipeStoppedDesc")
                 : currentStage
                 ? currentStage.activeText
-                : "Preparing the retinal screening pipeline..."}
-
+                : t("pipePreparingDesc")}
             </p>
-
           </div>
 
-
           <div className="pipeline-count">
-
             {stage === "done"
               ? "4 / 4"
               : stage === "error"
-              ? "Stopped"
+              ? t("pipeStopped")
               : `${Math.max(
                   0,
                   stages.findIndex(
@@ -185,87 +140,64 @@ function PipelineFlow() {
                       item.key === stage
                   ) + 1
                 )} / 4`}
-
           </div>
-
         </div>
-
 
         {/* =================================================
             FOUR STAGES
             ================================================= */}
-
         <div className="pipeline-flow">
-
           {stages.map(
             (item, index) => {
-
               const status =
                 getStatus(
                   item.key
                 );
 
-
               return (
-
                 <div
                   className="pipeline-stage-wrapper"
                   key={item.key}
                 >
-
                   <div
                     className={`
                       pipeline-stage
                       pipeline-stage-${status}
                     `}
                   >
-
                     <div className="pipeline-stage-icon">
-
                       {status === "completed" && (
                         <span>✓</span>
                       )}
 
-
                       {status === "active" && (
                         <span className="pipeline-spinner" />
                       )}
-
 
                       {status === "pending" && (
                         <span>
                           {index + 1}
                         </span>
                       )}
-
                     </div>
 
-
                     <div className="pipeline-stage-text">
-
                       <strong>
                         {item.title}
                       </strong>
 
-
                       <span>
-
                         {status === "active"
                           ? item.activeText
                           : status === "completed"
-                          ? "Completed"
+                          ? t("stageStatusCompleted")
                           : item.description}
-
                       </span>
-
                     </div>
-
                   </div>
-
 
                   {index <
                     stages.length - 1 && (
-
                     <div
                       className={`
                         pipeline-connector
@@ -277,59 +209,41 @@ function PipelineFlow() {
                         }
                       `}
                     />
-
                   )}
-
                 </div>
-
               );
             }
           )}
-
         </div>
-
 
         {/* =================================================
             IMAGE QUALITY RESULT
             ================================================= */}
-
         {quality && (
-
           <div className="pipeline-quality-result">
-
             <div>
-
               <span className="section-kicker">
-                IMAGE QUALITY CHECK
+                {t("pipeQualityTitle")}
               </span>
-
 
               <strong>
                 {quality.quality_label ||
-                  "Quality Assessed"}
+                  t("qualityAssessed")}
               </strong>
 
-
               {quality.recommendation && (
-
                 <p>
                   {quality.recommendation}
                 </p>
-
               )}
-
             </div>
-
 
             {typeof quality.quality_score ===
               "number" && (
-
               <div className="pipeline-quality-score">
-
                 <span>
-                  QUALITY SCORE
+                  {t("qualityScoreLabel")}
                 </span>
-
 
                 <strong>
                   {Math.round(
@@ -337,88 +251,59 @@ function PipelineFlow() {
                   )}
                   %
                 </strong>
-
               </div>
-
             )}
-
           </div>
-
         )}
-
 
         {/* =================================================
             SUCCESS
             ================================================= */}
-
         {stage === "done" && (
-
           <div className="pipeline-success">
-
             <div className="pipeline-success-icon">
               ✓
             </div>
 
-
             <div>
-
               <strong>
-                Analysis Complete
+                {t("analysisComplete")}
               </strong>
 
-
               <p>
-                The retinal screening assessment
-                has been generated successfully.
+                {t("pipeSuccessDesc")}
               </p>
-
             </div>
-
           </div>
-
         )}
-
 
         {/* =================================================
             ERROR
             ================================================= */}
-
         {stage === "error" && (
-
           <div className="pipeline-error">
-
             <div className="pipeline-error-icon">
               !
             </div>
 
-
             <div>
-
               <strong>
-                Analysis Stopped
+                {t("analysisStopped")}
               </strong>
 
-
               <p>
-
                 {typeof error === "string"
                   ? error
                   : error?.message ||
-                    "The analysis could not be completed."}
-
+                    t("serviceUnavailableHelp")}
               </p>
-
             </div>
-
           </div>
-
         )}
 
       </div>
-
     </LiquidGlass>
   );
 }
-
 
 export default PipelineFlow;

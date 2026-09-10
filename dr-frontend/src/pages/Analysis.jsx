@@ -5,16 +5,16 @@ import {
 } from "react";
 import "../styles/liquidGlass.css";
 import useAnalysisStore from "../store/useAnalysisStore";
+import useLanguageStore from "../store/useLanguageStore";
 import ResultDashboard from "../components/ResultDashboard";
 import GradCAMViewer from "../components/GradCAMViewer";
 import PipelineFlow from "../components/PipelineFlow";
 import LiquidGlass from "../components/LiquidGlass";
 import ClinicalReport from "../components/ClinicalReport";
 
-
 function Analysis() {
-
   const resultRef = useRef(null);
+  const { t } = useLanguageStore();
 
   const file = useAnalysisStore(
     (state) => state.file
@@ -61,7 +61,6 @@ function Analysis() {
     });
   };
 
-
   /* =========================================================
      IMAGE PREVIEW
      ========================================================= */
@@ -71,56 +70,37 @@ function Analysis() {
     setImagePreview,
   ] = useState(null);
 
-
   useEffect(() => {
-
     if (!file) {
-
       setImagePreview(null);
-
       return;
     }
 
-
     const objectUrl =
       URL.createObjectURL(file);
-
 
     setImagePreview(
       objectUrl
     );
 
-
     return () => {
-
       URL.revokeObjectURL(
         objectUrl
       );
-
     };
-
   }, [file]);
-
 
   /* =========================================================
      SMOOTHLY SHOW SCREENING RESULT
      ========================================================= */
 
   useEffect(() => {
-
     if (stage !== "done") {
       return;
     }
 
-    /*
-     * Wait until the Screening Result has fully rendered,
-     * then place its heading near the top of the viewport.
-     * A small offset keeps the heading from touching the browser edge.
-     */
     const timer = setTimeout(() => {
-
       const result = resultRef.current;
-
       if (!result) return;
 
       const top =
@@ -132,60 +112,43 @@ function Analysis() {
         top: Math.max(0, top),
         behavior: "smooth",
       });
-
     }, 350);
 
     return () => {
       clearTimeout(timer);
     };
-
   }, [stage]);
 
-
   /* =========================================================
-     EMPTY
+     EMPTY STATE
      ========================================================= */
 
   if (!file) {
-
     return (
-
       <main className="analysis-page">
-
         <div className="analysis-container">
-
           <LiquidGlass
             variant="light"
             className="empty-analysis-card"
           >
-
             <div className="empty-analysis">
-
               <div className="empty-icon">
                 ◎
               </div>
 
-
               <h1>
-                No Analysis Available
+                {t("noAnalysisTitle")}
               </h1>
 
-
               <p>
-                Upload a retinal image and start
-                the screening analysis first.
+                {t("noAnalysisDesc")}
               </p>
-
             </div>
-
           </LiquidGlass>
-
         </div>
-
       </main>
     );
   }
-
 
   /* =========================================================
      DATA
@@ -195,14 +158,11 @@ function Analysis() {
     file.size /
     (1024 * 1024);
 
-
   const isComplete =
     stage === "done";
 
-
   const drLevel =
     grade?.dr_level ?? "—";
-
 
   /* =========================================================
      ERROR SCREEN
@@ -212,29 +172,23 @@ function Analysis() {
     error ||
     stage === "error"
   ) {
-
     const errorType =
       error?.type || "unknown";
-
 
     const errorMessage =
       error?.message ||
       (typeof error === "string"
         ? error
-        : "An unexpected error occurred during analysis.");
-
+        : t("serviceUnavailableHelp"));
 
     let errorKicker =
-      "ANALYSIS ERROR";
-
+      t("screeningSystemKicker");
 
     let errorTitle =
-      "Analysis Error";
-
+      t("serviceUnavailableTitle");
 
     let helpText =
-      "Please try the analysis again.";
-
+      t("serviceUnavailableHelp");
 
     /* -------------------------------------------------------
        UNGRADABLE
@@ -243,36 +197,31 @@ function Analysis() {
     if (
       errorType === "ungradable"
     ) {
-
       errorKicker =
-        "IMAGE QUALITY CHECK";
-
+        t("pipeQualityTitle");
 
       errorTitle =
-        "Image Not Suitable for Analysis";
-
+        t("imageNotSuitableTitle");
 
       helpText =
-        "Please recapture the retinal image with the optic disc and retinal area clearly visible.";
-
+        t("imageNotSuitableHelp");
     }
 
     /* -------------------------------------------------------
-   HUMAN REVIEW
-   ------------------------------------------------------- */
+       HUMAN REVIEW
+       ------------------------------------------------------- */
 
     if (
       errorType === "human_review"
     ) {
-
       errorKicker =
-        "CLINICAL REVIEW REQUIRED";
+        t("clinicalReviewReqKicker");
 
       errorTitle =
-        "Flagged for Doctor Review";
+        t("flaggedDoctorTitle");
 
       helpText =
-        "The AI screening result requires review by a qualified clinician before a final screening decision is made.";
+        t("flaggedDoctorHelp");
     }
 
     /* -------------------------------------------------------
@@ -282,20 +231,15 @@ function Analysis() {
     if (
       errorType === "api_error"
     ) {
-
       errorKicker =
-        "SCREENING SERVICE ERROR";
-
+        t("screeningSystemKicker");
 
       errorTitle =
-        "Screening Service Unavailable";
-
+        t("serviceUnavailableTitle");
 
       helpText =
-        "The screening service returned an error. Please retry the analysis.";
-
+        t("serviceUnavailableHelp");
     }
-
 
     /* -------------------------------------------------------
        TIMEOUT
@@ -304,179 +248,127 @@ function Analysis() {
     if (
       errorType === "api_timeout"
     ) {
-
       errorKicker =
-        "REQUEST TIMEOUT";
-
+        t("requestTimeoutTitle");
 
       errorTitle =
-        "Request Timed Out";
-
+        t("requestTimeoutTitle");
 
       helpText =
-        "The screening service took too long to respond. Please try again.";
-
+        t("requestTimeoutHelp");
     }
 
-
     return (
-
       <main className="analysis-page">
-
         <div className="analysis-container">
 
-
           {/* HEADER */}
-
           <header className="analysis-header">
-
             <div>
-
               <span className="brand-kicker">
-                RETINA AI · SCREENING SYSTEM
+                {t("screeningSystemKicker")}
               </span>
 
-
               <h1>
-                Screening Unable to Continue
+                {t("screeningUnable")}
               </h1>
 
-
               <p>
-                The uploaded retinal image could not
-                be processed for automated screening.
+                {t("screeningUnableDesc")}
               </p>
-
             </div>
-
 
             <div
               className="analysis-status status-error"
             >
-
               <span className="status-dot" />
-
-              Analysis Stopped
-
+              {t("analysisStopped")}
             </div>
-
           </header>
 
-
           {/* IMAGE INFORMATION */}
-
           <LiquidGlass
             variant="light"
             className="analysis-info-card"
           >
-
             <div className="info-item">
-
               <span className="info-label">
-                RETINAL IMAGE
+                {t("retinalImageLabel")}
               </span>
-
 
               <strong>
                 {file.name}
               </strong>
-
             </div>
 
-
             <div className="info-item">
-
               <span className="info-label">
-                EYE
+                {t("eyeLabel")}
               </span>
-
 
               <strong>
                 {eye === "right"
-                  ? "Right Eye"
-                  : "Left Eye"}
+                  ? t("rightEye")
+                  : t("leftEye")}
               </strong>
-
             </div>
 
-
             <div className="info-item">
-
               <span className="info-label">
-                FILE SIZE
+                {t("fileSizeLabel")}
               </span>
-
 
               <strong>
                 {fileSize.toFixed(2)} MB
               </strong>
-
             </div>
 
-
             <div className="info-item">
-
               <span className="info-label">
-                PIPELINE
+                {t("pipelineLabel")}
               </span>
-
 
               <strong>
                 {errorType === "ungradable"
-                  ? "Stopped at Image Quality"
-                  : "Pipeline Interrupted"}
+                  ? t("stoppedAtQuality")
+                  : t("pipelineInterrupted")}
               </strong>
-
             </div>
-
           </LiquidGlass>
 
-
           {/* ERROR CARD */}
-
           <LiquidGlass
             variant="light"
             className="error-card phase1-error-card"
           >
-
             <div className="error-icon">
               !
             </div>
 
-
             <div className="error-content">
-
               <span className="section-kicker">
                 {errorKicker}
               </span>
-
 
               <h2>
                 {errorTitle}
               </h2>
 
-
               <p>
                 {errorMessage}
               </p>
 
-
               {/* UNGRADABLE QUALITY */}
-
               {errorType ===
                 "ungradable" &&
                 quality && (
-
                   <div
                     className="ungradable-quality-summary"
                   >
-
                     <div>
-
                       <span>
-                        QUALITY SCORE
+                        {t("qualityScoreLabel")}
                       </span>
-
 
                       <strong>
                         {Math.round(
@@ -485,65 +377,50 @@ function Analysis() {
                         )}
                         %
                       </strong>
-
                     </div>
 
-
                     <div>
-
                       <span>
-                        STATUS
+                        {t("statusLabelUpper")}
                       </span>
-
 
                       <strong>
                         {quality.quality_label ||
-                          "UNGRADABLE"}
+                          t("pipeStopped")}
                       </strong>
-
                     </div>
-
                   </div>
-
                 )}
-
 
               <p className="error-help-text">
                 {helpText}
               </p>
 
-
               <div className="error-actions">
-
                 {errorType === "ungradable" ? (
-
                   <button
                     type="button"
                     className="recapture-button"
                     onClick={handleRecapture}
                   >
-                    Recapture Image
+                    {t("recaptureBtn")}
                   </button>
-
                 ) : errorType === "human_review" ? (
-
                   <button
                     type="button"
                     className="recapture-button"
                     onClick={reset}
                   >
-                    Upload New Image
+                    {t("uploadNewImageBtn")}
                   </button>
-
                 ) : (
-
                   <>
                     <button
                       type="button"
                       className="recapture-button"
                       onClick={runFullAnalysis}
                     >
-                      Retry Analysis
+                      {t("retryAnalysisBtn")}
                     </button>
 
                     <button
@@ -551,57 +428,39 @@ function Analysis() {
                       className="recapture-button"
                       onClick={handleRecapture}
                     >
-                      Upload New Image
+                      {t("uploadNewImageBtn")}
                     </button>
                   </>
-
                 )}
-
               </div>
-
             </div>
-
           </LiquidGlass>
 
-
           {/* PIPELINE */}
-
           <section className="dashboard-section">
-
             <div className="section-heading">
-
               <div>
-
                 <span className="section-kicker">
-                  PROCESSING PIPELINE
+                  {t("pipeProcessingKicker")}
                 </span>
 
-
                 <h2>
-                  Analysis Progress
+                  {t("pipelineProgress")}
                 </h2>
 
-
                 <p>
-                  Processing stopped before the final
-                  screening result was generated.
+                  {t("pipeStoppedDesc")}
                 </p>
-
               </div>
-
             </div>
 
-
             <PipelineFlow />
-
           </section>
 
         </div>
-
       </main>
     );
   }
-
 
   /* =========================================================
      CONFIDENCE
@@ -610,60 +469,43 @@ function Analysis() {
   const confidenceBreakdown =
     report?.confidence_breakdown || {};
 
-
   const imageQualityConfidence =
     confidenceBreakdown.image_quality ??
     quality?.quality_score ??
     0;
-
 
   const classificationConfidence =
     confidenceBreakdown.classification ??
     grade?.confidence ??
     0;
 
-
   const lesionConfidence =
     confidenceBreakdown.lesion_detection ??
     0;
-
 
   /* =========================================================
      NORMAL PAGE
      ========================================================= */
 
   return (
-
     <main className="analysis-page">
-
       <div className="analysis-container">
 
-
-        {/* ===================================================
-            HEADER
-            =================================================== */}
-
+        {/* HEADER */}
         <header className="analysis-header">
-
           <div>
-
             <span className="brand-kicker">
-              RETINA AI · SCREENING SYSTEM
+              {t("screeningSystemKicker")}
             </span>
 
-
             <h1>
-              DR Screening Analysis
+              {t("drAnalysisTitle")}
             </h1>
 
-
             <p>
-              AI-assisted retinal image screening
-              and clinical evidence assessment
+              {t("drAnalysisSubtitle")}
             </p>
-
           </div>
-
 
           <div
             className={`analysis-status ${isComplete
@@ -671,255 +513,167 @@ function Analysis() {
               : ""
               }`}
           >
-
             <span className="status-dot" />
 
-
             {isComplete
-              ? "Analysis Complete"
-              : "Analysis in Progress"}
-
+              ? t("analysisComplete")
+              : t("analysisInProgress")}
           </div>
-
         </header>
 
-
-        {/* ===================================================
-            IMAGE INFORMATION
-            =================================================== */}
-
+        {/* IMAGE INFORMATION */}
         <LiquidGlass
           variant="light"
           className="analysis-info-card"
         >
-
           <div className="info-item">
-
             <span className="info-label">
-              RETINAL IMAGE
+              {t("retinalImageLabel")}
             </span>
-
 
             <strong>
               {file.name}
             </strong>
-
           </div>
 
-
           <div className="info-item">
-
             <span className="info-label">
-              EYE
+              {t("eyeLabel")}
             </span>
-
 
             <strong>
               {eye === "right"
-                ? "Right Eye"
-                : "Left Eye"}
+                ? t("rightEye")
+                : t("leftEye")}
             </strong>
-
           </div>
 
-
           <div className="info-item">
-
             <span className="info-label">
-              FILE SIZE
+              {t("fileSizeLabel")}
             </span>
-
 
             <strong>
               {fileSize.toFixed(2)} MB
             </strong>
-
           </div>
 
-
           <div className="info-item">
-
             <span className="info-label">
-              PIPELINE
+              {t("pipelineLabel")}
             </span>
-
 
             <strong>
               {isComplete
-                ? "4 / 4 Stages"
-                : "Processing"}
+                ? t("stagesCountComplete")
+                : t("stagesProcessing")}
             </strong>
-
           </div>
-
         </LiquidGlass>
 
-
-        {/* ===================================================
-            LIVE PROCESSING PIPELINE
-            =================================================== */}
-
+        {/* LIVE PROCESSING PIPELINE */}
         <section
           className="dashboard-section pipeline-section-top"
         >
-
           <PipelineFlow />
-
         </section>
 
-
-        {/* ===================================================
-            RESULTS
-            ONLY WHEN COMPLETE
-            =================================================== */}
-
+        {/* RESULTS ONLY WHEN COMPLETE */}
         {isComplete && (
-
           <>
-
-
-            {/* ===============================================
-                PRIMARY ASSESSMENT
-                =============================================== */}
-
+            {/* PRIMARY ASSESSMENT */}
             <section
               ref={resultRef}
               className="dashboard-section screening-result-section"
             >
-
               <div className="section-heading">
-
                 <div>
-
                   <span className="section-kicker">
-                    PRIMARY ASSESSMENT
+                    {t("primaryAssessment")}
                   </span>
-
 
                   <h2>
-                    Screening Result
+                    {t("screeningResultTitle")}
                   </h2>
 
-
                   <p>
-                    Automated diabetic retinopathy
-                    assessment
+                    {t("screeningResultDesc")}
                   </p>
-
                 </div>
 
-
                 {grade && (
-
                   <span className="dr-level-badge">
-                    DR LEVEL {drLevel}
+                    {t("drLevelPrefix")} {drLevel}
                   </span>
-
                 )}
-
               </div>
 
-
               <ResultDashboard />
-
             </section>
 
-
-            {/* ===============================================
-                AI EXPLAINABILITY
-                =============================================== */}
-
+            {/* AI EXPLAINABILITY */}
             <section
               className="dashboard-section explainability-section"
             >
-
               <div className="section-heading">
-
                 <div>
-                  
                   <h2>
-                    Clinical Evidence
+                    {t("clinicalEvidenceTitle")}
                   </h2>
-
                 </div>
-
               </div>
 
-
               <GradCAMViewer />
-
             </section>
 
-
-            {/* ===============================================
-                CONFIDENCE BREAKDOWN
-                =============================================== */}
-
+            {/* CONFIDENCE BREAKDOWN */}
             <section
               className="dashboard-section"
             >
-
               <div className="section-heading">
-
                 <div>
-
                   <span className="section-kicker">
-                    MODEL RELIABILITY
+                    {t("modelReliability")}
                   </span>
 
-
                   <h2>
-                    Confidence Breakdown
+                    {t("confidenceBreakdownTitle")}
                   </h2>
 
-
                   <p>
-                    Confidence across the major
-                    screening stages
+                    {t("confidenceBreakdownDesc")}
                   </p>
-
                 </div>
-
               </div>
-
 
               <LiquidGlass
                 variant="light"
                 className="confidence-breakdown-card"
               >
-
                 <ConfidenceRow
-                  label="Image Quality"
+                  label={t("imageQualityStage")}
                   value={
                     imageQualityConfidence
                   }
                 />
 
-
                 <ConfidenceRow
-                  label="Classification"
+                  label={t("classificationStage")}
                   value={
                     classificationConfidence
                   }
                 />
 
-
                 <ConfidenceRow
-                  label="Lesion Detection"
+                  label={t("lesionDetectionStage")}
                   value={
                     lesionConfidence
                   }
                 />
-
               </LiquidGlass>
-
             </section>
 
-
-            {/* ===============================================
-                CLINICAL REPORT + WHATSAPP DELIVERY
-                =============================================== */}
-
+            {/* CLINICAL REPORT + WHATSAPP DELIVERY */}
             <ClinicalReport
               file={file}
               eye={eye}
@@ -928,95 +682,65 @@ function Analysis() {
               report={report}
             />
 
-
-            {/* ===============================================
-                CLINICAL SUMMARY
-                =============================================== */}
-
+            {/* CLINICAL SUMMARY */}
             <section
               className="dashboard-section"
             >
-
               <div className="section-heading">
-
                 <div>
-
                   <span className="section-kicker">
-                    CLINICAL INTERPRETATION
+                    {t("clinicalInterpretation")}
                   </span>
 
-
                   <h2>
-                    Screening Summary
+                    {t("screeningSummaryTitle")}
                   </h2>
 
-
                   <p>
-                    AI-generated clinical evidence
-                    summary
+                    {t("screeningSummaryDesc")}
                   </p>
-
                 </div>
-
               </div>
-
 
               <LiquidGlass
                 variant="light"
                 className="clinical-summary"
               >
-
                 <div className="summary-icon">
                   ✓
                 </div>
 
-
                 <div className="summary-content">
-
                   <h3>
-                    Clinical Summary
+                    {t("clinicalSummaryTitle")}
                   </h3>
-
 
                   <p>
                     {report?.clinical_summary ||
-                      "Clinical summary will appear after analysis."}
+                      t("screeningSummaryDesc")}
                   </p>
 
-
                   {report?.evidence_statement && (
-
                     <div className="evidence-statement">
-
                       <span>
-                        AI EVIDENCE
+                        {t("aiEvidenceKicker")}
                       </span>
-
 
                       <p>
                         {report.evidence_statement}
                       </p>
-
                     </div>
-
                   )}
-
                 </div>
-
               </LiquidGlass>
-
             </section>
-
           </>
-
         )}
 
       </div>
-
     </main>
   );
 }
-
 
 /* =========================================================
    CONFIDENCE ROW
@@ -1026,7 +750,6 @@ function ConfidenceRow({
   label,
   value,
 }) {
-
   const percentage =
     Math.round(
       Math.max(
@@ -1038,27 +761,19 @@ function ConfidenceRow({
       ) * 100
     );
 
-
   return (
-
     <div className="confidence-row">
-
       <div className="confidence-label">
-
         <span>
           {label}
         </span>
 
-
         <strong>
           {percentage}%
         </strong>
-
       </div>
 
-
       <div className="confidence-track">
-
         <div
           className="confidence-fill"
           style={{
@@ -1066,12 +781,9 @@ function ConfidenceRow({
               `${percentage}%`,
           }}
         />
-
       </div>
-
     </div>
   );
 }
-
 
 export default Analysis;

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Stethoscope, User, Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import useToastStore from "../../store/useToastStore";
+import useLanguageStore from "../../store/useLanguageStore";
 import { loginSchema, signupSchema } from "./authSchema";
 
 export default function AuthModal({ onAuthSuccess }) {
@@ -17,6 +18,7 @@ export default function AuthModal({ onAuthSuccess }) {
   } = useAuthStore();
 
   const { showToast } = useToastStore();
+  const { t } = useLanguageStore();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -109,7 +111,6 @@ export default function AuthModal({ onAuthSuccess }) {
     }
   };
 
-  // Quick 1-Click Demo Login fill helpers
   const fillDemoDoctor = () => {
     setSelectedModalRole("Ophthalmologist");
     setFormData({
@@ -179,7 +180,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 letterSpacing: "-0.01em",
               }}
             >
-              {isLogin ? "Access RetinaTrack" : "Create Clinical Account"}
+              {isLogin ? t("authLoginTitle") : t("authSignupTitle")}
             </h3>
             <p
               style={{
@@ -188,9 +189,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 color: "var(--saas-fg-muted)",
               }}
             >
-              {isLogin
-                ? "Sign in to access your role-based screening workspace"
-                : "Register for AI-assisted retinal screening and triage"}
+              {isLogin ? t("authLoginSubtitle") : t("authSignupSubtitle")}
             </p>
           </div>
 
@@ -234,11 +233,10 @@ export default function AuthModal({ onAuthSuccess }) {
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
                 color: "var(--saas-fg-muted)",
-                fontFamily: "var(--font-mono)",
                 marginBottom: "8px",
               }}
             >
-              Select Your Role
+              {t("authRoleLabel")}
             </label>
             <div
               style={{
@@ -275,7 +273,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 }}
               >
                 <User size={16} color={selectedModalRole === "Patient" ? "#0052FF" : "#64748B"} />
-                <span>Patient / Citizen</span>
+                <span>{t("rolePatient")}</span>
               </button>
 
               <button
@@ -305,7 +303,7 @@ export default function AuthModal({ onAuthSuccess }) {
                   size={16}
                   color={selectedModalRole === "Ophthalmologist" ? "#0052FF" : "#64748B"}
                 />
-                <span>Ophthalmologist</span>
+                <span>{t("roleDoctor")}</span>
               </button>
             </div>
           </div>
@@ -323,7 +321,7 @@ export default function AuthModal({ onAuthSuccess }) {
                     marginBottom: "6px",
                   }}
                 >
-                  Full Name
+                  {t("fullNameLabel")}
                 </label>
                 <div style={{ position: "relative" }}>
                   <input
@@ -343,17 +341,6 @@ export default function AuthModal({ onAuthSuccess }) {
                       backgroundColor: "var(--saas-bg-subtle)",
                       outline: "none",
                       color: "var(--saas-fg)",
-                      transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "var(--saas-accent)";
-                      e.target.style.backgroundColor = "#FFFFFF";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(0, 82, 255, 0.12)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "var(--saas-border)";
-                      e.target.style.backgroundColor = "var(--saas-bg-subtle)";
-                      e.target.style.boxShadow = "none";
                     }}
                   />
                   <User
@@ -381,7 +368,7 @@ export default function AuthModal({ onAuthSuccess }) {
                   marginBottom: "6px",
                 }}
               >
-                Email Address
+                {t("emailLabel")}
               </label>
               <div style={{ position: "relative" }}>
                 <input
@@ -401,17 +388,6 @@ export default function AuthModal({ onAuthSuccess }) {
                     backgroundColor: "var(--saas-bg-subtle)",
                     outline: "none",
                     color: "var(--saas-fg)",
-                    transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = "var(--saas-accent)";
-                    e.target.style.backgroundColor = "#FFFFFF";
-                    e.target.style.boxShadow = "0 0 0 3px rgba(0, 82, 255, 0.12)";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = "var(--saas-border)";
-                    e.target.style.backgroundColor = "var(--saas-bg-subtle)";
-                    e.target.style.boxShadow = "none";
                   }}
                 />
                 <Mail
@@ -438,13 +414,13 @@ export default function AuthModal({ onAuthSuccess }) {
                   marginBottom: "6px",
                 }}
               >
-                Password
+                {t("passwordLabel")}
               </label>
               <div style={{ position: "relative" }}>
                 <input
                   type="password"
                   required
-                  placeholder="Minimum 6 characters"
+                  placeholder={t("passwordPlaceholder")}
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
                   style={{
@@ -458,17 +434,6 @@ export default function AuthModal({ onAuthSuccess }) {
                     backgroundColor: "var(--saas-bg-subtle)",
                     outline: "none",
                     color: "var(--saas-fg)",
-                    transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = "var(--saas-accent)";
-                    e.target.style.backgroundColor = "#FFFFFF";
-                    e.target.style.boxShadow = "0 0 0 3px rgba(0, 82, 255, 0.12)";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = "var(--saas-border)";
-                    e.target.style.backgroundColor = "var(--saas-bg-subtle)";
-                    e.target.style.boxShadow = "none";
                   }}
                 />
                 <Lock
@@ -499,10 +464,10 @@ export default function AuthModal({ onAuthSuccess }) {
             >
               <span>
                 {isSubmitting
-                  ? "Processing..."
+                  ? t("processing")
                   : isLogin
-                  ? `Sign In as ${selectedModalRole}`
-                  : `Register as ${selectedModalRole}`}
+                  ? `${t("btnSignIn")} ${selectedModalRole === "Ophthalmologist" ? t("roleDoctor") : t("rolePatient")}`
+                  : `${t("btnRegister")} ${selectedModalRole === "Ophthalmologist" ? t("roleDoctor") : t("rolePatient")}`}
               </span>
               <ArrowRight size={18} />
             </button>
@@ -526,13 +491,12 @@ export default function AuthModal({ onAuthSuccess }) {
                 fontSize: "0.72rem",
                 fontWeight: 700,
                 color: "var(--saas-accent)",
-                fontFamily: "var(--font-mono)",
                 textTransform: "uppercase",
                 marginBottom: "8px",
               }}
             >
               <Sparkles size={13} />
-              <span>Instant Test Credentials (1-Click)</span>
+              <span>{t("demoCredentialsTitle")}</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
               <button
@@ -550,7 +514,7 @@ export default function AuthModal({ onAuthSuccess }) {
                   textAlign: "center",
                 }}
               >
-                🩺 Fill Doctor Demo
+                {t("fillDoctorDemo")}
               </button>
               <button
                 type="button"
@@ -567,12 +531,12 @@ export default function AuthModal({ onAuthSuccess }) {
                   textAlign: "center",
                 }}
               >
-                👤 Fill Patient Demo
+                {t("fillPatientDemo")}
               </button>
             </div>
           </div>
 
-          {/* Mode Switcher Footer Link */}
+          {/* Mode Switcher Link */}
           <div
             style={{
               marginTop: "20px",
@@ -583,7 +547,7 @@ export default function AuthModal({ onAuthSuccess }) {
           >
             {isLogin ? (
               <span>
-                Don't have an account?{" "}
+                {t("noAccount")}{" "}
                 <button
                   type="button"
                   onClick={() => setAuthModalMode("signup")}
@@ -597,12 +561,12 @@ export default function AuthModal({ onAuthSuccess }) {
                     textDecoration: "underline",
                   }}
                 >
-                  Sign up
+                  {t("linkSignUp")}
                 </button>
               </span>
             ) : (
               <span>
-                Already registered?{" "}
+                {t("haveAccount")}{" "}
                 <button
                   type="button"
                   onClick={() => setAuthModalMode("login")}
@@ -616,7 +580,7 @@ export default function AuthModal({ onAuthSuccess }) {
                     textDecoration: "underline",
                   }}
                 >
-                  Log in
+                  {t("linkLogIn")}
                 </button>
               </span>
             )}

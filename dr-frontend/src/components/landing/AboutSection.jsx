@@ -1,21 +1,21 @@
 import {
-  Users,
   ShieldAlert,
   SlidersHorizontal,
   Crosshair,
   CheckCircle,
   FileCheck2,
-  AlertTriangle,
-  Sparkles,
 } from "lucide-react";
+import useLanguageStore from "../../store/useLanguageStore";
 
 export default function AboutSection() {
+  const { t } = useLanguageStore();
+
   return (
     <section
       id="about"
       style={{
-        paddingTop: "96px",
-        paddingBottom: "96px",
+        paddingTop: "80px",
+        paddingBottom: "80px",
         backgroundColor: "#FFFFFF",
         borderTop: "1px solid var(--saas-border)",
         borderBottom: "1px solid var(--saas-border)",
@@ -28,23 +28,8 @@ export default function AboutSection() {
           padding: "0 24px",
         }}
       >
-        {/* Section Pill Badge */}
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
-          <div className="saas-pill-badge">
-            <span
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                backgroundColor: "var(--saas-accent)",
-              }}
-            />
-            <span>Clinical Context & Mission</span>
-          </div>
-        </div>
-
-        {/* Section Headline */}
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 64px" }}>
+        {/* Section Headline - Pill badge removed */}
+        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 56px" }}>
           <h2
             className="font-display"
             style={{
@@ -54,8 +39,8 @@ export default function AboutSection() {
               margin: "0 0 16px 0",
             }}
           >
-            Closing the Rural Specialist Gap with{" "}
-            <span className="gradient-text-saas">Intelligent Triage</span>
+            {t("aboutHeadlinePrefix")}{" "}
+            <span className="gradient-text-saas">{t("aboutHeadlineGradient")}</span>
           </h2>
           <p
             style={{
@@ -65,7 +50,7 @@ export default function AboutSection() {
               margin: 0,
             }}
           >
-            In rural India, there is approximately <strong>1 ophthalmologist per 100,000 citizens</strong>. RetinaTrack AI does not replace specialists—it acts as an automated triage safety net, converting high-volume rural screenings into calibrated, evidence-backed referrals.
+            {t("aboutDescription")}
           </p>
         </div>
 
@@ -104,19 +89,6 @@ export default function AboutSection() {
               <ShieldAlert size={24} />
             </div>
 
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "var(--saas-fg-light)",
-                textTransform: "uppercase",
-                marginBottom: "6px",
-              }}
-            >
-              Stage 01 • Gatekeeper
-            </div>
-
             <h3
               style={{
                 fontSize: "1.18rem",
@@ -125,7 +97,7 @@ export default function AboutSection() {
                 margin: "0 0 10px 0",
               }}
             >
-              Quality Rejection (IQA)
+              {t("stage1Title")}
             </h3>
 
             <p
@@ -136,7 +108,7 @@ export default function AboutSection() {
                 margin: 0,
               }}
             >
-              Filters blurred, dark, or cropped captures immediately at the PHC camera. Prevents unreliable automated predictions and flags instant recapture instructions.
+              {t("stage1Desc")}
             </p>
           </div>
 
@@ -166,19 +138,6 @@ export default function AboutSection() {
               <SlidersHorizontal size={24} />
             </div>
 
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "var(--saas-fg-light)",
-                textTransform: "uppercase",
-                marginBottom: "6px",
-              }}
-            >
-              Stage 02 • Enhancement
-            </div>
-
             <h3
               style={{
                 fontSize: "1.18rem",
@@ -187,7 +146,7 @@ export default function AboutSection() {
                 margin: "0 0 10px 0",
               }}
             >
-              Adaptive CLAHE Filter
+              {t("stage2Title")}
             </h3>
 
             <p
@@ -198,7 +157,7 @@ export default function AboutSection() {
                 margin: 0,
               }}
             >
-              Optimizes borderline retinal captures with Contrast Limited Adaptive Histogram Equalization, illumination normalization, and selective denoising without hallucinating artifacts.
+              {t("stage2Desc")}
             </p>
           </div>
 
@@ -228,19 +187,6 @@ export default function AboutSection() {
               <Crosshair size={24} />
             </div>
 
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "var(--saas-fg-light)",
-                textTransform: "uppercase",
-                marginBottom: "6px",
-              }}
-            >
-              Stage 03 • Anatomical Maps
-            </div>
-
             <h3
               style={{
                 fontSize: "1.18rem",
@@ -249,7 +195,7 @@ export default function AboutSection() {
                 margin: "0 0 10px 0",
               }}
             >
-              Anatomy & Lesion AI
+              {t("stage3Title")}
             </h3>
 
             <p
@@ -260,7 +206,7 @@ export default function AboutSection() {
                 margin: 0,
               }}
             >
-              Localizes optic disc, fovea center, and vascular tree. Detects sub-pixel microaneurysms, hemorrhages, and exudates with spatial coordinate references.
+              {t("stage3Desc")}
             </p>
           </div>
 
@@ -290,19 +236,6 @@ export default function AboutSection() {
               <FileCheck2 size={24} />
             </div>
 
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "var(--saas-fg-light)",
-                textTransform: "uppercase",
-                marginBottom: "6px",
-              }}
-            >
-              Stage 04 • Clinician Triage
-            </div>
-
             <h3
               style={{
                 fontSize: "1.18rem",
@@ -311,7 +244,7 @@ export default function AboutSection() {
                 margin: "0 0 10px 0",
               }}
             >
-              &lt; 30s Clinician Review
+              {t("stage4Title")}
             </h3>
 
             <p
@@ -322,12 +255,12 @@ export default function AboutSection() {
                 margin: 0,
               }}
             >
-              Multi-class ICDR severity classification (Levels 0–4) paired with Grad-CAM visual heatmaps, calibrated confidence metrics, and structured clinical referrals.
+              {t("stage4Desc")}
             </p>
           </div>
         </div>
 
-        {/* Inverted Summary Banner for Visual Rhythm */}
+        {/* Inverted Summary Banner - Badge removed */}
         <div
           style={{
             backgroundColor: "var(--saas-fg)",
@@ -342,24 +275,6 @@ export default function AboutSection() {
           className="about-inverted-banner"
         >
           <div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "4px 12px",
-                borderRadius: "999px",
-                backgroundColor: "rgba(255, 255, 255, 0.12)",
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                marginBottom: "16px",
-                color: "#93C5FD",
-              }}
-            >
-              <Sparkles size={14} />
-              <span>Human-In-The-Loop Paradigm</span>
-            </div>
             <h3
               style={{
                 fontSize: "1.5rem",
@@ -368,7 +283,7 @@ export default function AboutSection() {
                 margin: "0 0 12px 0",
               }}
             >
-              Screening vs. Diagnosis: The Essential Difference
+              {t("bannerTitle")}
             </h3>
             <p
               style={{
@@ -378,7 +293,7 @@ export default function AboutSection() {
                 margin: 0,
               }}
             >
-              By filtering out normal cases (Level 0/1) with &gt;85% specificity and escalating referable cases (Level 2+) with &gt;90% sensitivity, ophthalmologists focus their time where it is needed most.
+              {t("bannerDesc")}
             </p>
           </div>
 
@@ -394,19 +309,19 @@ export default function AboutSection() {
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
                 <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
-                  Triage 100,000+ rural patients annually
+                  {t("bannerPoint1")}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
                 <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
-                  Sub-30s ophthalmologist case sign-off
+                  {t("bannerPoint2")}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
                 <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
-                  Real-time WhatsApp report delivery to patients
+                  {t("bannerPoint3")}
                 </span>
               </div>
             </div>
