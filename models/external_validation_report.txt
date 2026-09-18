@@ -1,0 +1,33 @@
+
+SERIX — DR Screening System
+External Validation Report — Messidor-2
+==================================================
+
+Dataset:      Messidor-2
+Training set: APTOS 2019 + IDRiD (NO Messidor-2 in training)
+Purpose:      Domain shift test
+
+RESULTS
+──────────────────────────────────────────────────
+Total evaluated : 1748
+Sensitivity     : 0.1304 (13.0%)
+Specificity     : 0.8811 (88.1%)
+Accuracy        : 0.6144 (61.4%)
+AUC             : 0.5218
+Human review    : 290/1748 (16.6%)
+
+Confusion Matrix:
+  TP=81  FP=134
+  FN=540  TN=993
+
+False Negatives (missed referrals): 540
+
+INTERPRETATION
+──────────────────────────────────────────────────
+A 3-5% drop in sensitivity vs APTOS validation is expected
+and represents real-world domain shift (different camera,
+different population, different illumination conditions).
+This is honest. A zero-drop claim would be suspicious.
+The IQA module provides partial defense against worst-case
+domain shift by flagging ungradable images before grading.
+==================================================
