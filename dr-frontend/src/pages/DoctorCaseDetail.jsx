@@ -97,6 +97,31 @@ export default function DoctorCaseDetail() {
               </div>
             </div>
 
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Image Quality</div>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: ticket.quality_label === 'REJECT' ? '#ef4444' : ticket.quality_label === 'BORDERLINE' ? '#d97706' : '#22c55e' }}>
+                  {ticket.quality_label || "GOOD"} ({Math.round((ticket.quality_score || 1) * 100)}%)
+                </div>
+                {ticket.quality_issues && ticket.quality_issues.length > 0 && (
+                  <div style={{ fontSize: '0.8rem', color: '#ef4444', marginTop: '4px' }}>
+                    Issues: {ticket.quality_issues.join(", ")}
+                  </div>
+                )}
+              </div>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Clinical Action</div>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: ticket.refer ? '#ef4444' : '#22c55e' }}>
+                  {ticket.refer ? 'Referral Recommended' : 'No Referral Needed'}
+                </div>
+                {ticket.refer && (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginTop: '4px' }}>
+                    Routing: {ticket.routing || "STANDARD_REFERRAL"}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <h3 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 12px 0' }}>Evidence Summary</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--saas-fg-muted)', lineHeight: 1.5, backgroundColor: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
               {ticket.clinical_summary || ticket.evidence_statement || "No detailed summary available."}

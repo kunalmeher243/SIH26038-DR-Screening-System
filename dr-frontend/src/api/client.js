@@ -25,6 +25,19 @@ const apiClient = axios.create({
   timeout: 35000,
 });
 
+apiClient.interceptors.request.use((config) => {
+  try {
+    const raw = localStorage.getItem("retinatrack_auth");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.token) {
+        config.headers.Authorization = `Bearer ${parsed.token}`;
+      }
+    }
+  } catch (err) {}
+  return config;
+});
+
 
 /*
  * =========================================================

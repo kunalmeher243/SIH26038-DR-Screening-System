@@ -25,6 +25,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from bson import ObjectId
 from collections import defaultdict
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Optional
 
 from database import tickets_col, slots_col, messages_col, doctors_col, init_db
 from services import (
@@ -34,6 +36,7 @@ from services import (
     gradcam_service,
     report_service,
     email_service,
+    auth_service,
 )
 
 app = FastAPI(
@@ -127,6 +130,46 @@ async def generate_report_pdf(file: UploadFile = File(...)):
     )
 
 
+# ── Auth Endpoints ────────────────────────────────────────────────────────────
+
+class UserRegister(BaseModel):
+    name: str
+    email: str
+    password: str
+    role: str
+
+@app.post("/api/auth/register")
+async def register(user: UserRegister):
+    existing = await users_col.find_one({"email": user.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+        
+    user_doc = {
+        "name": user.name,
+        "email": user.email,
+        "password_hash": auth_service.get_password_hash(user.password),
+        "role": user.role,
+        "created_at": datetime.utcnow()
+    }
+    result = await users_col.insert_one(user_doc)
+    return {"message": "User registered successfully"}
+
+@app.post("/api/auth/login")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = await users_col.find_one({"email": form_data.username})
+    if not user or not auth_service.verify_password(form_data.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+        
+    access_token = auth_service.create_access_token(
+        data={"sub": str(user["_id"])}
+    )
+    return {"access_token": access_token, "token_type": "bearer", "role": user["role"], "name": user["name"], "email": user["email"]}
+
+@app.get("/api/auth/me")
+async def read_users_me(current_user: dict = Depends(auth_service.get_current_user)):
+    return {"name": current_user["name"], "email": current_user["email"], "role": current_user["role"]}
+
+
 # ── SERIX New Endpoints ────────────────────────────────────────────────────────
 
 @app.get("/api/doctors")
@@ -171,6 +214,12 @@ async def create_ticket(
         "clinical_summary": report.get("clinical_summary", ""),
         "evidence_statement": report.get("evidence_statement", ""),
         "confidence_breakdown": report.get("confidence_breakdown", {}),
+        "quality_score": report.get("quality", {}).get("quality_score", 1.0),
+        "quality_label": report.get("quality", {}).get("quality_label", "GOOD"),
+        "quality_issues": report.get("quality", {}).get("issues", []),
+        "enhancement_used": report.get("enhancement", {}).get("was_enhanced", False),
+        "refer": report.get("grading", {}).get("refer", False),
+        "routing": report.get("grading", {}).get("routing", "STANDARD_REFERRAL"),
         "status": "pending",
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
@@ -253,6 +302,14 @@ async def schedule_ticket(ticket_id: str, req: ScheduleRequest):
         "scheduled_at": req.scheduled_at,
         "status": "accepted"
     }
+
+@app.get("/api/tickets/patient/me")
+async def get_patient_tickets(current_user: dict = Depends(auth_service.get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    cursor = tickets_col.find({"patient_email": current_user["email"]}).sort("created_at", -1)
+    tickets = [format_doc(doc) async for doc in cursor]
+    return tickets
 
 @app.get("/api/tickets/{ticket_id}/slot")
 async def get_ticket_slot(ticket_id: str):

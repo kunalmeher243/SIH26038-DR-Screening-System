@@ -14,6 +14,7 @@ tickets_col = db["tickets"]
 slots_col = db["slots"]
 messages_col = db["messages"]
 doctors_col = db["doctors"]
+users_col = db["users"]
 
 # Dummy hardcoded doctor details
 DOCTORS = [
@@ -27,4 +28,15 @@ async def init_db():
     count = await doctors_col.count_documents({})
     if count == 0:
         await doctors_col.insert_many(DOCTORS)
+        
+    user_count = await users_col.count_documents({})
+    if user_count == 0:
+        from passlib.context import CryptContext
+        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        demo_users = [
+            {"name": "Demo PHC Worker", "email": "phc@demo.com", "password_hash": pwd_context.hash("password"), "role": "phc_worker"},
+            {"name": "Dr. Sharma", "email": "doctor@demo.com", "password_hash": pwd_context.hash("password"), "role": "doctor"},
+            {"name": "Demo Patient", "email": "patient@demo.com", "password_hash": pwd_context.hash("password"), "role": "patient"}
+        ]
+        await users_col.insert_many(demo_users)
 

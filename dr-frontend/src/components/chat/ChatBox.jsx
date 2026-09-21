@@ -69,7 +69,7 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
               <div key={idx} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', maxWidth: '75%' }}>
                 {!isMe && (
                   <div style={{ fontSize: '0.75rem', color: 'var(--saas-fg-muted)', marginBottom: '4px', marginLeft: '4px' }}>
-                    {msg.sender_name} ({msg.sender_role === 'doctor' ? 'Doctor' : 'PHC'})
+                    {msg.sender_name} ({msg.sender_role === 'doctor' ? 'Doctor' : msg.sender_role === 'patient' ? 'Patient' : 'PHC'})
                   </div>
                 )}
                 <div style={{

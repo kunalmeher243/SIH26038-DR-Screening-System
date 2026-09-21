@@ -195,65 +195,46 @@ const useAuthStore = create((set, get) => ({
     password,
     role,
   }) => {
-    const normalizedRole =
-      normalizeRole(role);
+    // Determine the expected role the user is trying to log in as (for the UI)
+    const normalizedRole = normalizeRole(role);
 
-    const normalizedEmail =
-      String(email || "")
-        .trim()
-        .toLowerCase();
-
-    const namePart =
-      normalizedEmail.split("@")[0] ||
-      "User";
-
-    const generatedName =
-      normalizedRole ===
-      "Ophthalmologist"
-        ? formatUserName(
-            namePart,
-            normalizedRole
-          )
-        : formatUserName(
-            namePart,
-            normalizedRole
-          );
-
-    /*
-     * -------------------------------------------------------
-     * CURRENT DEVELOPMENT AUTH
-     * -------------------------------------------------------
-     *
-     * This is still local/mock authentication.
-     *
-     * It is intentionally kept compatible with the existing
-     * frontend architecture until the real authentication
-     * backend is connected.
-     * -------------------------------------------------------
-     */
-
+    // Call the backend to login using OAuth2 password flow (which uses form-data)
+    const formData = new URLSearchParams();
+    formData.append('username', email);
+    formData.append('password', password);
+    
+    // We import apiClient dynamically to avoid circular dependencies if any
+    const { default: apiClient } = await import("../api/client");
+    
+    const response = await apiClient.post("/api/auth/login", formData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    
+    const data = response.data;
+    
+    // Map backend role back to frontend role string if needed
+    // "phc_worker" -> "PHC Worker", "doctor" -> "Ophthalmologist", "patient" -> "Patient"
+    let uiRole = "Patient";
+    let portal = "patient";
+    if (data.role === "phc_worker") {
+      uiRole = "PHC Worker";
+      portal = "phc";
+    } else if (data.role === "doctor") {
+      uiRole = "Ophthalmologist";
+      portal = "doctor";
+    }
+    
     const userPayload = {
-      name: generatedName,
-
-      email: normalizedEmail,
-
-      role: normalizedRole,
-
+      name: data.name,
+      email: data.email,
+      role: uiRole,
       id: `usr_${Date.now()}`,
-
-      /*
-       * Used later by the role-specific dashboard.
-       */
-      portal:
-        normalizedRole === "PHC Worker"
-          ? "phc"
-          : normalizedRole ===
-            "Ophthalmologist"
-          ? "doctor"
-          : "patient",
+      portal: portal,
     };
-
-    const token = createMockToken();
+    
+    const token = data.access_token;
 
     persistAuth(
       userPayload,
@@ -262,11 +243,8 @@ const useAuthStore = create((set, get) => ({
 
     set({
       user: userPayload,
-
       token,
-
       isAuthenticated: true,
-
       isAuthModalOpen: false,
     });
 
@@ -283,56 +261,23 @@ const useAuthStore = create((set, get) => ({
     password,
     role,
   }) => {
-    const normalizedRole =
-      normalizeRole(role);
+    const normalizedRole = normalizeRole(role);
+    
+    let backendRole = "patient";
+    if (normalizedRole === "PHC Worker") backendRole = "phc_worker";
+    if (normalizedRole === "Ophthalmologist") backendRole = "doctor";
 
-    const normalizedEmail =
-      String(email || "")
-        .trim()
-        .toLowerCase();
-
-    const formattedName =
-      formatUserName(
-        name,
-        normalizedRole
-      );
-
-    const userPayload = {
-      name: formattedName,
-
-      email: normalizedEmail,
-
-      role: normalizedRole,
-
-      id: `usr_${Date.now()}`,
-
-      portal:
-        normalizedRole === "PHC Worker"
-          ? "phc"
-          : normalizedRole ===
-            "Ophthalmologist"
-          ? "doctor"
-          : "patient",
-    };
-
-    const token = createMockToken();
-
-    persistAuth(
-      userPayload,
-      token
-    );
-
-    set({
-      user: userPayload,
-
-      token,
-
-      isAuthenticated: true,
-
-      isAuthModalOpen: false,
+    const { default: apiClient } = await import("../api/client");
+    
+    await apiClient.post("/api/auth/register", {
+      name,
+      email,
+      password,
+      role: backendRole
     });
-
-    return userPayload;
+    
+    // Automatically login after successful registration
+    return get().login({ email, password, role });
   },
 
   /* =======================================================
