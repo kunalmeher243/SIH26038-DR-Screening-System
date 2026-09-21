@@ -7,11 +7,11 @@ export default function Footer() {
   return (
     <footer
       style={{
-        backgroundColor: "#FFFFFF",
-        borderTop: "1px solid var(--saas-border)",
+        backgroundColor: "var(--color-surface)",
+        borderTop: "1px solid var(--color-border)",
         paddingTop: "64px",
         paddingBottom: "48px",
-        color: "var(--saas-fg-muted)",
+        color: "var(--color-text-muted)",
         marginTop: "80px",
       }}
     >
@@ -50,7 +50,7 @@ export default function Footer() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#FFFFFF",
+                  color: "var(--color-surface)",
                 }}
               >
                 <Eye size={18} strokeWidth={2.4} />
@@ -59,18 +59,18 @@ export default function Footer() {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: 800,
-                  color: "var(--saas-fg)",
+                  color: "var(--color-text)",
                   letterSpacing: "-0.02em",
                 }}
               >
-                {t("brandName")}<span style={{ color: "var(--saas-accent)" }}>.AI</span>
+                {t("brandName")}<span style={{ color: "var(--color-primary)" }}>.AI</span>
               </span>
             </div>
             <p
               style={{
                 fontSize: "0.875rem",
                 lineHeight: 1.6,
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 marginBottom: "16px",
               }}
             >
@@ -84,13 +84,13 @@ export default function Footer() {
                 padding: "4px 10px",
                 backgroundColor: "var(--saas-bg-subtle)",
                 borderRadius: "6px",
-                border: "1px solid var(--saas-border)",
+                border: "1px solid var(--color-border)",
                 fontSize: "0.75rem",
                 fontWeight: 600,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
               }}
             >
-              <Activity size={14} color="var(--saas-accent)" />
+              <Activity size={14} color="var(--color-primary)" />
               <span>{t("footerCapacity")}</span>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function Footer() {
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 marginBottom: "18px",
@@ -133,7 +133,7 @@ export default function Footer() {
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 marginBottom: "18px",
@@ -165,7 +165,7 @@ export default function Footer() {
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 marginBottom: "18px",
@@ -178,7 +178,7 @@ export default function Footer() {
                 padding: "14px",
                 backgroundColor: "var(--saas-bg-subtle)",
                 borderRadius: "10px",
-                border: "1px solid var(--saas-border)",
+                border: "1px solid var(--color-border)",
                 fontSize: "0.8125rem",
                 lineHeight: 1.5,
               }}
@@ -189,7 +189,7 @@ export default function Footer() {
                   alignItems: "center",
                   gap: "6px",
                   fontWeight: 700,
-                  color: "var(--saas-fg)",
+                  color: "var(--color-text)",
                   marginBottom: "4px",
                 }}
               >
@@ -205,7 +205,7 @@ export default function Footer() {
         <div
           style={{
             height: "1px",
-            backgroundColor: "var(--saas-border)",
+            backgroundColor: "var(--color-border)",
             marginBottom: "24px",
           }}
         />

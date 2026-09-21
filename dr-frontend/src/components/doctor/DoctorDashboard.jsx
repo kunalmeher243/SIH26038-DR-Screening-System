@@ -77,7 +77,7 @@ export default function DoctorDashboard() {
             description="Review screening cases created by the PHC workflow. AI findings are decision-support evidence; the final clinical decision remains with the reviewing ophthalmologist."
           />
 
-          <LiquidGlass variant="light" className="saas-card">
+          <LiquidGlass variant="light" className="card">
             <EmptyState
               title="No case is currently available"
               description="A PHC worker must complete a retinal screening case before it appears in this local review workspace."
@@ -97,7 +97,7 @@ export default function DoctorDashboard() {
             description="The current case is still being processed. Detailed AI findings will be available after screening completes."
           />
 
-          <LiquidGlass variant="light" className="saas-card">
+          <LiquidGlass variant="light" className="card">
             <div style={statusHeaderStyle}>
               <div style={iconBoxStyle}>
                 <RefreshCw size={22} />
@@ -129,7 +129,7 @@ export default function DoctorDashboard() {
             description="The current case does not yet contain a reviewable AI result."
           />
 
-          <LiquidGlass variant="light" className="saas-card">
+          <LiquidGlass variant="light" className="card">
             <EmptyState
               title="Case awaiting screening output"
               description="Complete the PHC screening workflow first."
@@ -154,7 +154,7 @@ export default function DoctorDashboard() {
           description="This workspace exposes the AI assessment, image evidence, and screening report for clinical review."
         />
 
-        <LiquidGlass variant="light" className="saas-card">
+        <LiquidGlass variant="light" className="card">
           <div
             style={{
               display: "flex",
@@ -272,7 +272,7 @@ export default function DoctorDashboard() {
             description="Record the action to be taken after reviewing the case."
           />
 
-          <LiquidGlass variant="light" className="saas-card">
+          <LiquidGlass variant="light" className="card">
             <div
               style={{
                 display: "grid",
@@ -293,13 +293,13 @@ export default function DoctorDashboard() {
                       textAlign: "left",
                       borderRadius: "12px",
                       border: active
-                        ? "1.5px solid var(--saas-accent)"
-                        : "1px solid var(--saas-border)",
+                        ? "1.5px solid var(--color-primary)"
+                        : "1px solid var(--color-border)",
                       background: active
                         ? "rgba(0, 82, 255, 0.06)"
-                        : "#FFFFFF",
+                        : "var(--color-surface)",
                       cursor: "pointer",
-                      color: "var(--saas-fg)",
+                      color: "var(--color-text)",
                     }}
                   >
                     <div
@@ -320,7 +320,7 @@ export default function DoctorDashboard() {
                         margin: "7px 0 0",
                         fontSize: "0.76rem",
                         lineHeight: 1.45,
-                        color: "var(--saas-fg-muted)",
+                        color: "var(--color-text-muted)",
                       }}
                     >
                       {item.description}
@@ -337,7 +337,7 @@ export default function DoctorDashboard() {
                 marginBottom: "7px",
                 fontSize: "0.8rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
               }}
             >
               Doctor notes
@@ -371,7 +371,7 @@ export default function DoctorDashboard() {
 
               <button
                 type="button"
-                className="saas-btn-primary"
+                className="btn btn-primary"
                 disabled={!decision}
                 onClick={() => {
                   // Local prototype state only. Backend case persistence will be added
@@ -405,7 +405,7 @@ export default function DoctorDashboard() {
           }}
         >
           <div style={{ ...mutedStyle, maxWidth: "720px" }}>
-            <strong style={{ color: "var(--saas-fg)" }}>
+            <strong style={{ color: "var(--color-text)" }}>
               Clinical safety boundary:
             </strong>{" "}
             the displayed AI classification and confidence are decision-support
@@ -414,7 +414,7 @@ export default function DoctorDashboard() {
 
           <button
             type="button"
-            className="saas-btn-primary"
+            className="btn btn-primary"
             onClick={reset}
           >
             <FileImage size={16} />
@@ -436,7 +436,7 @@ function Header({ title, description }) {
           fontSize: "clamp(1.7rem, 3vw, 2.25rem)",
           fontWeight: 850,
           letterSpacing: "-0.035em",
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
         }}
       >
         {title}
@@ -445,7 +445,7 @@ function Header({ title, description }) {
         style={{
           maxWidth: "840px",
           margin: 0,
-          color: "var(--saas-fg-muted)",
+          color: "var(--color-text-muted)",
           lineHeight: 1.6,
         }}
       >
@@ -464,7 +464,7 @@ function SectionHeading({ kicker, title, description }) {
           margin: "5px 0 5px",
           fontSize: "1.3rem",
           fontWeight: 820,
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
         }}
       >
         {title}
@@ -480,8 +480,8 @@ function SummaryItem({ label, value }) {
       style={{
         padding: "13px 14px",
         borderRadius: "10px",
-        border: "1px solid var(--saas-border)",
-        background: "#FFFFFF",
+        border: "1px solid var(--color-border)",
+        background: "var(--color-surface)",
       }}
     >
       <span
@@ -492,7 +492,7 @@ function SummaryItem({ label, value }) {
           fontWeight: 750,
           textTransform: "uppercase",
           letterSpacing: "0.05em",
-          color: "var(--saas-fg-muted)",
+          color: "var(--color-text-muted)",
         }}
       >
         {label}
@@ -501,7 +501,7 @@ function SummaryItem({ label, value }) {
         style={{
           display: "block",
           fontSize: "0.88rem",
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
         }}
       >
         {value || "—"}
@@ -528,7 +528,7 @@ function EmptyState({ title, description }) {
           alignItems: "center",
           justifyContent: "center",
           background: "rgba(0, 82, 255, 0.08)",
-          color: "var(--saas-accent)",
+          color: "var(--color-primary)",
         }}
       >
         <Eye size={25} />
@@ -550,7 +550,7 @@ function EmptyState({ title, description }) {
 const pageStyle = {
   minHeight: "calc(100vh - 150px)",
   padding: "38px 24px 56px",
-  background: "#FAFAFA",
+  background: "var(--color-bg)",
 };
 
 const containerStyle = {
@@ -576,7 +576,7 @@ const iconBoxStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
   background: "rgba(0, 82, 255, 0.08)",
 };
 
@@ -586,21 +586,21 @@ const kickerStyle = {
   fontWeight: 800,
   letterSpacing: "0.08em",
   textTransform: "uppercase",
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
 };
 
 const titleStyle = {
   margin: "4px 0 4px",
   fontSize: "1.25rem",
   fontWeight: 800,
-  color: "var(--saas-fg)",
+  color: "var(--color-text)",
 };
 
 const mutedStyle = {
   margin: 0,
   fontSize: "0.84rem",
   lineHeight: 1.5,
-  color: "var(--saas-fg-muted)",
+  color: "var(--color-text-muted)",
 };
 
 const summaryGridStyle = {
@@ -616,9 +616,9 @@ const textareaStyle = {
   padding: "12px 13px",
   resize: "vertical",
   borderRadius: "10px",
-  border: "1px solid var(--saas-border)",
-  background: "#FFFFFF",
-  color: "var(--saas-fg)",
+  border: "1px solid var(--color-border)",
+  background: "var(--color-surface)",
+  color: "var(--color-text)",
   fontFamily: "inherit",
   fontSize: "0.86rem",
   outline: "none",

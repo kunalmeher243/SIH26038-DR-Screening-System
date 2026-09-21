@@ -12,7 +12,7 @@ import "./index.css";
 function App() {
   return (
     <BrowserRouter>
-      <div className="retinatrack-app" style={{ minHeight: "100vh", backgroundColor: "#FAFAFA" }}>
+      <div className="retinatrack-app" style={{ minHeight: "100vh", backgroundColor: "var(--color-bg)" }}>
         <Toast />
         <Routes>
           <Route path="/" element={<Login />} />

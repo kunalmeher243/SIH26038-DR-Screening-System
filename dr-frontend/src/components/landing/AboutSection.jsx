@@ -16,9 +16,9 @@ export default function AboutSection() {
       style={{
         paddingTop: "80px",
         paddingBottom: "80px",
-        backgroundColor: "#FFFFFF",
-        borderTop: "1px solid var(--saas-border)",
-        borderBottom: "1px solid var(--saas-border)",
+        backgroundColor: "var(--color-surface)",
+        borderTop: "1px solid var(--color-border)",
+        borderBottom: "1px solid var(--color-border)",
       }}
     >
       <div
@@ -35,7 +35,7 @@ export default function AboutSection() {
             style={{
               fontSize: "clamp(2rem, 3.5vw, 2.75rem)",
               lineHeight: 1.15,
-              color: "var(--saas-fg)",
+              color: "var(--color-text)",
               margin: "0 0 16px 0",
             }}
           >
@@ -46,7 +46,7 @@ export default function AboutSection() {
             style={{
               fontSize: "1.0625rem",
               lineHeight: 1.65,
-              color: "var(--saas-fg-muted)",
+              color: "var(--color-text-muted)",
               margin: 0,
             }}
           >
@@ -65,7 +65,7 @@ export default function AboutSection() {
         >
           {/* Stage 1 */}
           <div
-            className="saas-card"
+            className="card"
             style={{
               padding: "32px 26px",
               position: "relative",
@@ -93,7 +93,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 margin: "0 0 10px 0",
               }}
             >
@@ -103,7 +103,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -114,7 +114,7 @@ export default function AboutSection() {
 
           {/* Stage 2 */}
           <div
-            className="saas-card"
+            className="card"
             style={{
               padding: "32px 26px",
               position: "relative",
@@ -128,7 +128,7 @@ export default function AboutSection() {
                 borderRadius: "12px",
                 backgroundColor: "rgba(0, 82, 255, 0.08)",
                 border: "1px solid rgba(0, 82, 255, 0.2)",
-                color: "var(--saas-accent)",
+                color: "var(--color-primary)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -142,7 +142,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 margin: "0 0 10px 0",
               }}
             >
@@ -152,7 +152,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -163,7 +163,7 @@ export default function AboutSection() {
 
           {/* Stage 3 */}
           <div
-            className="saas-card"
+            className="card"
             style={{
               padding: "32px 26px",
               position: "relative",
@@ -191,7 +191,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 margin: "0 0 10px 0",
               }}
             >
@@ -201,7 +201,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -212,7 +212,7 @@ export default function AboutSection() {
 
           {/* Stage 4 */}
           <div
-            className="saas-card"
+            className="card"
             style={{
               padding: "32px 26px",
               position: "relative",
@@ -240,7 +240,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 margin: "0 0 10px 0",
               }}
             >
@@ -250,7 +250,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -263,8 +263,8 @@ export default function AboutSection() {
         {/* Inverted Summary Banner - Badge removed */}
         <div
           style={{
-            backgroundColor: "var(--saas-fg)",
-            color: "#FFFFFF",
+            backgroundColor: "var(--color-text)",
+            color: "var(--color-surface)",
             borderRadius: "20px",
             padding: "40px 48px",
             display: "grid",
@@ -279,7 +279,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.5rem",
                 fontWeight: 700,
-                color: "#FFFFFF",
+                color: "var(--color-surface)",
                 margin: "0 0 12px 0",
               }}
             >

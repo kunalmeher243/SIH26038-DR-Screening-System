@@ -57,12 +57,12 @@ export default function PHCWindow() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
       <div style={{ width: '100%', maxWidth: '800px', marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--saas-fg)' }}>PHC Worker Portal</h1>
-        <p style={{ color: 'var(--saas-fg-muted)' }}>Upload retinal images and assign to an ophthalmologist.</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)' }}>PHC Worker Portal</h1>
+        <p style={{ color: 'var(--color-text-muted)' }}>Upload retinal images and assign to an ophthalmologist.</p>
       </div>
 
-      <div style={{ width: '100%', maxWidth: '800px', backgroundColor: '#fff', borderRadius: '16px', border: '1px solid var(--saas-border)', padding: '32px', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '24px', borderBottom: '1px solid var(--saas-border)', paddingBottom: '16px' }}>Patient Details</h2>
+      <div className="card" style={{ width: '100%', maxWidth: '800px', marginBottom: '24px' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '24px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>Patient Details</h2>
         
         <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
           <div style={{ flex: 1 }}>
@@ -72,7 +72,7 @@ export default function PHCWindow() {
               value={patientName}
               onChange={(e) => setPatientName(e.target.value)}
               placeholder="e.g. John Doe"
-              style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--saas-border)', fontSize: '0.95rem' }}
+              className="input-field"
             />
           </div>
           <div style={{ flex: 1 }}>
@@ -82,7 +82,7 @@ export default function PHCWindow() {
               value={patientEmail}
               onChange={(e) => setPatientEmail(e.target.value)}
               placeholder="patient@example.com"
-              style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--saas-border)', fontSize: '0.95rem' }}
+              className="input-field"
             />
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function PHCWindow() {
           <select 
             value={doctorId} 
             onChange={(e) => setDoctorId(e.target.value)}
-            style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--saas-border)', fontSize: '0.95rem', backgroundColor: '#fff' }}
+            className="input-field"
           >
             <option value="" disabled>Select a doctor...</option>
             {doctors.map(doc => (
@@ -115,7 +115,7 @@ export default function PHCWindow() {
       </div>
 
       {isSubmitting && (
-        <div style={{ marginTop: '24px', fontSize: '1.1rem', fontWeight: 600, color: 'var(--saas-accent)' }}>
+        <div style={{ marginTop: '24px', fontSize: '1.1rem', fontWeight: 600, color: 'var(--color-primary)' }}>
           Processing and running ML pipeline... Please wait.
         </div>
       )}

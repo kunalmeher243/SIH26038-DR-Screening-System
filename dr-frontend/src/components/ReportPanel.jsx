@@ -150,7 +150,7 @@ const containerStyle = {
   marginTop: "30px",
   marginBottom: "30px",
   padding: "25px",
-  background: "#ffffff",
+  background: "var(--color-surface)",
   border: "1px solid #d9dfe7",
   borderRadius: "12px",
 };
@@ -188,7 +188,7 @@ const summaryTextStyle = {
 
 const evidenceCardStyle = {
   padding: "20px",
-  background: "#fafafa",
+  background: "var(--color-bg)",
   border: "1px solid #e0e4e8",
   borderRadius: "10px",
   marginBottom: "20px",

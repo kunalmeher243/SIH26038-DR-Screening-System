@@ -106,7 +106,7 @@ const containerStyle = {
   marginTop: "30px",
   marginBottom: "30px",
   padding: "25px",
-  background: "#ffffff",
+  background: "var(--color-surface)",
   border: "1px solid #d9dfe7",
   borderRadius: "12px",
 };

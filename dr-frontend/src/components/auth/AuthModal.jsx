@@ -156,8 +156,8 @@ export default function AuthModal({ onAuthSuccess }) {
           maxWidth: "540px",
           maxHeight: "calc(100vh - 32px)",
           overflowY: "auto",
-          backgroundColor: "#FFFFFF",
-          border: "1px solid var(--saas-border)",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
           borderRadius: "22px",
           boxShadow: "0 25px 60px rgba(15, 23, 42, 0.28)",
         }}
@@ -165,7 +165,7 @@ export default function AuthModal({ onAuthSuccess }) {
         <div
           style={{
             padding: "24px 28px 18px",
-            borderBottom: "1px solid var(--saas-border-subtle)",
+            borderBottom: "1px solid var(--color-border)",
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
@@ -178,7 +178,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 margin: 0,
                 fontSize: "1.3rem",
                 fontWeight: 800,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
               }}
             >
               {isLogin
@@ -191,7 +191,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 margin: "5px 0 0",
                 fontSize: "0.82rem",
                 lineHeight: 1.45,
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               {isLogin
@@ -214,7 +214,7 @@ export default function AuthModal({ onAuthSuccess }) {
               border: "none",
               borderRadius: "9px",
               background: "transparent",
-              color: "#64748B",
+              color: "var(--color-text-muted)",
               cursor: "pointer",
             }}
           >
@@ -231,7 +231,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 fontWeight: 800,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               Account role
@@ -263,14 +263,14 @@ export default function AuthModal({ onAuthSuccess }) {
                       gap: "7px",
                       borderRadius: "12px",
                       border: active
-                        ? "1.5px solid var(--saas-accent)"
-                        : "1px solid var(--saas-border)",
+                        ? "1.5px solid var(--color-primary)"
+                        : "1px solid var(--color-border)",
                       backgroundColor: active
                         ? "rgba(0, 82, 255, 0.06)"
-                        : "#FFFFFF",
+                        : "var(--color-surface)",
                       color: active
-                        ? "var(--saas-accent)"
-                        : "var(--saas-fg)",
+                        ? "var(--color-primary)"
+                        : "var(--color-text)",
                       cursor: "pointer",
                       transition: "all 0.18s ease",
                     }}
@@ -296,7 +296,7 @@ export default function AuthModal({ onAuthSuccess }) {
                 margin: "9px 2px 0",
                 fontSize: "0.76rem",
                 lineHeight: 1.4,
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               {selectedRole.description}
@@ -367,7 +367,7 @@ export default function AuthModal({ onAuthSuccess }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="saas-btn-primary"
+              className="btn btn-primary"
               style={{
                 width: "100%",
                 height: "46px",
@@ -391,10 +391,10 @@ export default function AuthModal({ onAuthSuccess }) {
             style={{
               marginTop: "20px",
               paddingTop: "18px",
-              borderTop: "1px solid var(--saas-border-subtle)",
+              borderTop: "1px solid var(--color-border)",
               textAlign: "center",
               fontSize: "0.85rem",
-              color: "var(--saas-fg-muted)",
+              color: "var(--color-text-muted)",
             }}
           >
             {isLogin ? (
@@ -436,7 +436,7 @@ function Field({ label, icon, children }) {
           marginBottom: "6px",
           fontSize: "0.8125rem",
           fontWeight: 650,
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
         }}
       >
         {label}
@@ -454,7 +454,7 @@ function Field({ label, icon, children }) {
             top: "50%",
             transform: "translateY(-50%)",
             display: "flex",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
             pointerEvents: "none",
           }}
         >
@@ -470,15 +470,15 @@ function Field({ label, icon, children }) {
             height: 46px;
             padding: 0 14px 0 40px;
             border-radius: 10px;
-            border: 1px solid var(--saas-border);
+            border: 1px solid var(--color-border);
             background: var(--saas-bg-subtle);
-            color: var(--saas-fg);
+            color: var(--color-text);
             font-size: 0.9375rem;
             outline: none;
           }
 
           input:focus {
-            border-color: var(--saas-accent);
+            border-color: var(--color-primary);
             box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.08);
           }
         `}</style>
@@ -491,7 +491,7 @@ const linkStyle = {
   padding: 0,
   border: "none",
   background: "transparent",
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
   fontWeight: 750,
   cursor: "pointer",
   textDecoration: "underline",

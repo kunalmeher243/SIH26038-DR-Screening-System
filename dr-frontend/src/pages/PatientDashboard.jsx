@@ -38,20 +38,20 @@ export default function PatientDashboard() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#FAFAFA' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', backgroundColor: '#fff', borderBottom: '1px solid var(--saas-border)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', backgroundColor: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(0, 82, 255, 0.1)', color: 'var(--saas-accent)' }}>
+          <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'rgba(0, 82, 255, 0.1)', color: 'var(--color-primary)' }}>
             <Activity size={24} />
           </div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0, color: 'var(--saas-fg)' }}>Patient Portal</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0, color: 'var(--color-text)' }}>Patient Portal</h1>
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-          <span style={{ fontWeight: 600, color: 'var(--saas-fg)' }}>{user?.name}</span>
+          <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{user?.name}</span>
           <button 
             onClick={handleLogout}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', backgroundColor: 'transparent', border: '1px solid var(--saas-border)', cursor: 'pointer', color: 'var(--saas-fg-muted)' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', backgroundColor: 'transparent', border: '1px solid var(--color-border)', cursor: 'pointer', color: 'var(--color-text-muted)' }}
           >
             <LogOut size={16} /> Logout
           </button>
@@ -59,12 +59,12 @@ export default function PatientDashboard() {
       </header>
 
       <main style={{ flex: 1, padding: '40px', maxWidth: '1000px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '24px', color: 'var(--saas-fg)' }}>Your Screenings</h2>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '24px', color: 'var(--color-text)' }}>Your Screenings</h2>
         
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--saas-fg-muted)' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--color-text-muted)' }}>Loading...</div>
         ) : tickets.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px', backgroundColor: '#fff', borderRadius: '16px', border: '1px dashed var(--saas-border)', color: 'var(--saas-fg-muted)' }}>
+          <div style={{ textAlign: 'center', padding: '60px', backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px dashed var(--color-border)', color: 'var(--color-text-muted)' }}>
             No screenings found. A PHC worker will create a ticket for you when you are screened.
           </div>
         ) : (
@@ -73,13 +73,13 @@ export default function PatientDashboard() {
               <Link 
                 key={ticket.id} 
                 to={`/patient/ticket/${ticket.id}`}
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px', backgroundColor: '#fff', borderRadius: '16px', border: '1px solid var(--saas-border)', textDecoration: 'none', color: 'inherit', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px', backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px solid var(--color-border)', textDecoration: 'none', color: 'inherit', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', transition: 'transform 0.2s, box-shadow 0.2s' }}
                 onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.06)'; }}
                 onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.02)'; }}
               >
                 <div>
                   <h3 style={{ margin: '0 0 8px 0', fontSize: '1.2rem', fontWeight: 700 }}>Ticket #{ticket.id.substring(0,8)}</h3>
-                  <div style={{ display: 'flex', gap: '16px', color: 'var(--saas-fg-muted)', fontSize: '0.9rem' }}>
+                  <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
                     <span>Created: {new Date(ticket.created_at).toLocaleDateString()}</span>
                     <span>Doctor: {ticket.doctor_name}</span>
                   </div>

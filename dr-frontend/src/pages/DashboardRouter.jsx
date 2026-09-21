@@ -56,13 +56,13 @@ export default function DashboardRouter({
 
         <div style={authRequiredWrapStyle}>
           <div
-            className="saas-card"
+            className="card"
             style={{
               maxWidth: "460px",
               width: "100%",
               padding: "36px 28px",
               textAlign: "center",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--color-surface)",
             }}
           >
             <div style={authIconStyle}>
@@ -74,7 +74,7 @@ export default function DashboardRouter({
                 margin: "0 0 8px",
                 fontSize: "1.35rem",
                 fontWeight: 800,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
               }}
             >
               {t("authRequiredTitle")}
@@ -83,7 +83,7 @@ export default function DashboardRouter({
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.5,
                 margin: "0 0 24px",
               }}
@@ -94,7 +94,7 @@ export default function DashboardRouter({
             <button
               type="button"
               onClick={() => openLogin("Patient")}
-              className="saas-btn-primary"
+              className="btn btn-primary"
               style={{
                 width: "100%",
                 padding: "12px",
@@ -161,9 +161,9 @@ export default function DashboardRouter({
 
       <div
         style={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--color-surface)",
           borderBottom:
-            "1px solid var(--saas-border)",
+            "1px solid var(--color-border)",
           padding: "12px 24px",
         }}
       >
@@ -191,7 +191,7 @@ export default function DashboardRouter({
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 750,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
               }}
             >
               {roleTitle}
@@ -207,7 +207,7 @@ export default function DashboardRouter({
             <span
               style={{
                 fontSize: "0.75rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               Active role
@@ -279,7 +279,7 @@ const pageShellStyle = {
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
-  backgroundColor: "#FAFAFA",
+  backgroundColor: "var(--color-bg)",
 };
 
 /* =========================================================
@@ -299,7 +299,7 @@ const authIconStyle = {
   height: "52px",
   borderRadius: "14px",
   background: "var(--saas-accent-gradient)",
-  color: "#FFFFFF",
+  color: "var(--color-surface)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -348,7 +348,7 @@ const backButtonStyle = {
   borderRadius: "8px",
 
   border:
-    "1px solid var(--saas-border)",
+    "1px solid var(--color-border)",
 
   backgroundColor:
     "var(--saas-bg-subtle)",
@@ -356,7 +356,7 @@ const backButtonStyle = {
   fontSize: "0.8125rem",
   fontWeight: 600,
 
-  color: "var(--saas-fg)",
+  color: "var(--color-text)",
 
   cursor: "pointer",
 };
@@ -382,7 +382,7 @@ const roleSwitchButtonStyle = {
   backgroundColor:
     "rgba(0, 82, 255, 0.06)",
 
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
 
   fontSize: "0.75rem",
   fontWeight: 700,

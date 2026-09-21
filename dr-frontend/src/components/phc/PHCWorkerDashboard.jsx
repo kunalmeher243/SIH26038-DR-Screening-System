@@ -286,7 +286,7 @@ export default function PHCWorkerDashboard() {
 
           <LiquidGlass
             variant="light"
-            className="saas-card"
+            className="card"
           >
             <div style={statusHeaderStyle}>
               <div style={iconBoxStyle}>
@@ -343,7 +343,7 @@ export default function PHCWorkerDashboard() {
 
           <LiquidGlass
             variant="light"
-            className="saas-card"
+            className="card"
           >
             <div style={statusHeaderStyle}>
               <div
@@ -385,7 +385,7 @@ export default function PHCWorkerDashboard() {
 
             <button
               type="button"
-              className="saas-btn-primary"
+              className="btn btn-primary"
               onClick={reset}
               style={{
                 marginTop: "22px",
@@ -431,7 +431,7 @@ export default function PHCWorkerDashboard() {
 
           <LiquidGlass
             variant="light"
-            className="saas-card"
+            className="card"
           >
             <div style={statusHeaderStyle}>
               <div
@@ -516,7 +516,7 @@ export default function PHCWorkerDashboard() {
                 borderRadius: "12px",
                 background: "#F8FAFC",
                 border:
-                  "1px solid var(--saas-border)",
+                  "1px solid var(--color-border)",
               }}
             >
               <div
@@ -526,7 +526,7 @@ export default function PHCWorkerDashboard() {
                   gap: "9px",
                   fontWeight: 750,
                   color:
-                    "var(--saas-fg)",
+                    "var(--color-text)",
                 }}
               >
                 <Stethoscope
@@ -557,7 +557,7 @@ export default function PHCWorkerDashboard() {
 
           <LiquidGlass
             variant="light"
-            className="saas-card"
+            className="card"
           >
             <div style={statusHeaderStyle}>
               <div style={iconBoxStyle}>
@@ -588,7 +588,7 @@ export default function PHCWorkerDashboard() {
               style={{
                 margin: "18px 0 5px",
                 fontWeight: 700,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 wordBreak: "break-word",
               }}
             >
@@ -638,7 +638,7 @@ export default function PHCWorkerDashboard() {
         >
           <button
             type="button"
-            className="saas-btn-primary"
+            className="btn btn-primary"
             onClick={reset}
           >
             <UploadCloud
@@ -682,7 +682,7 @@ function Header({
             "clamp(1.7rem, 3vw, 2.25rem)",
           fontWeight: 850,
           letterSpacing: "-0.035em",
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
         }}
       >
         {title}
@@ -693,7 +693,7 @@ function Header({
           maxWidth: "780px",
           margin: 0,
           color:
-            "var(--saas-fg-muted)",
+            "var(--color-text-muted)",
           lineHeight: 1.6,
         }}
       >
@@ -719,8 +719,8 @@ function SummaryItem({
         padding: "13px 14px",
         borderRadius: "10px",
         border:
-          "1px solid var(--saas-border)",
-        background: "#FFFFFF",
+          "1px solid var(--color-border)",
+        background: "var(--color-surface)",
       }}
     >
       <span
@@ -732,7 +732,7 @@ function SummaryItem({
           textTransform: "uppercase",
           letterSpacing: "0.05em",
           color:
-            "var(--saas-fg-muted)",
+            "var(--color-text-muted)",
         }}
       >
         {label}
@@ -742,7 +742,7 @@ function SummaryItem({
         style={{
           display: "block",
           fontSize: "0.88rem",
-          color: "var(--saas-fg)",
+          color: "var(--color-text)",
           wordBreak: "break-word",
         }}
       >
@@ -762,7 +762,7 @@ const pageStyle = {
   minHeight:
     "calc(100vh - 150px)",
   padding: "38px 24px 56px",
-  background: "#FAFAFA",
+  background: "var(--color-bg)",
 };
 
 const containerStyle = {
@@ -784,7 +784,7 @@ const iconBoxStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
   background:
     "rgba(0, 82, 255, 0.08)",
 };
@@ -795,21 +795,21 @@ const kickerStyle = {
   fontWeight: 800,
   letterSpacing: "0.08em",
   textTransform: "uppercase",
-  color: "var(--saas-accent)",
+  color: "var(--color-primary)",
 };
 
 const titleStyle = {
   margin: "4px 0 4px",
   fontSize: "1.25rem",
   fontWeight: 800,
-  color: "var(--saas-fg)",
+  color: "var(--color-text)",
 };
 
 const mutedStyle = {
   margin: 0,
   fontSize: "0.84rem",
   lineHeight: 1.5,
-  color: "var(--saas-fg-muted)",
+  color: "var(--color-text-muted)",
 };
 
 const summaryGridStyle = {

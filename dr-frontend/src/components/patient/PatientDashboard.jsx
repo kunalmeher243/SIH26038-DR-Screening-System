@@ -80,17 +80,17 @@ export default function PatientDashboard() {
     >
       {/* Patient Profile Card - Decorative pill badges removed */}
       <div
-        className="saas-card"
+        className="card"
         style={{
           padding: "28px 32px",
           marginBottom: "36px",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--color-surface)",
           display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
           justifyContent: "space-between",
           gap: "24px",
-          borderLeft: "5px solid var(--saas-accent)",
+          borderLeft: "5px solid var(--color-primary)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -100,7 +100,7 @@ export default function PatientDashboard() {
               height: "56px",
               borderRadius: "14px",
               background: "var(--saas-accent-gradient)",
-              color: "#FFFFFF",
+              color: "var(--color-surface)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -118,7 +118,7 @@ export default function PatientDashboard() {
                   margin: 0,
                   fontSize: "1.45rem",
                   fontWeight: 800,
-                  color: "var(--saas-fg)",
+                  color: "var(--color-text)",
                   letterSpacing: "-0.01em",
                 }}
               >
@@ -132,7 +132,7 @@ export default function PatientDashboard() {
                 alignItems: "center",
                 gap: "16px",
                 fontSize: "0.84rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               <span>{t("emailLabelShort")} {user?.email || "patient@ruralphc.in"}</span>
@@ -150,14 +150,14 @@ export default function PatientDashboard() {
               padding: "10px 18px",
               borderRadius: "10px",
               backgroundColor: "var(--saas-bg-subtle)",
-              border: "1px solid var(--saas-border)",
+              border: "1px solid var(--color-border)",
               textAlign: "right",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontWeight: 700 }}>
+            <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", textTransform: "uppercase", fontWeight: 700 }}>
               {t("lastScreening")}
             </div>
-            <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+            <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--color-text)" }}>
               Sep 08, 2026
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function PatientDashboard() {
                 margin: 0,
                 fontSize: "1.35rem",
                 fontWeight: 800,
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -192,7 +192,7 @@ export default function PatientDashboard() {
               style={{
                 margin: "4px 0 0 0",
                 fontSize: "0.875rem",
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
               }}
             >
               {t("screeningHistorySub")}
@@ -203,7 +203,7 @@ export default function PatientDashboard() {
             style={{
               fontSize: "0.8125rem",
               fontWeight: 600,
-              color: "var(--saas-fg-muted)",
+              color: "var(--color-text-muted)",
             }}
           >
             {reports.length} {t("reportsFound")}
@@ -216,10 +216,10 @@ export default function PatientDashboard() {
             return (
               <div
                 key={rep.id}
-                className="saas-card patient-report-row"
+                className="card patient-report-row"
                 style={{
                   padding: "22px 26px",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--color-surface)",
                   display: "grid",
                   gridTemplateColumns: "1.2fr 1.5fr 1fr auto",
                   gap: "20px",
@@ -239,13 +239,13 @@ export default function PatientDashboard() {
                       marginBottom: "4px",
                     }}
                   >
-                    <FileText size={14} color="var(--saas-accent)" />
+                    <FileText size={14} color="var(--color-primary)" />
                     <span>{rep.id}</span>
                   </div>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-text)" }}>
                     {rep.date}
                   </div>
-                  <div style={{ fontSize: "0.78rem", color: "var(--saas-fg-muted)" }}>
+                  <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
                     {rep.eye} • {rep.center}
                   </div>
                 </div>
@@ -277,13 +277,13 @@ export default function PatientDashboard() {
 
                 {/* Column 3: Reviewer */}
                 <div>
-                  <div style={{ fontSize: "0.72rem", color: "var(--saas-fg-muted)", textTransform: "uppercase", fontWeight: 600 }}>
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", textTransform: "uppercase", fontWeight: 600 }}>
                     {t("reviewingDoctor")}
                   </div>
-                  <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+                  <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--color-text)" }}>
                     {rep.doctorName}
                   </div>
-                  <div style={{ fontSize: "0.75rem", color: "var(--saas-fg-muted)" }}>
+                  <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
                     {t("aiConfidence")} {rep.confidence}
                   </div>
                 </div>
@@ -293,7 +293,7 @@ export default function PatientDashboard() {
                   <button
                     type="button"
                     onClick={() => setSelectedReport(rep)}
-                    className="saas-btn-secondary"
+                    className="btn btn-outline"
                     style={{
                       padding: "8px 16px",
                       fontSize: "0.8125rem",
@@ -337,9 +337,9 @@ export default function PatientDashboard() {
               maxWidth: "680px",
               maxHeight: "90vh",
               overflowY: "auto",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--color-surface)",
               borderRadius: "20px",
-              border: "1px solid var(--saas-border)",
+              border: "1px solid var(--color-border)",
               boxShadow: "0 25px 50px -12px rgba(15, 23, 42, 0.25)",
             }}
           >
@@ -347,7 +347,7 @@ export default function PatientDashboard() {
             <div
               style={{
                 padding: "20px 28px",
-                borderBottom: "1px solid var(--saas-border-subtle)",
+                borderBottom: "1px solid var(--color-border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -359,13 +359,13 @@ export default function PatientDashboard() {
                   style={{
                     fontSize: "0.72rem",
                     fontWeight: 700,
-                    color: "var(--saas-accent)",
+                    color: "var(--color-primary)",
                     textTransform: "uppercase",
                   }}
                 >
                   {t("modalReportSub")} • {selectedReport.id}
                 </span>
-                <h3 style={{ margin: "2px 0 0 0", fontSize: "1.25rem", fontWeight: 800, color: "var(--saas-fg)" }}>
+                <h3 style={{ margin: "2px 0 0 0", fontSize: "1.25rem", fontWeight: 800, color: "var(--color-text)" }}>
                   {t("modalReportTitle")}
                 </h3>
               </div>
@@ -374,7 +374,7 @@ export default function PatientDashboard() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="saas-btn-secondary"
+                  className="btn btn-outline"
                   style={{ padding: "6px 12px", fontSize: "0.75rem" }}
                 >
                   <Printer size={14} />
@@ -388,7 +388,7 @@ export default function PatientDashboard() {
                     border: "none",
                     padding: "6px",
                     cursor: "pointer",
-                    color: "#94A3B8",
+                    color: "var(--color-text-muted)",
                   }}
                 >
                   <X size={20} />
@@ -428,17 +428,17 @@ export default function PatientDashboard() {
                 style={{
                   padding: "20px",
                   borderRadius: "14px",
-                  border: "1.5px solid var(--saas-border)",
-                  backgroundColor: "#FFFFFF",
+                  border: "1.5px solid var(--color-border)",
+                  backgroundColor: "var(--color-surface)",
                   marginBottom: "24px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                   <div>
-                    <div style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: 700, color: "var(--saas-fg-muted)" }}>
+                    <div style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: 700, color: "var(--color-text-muted)" }}>
                       {t("severityLabel")}
                     </div>
-                    <div style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--saas-fg)" }}>
+                    <div style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--color-text)" }}>
                       {selectedReport.drLabel}
                     </div>
                   </div>
@@ -466,7 +466,7 @@ export default function PatientDashboard() {
 
               {/* Clinical Remarks */}
               <div style={{ marginBottom: "24px" }}>
-                <h4 style={{ margin: "0 0 8px 0", fontSize: "0.9375rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+                <h4 style={{ margin: "0 0 8px 0", fontSize: "0.9375rem", fontWeight: 700, color: "var(--color-text)" }}>
                   {t("doctorNotesTitle")}
                 </h4>
                 <div
@@ -477,7 +477,7 @@ export default function PatientDashboard() {
                     border: "1px solid rgba(0, 82, 255, 0.15)",
                     fontSize: "0.875rem",
                     lineHeight: 1.55,
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                   }}
                 >
                   {selectedReport.doctorRemarks}
@@ -488,9 +488,9 @@ export default function PatientDashboard() {
               <div
                 style={{
                   fontSize: "0.75rem",
-                  color: "var(--saas-fg-muted)",
+                  color: "var(--color-text-muted)",
                   lineHeight: 1.4,
-                  borderTop: "1px solid var(--saas-border-subtle)",
+                  borderTop: "1px solid var(--color-border)",
                   paddingTop: "16px",
                 }}
               >

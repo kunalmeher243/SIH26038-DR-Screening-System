@@ -50,7 +50,7 @@ export default function Toast() {
           alignItems: "flex-start",
           gap: "12px",
           padding: "14px 18px",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--color-surface)",
           border: `1.5px solid ${getBorderColor()}`,
           borderRadius: "12px",
           boxShadow: "0 12px 28px -4px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.06)",
@@ -90,7 +90,7 @@ export default function Toast() {
               margin: "3px 0 0 0",
               fontSize: "0.875rem",
               fontWeight: 500,
-              color: "#1E293B",
+              color: "var(--color-surface-hover)",
               lineHeight: 1.45,
             }}
           >
@@ -106,7 +106,7 @@ export default function Toast() {
             flexShrink: 0,
             background: "transparent",
             border: "none",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
             cursor: "pointer",
             padding: "4px",
             borderRadius: "6px",
@@ -116,11 +116,11 @@ export default function Toast() {
             transition: "all 0.15s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#0F172A";
+            e.currentTarget.style.color = "var(--color-text)";
             e.currentTarget.style.backgroundColor = "#F1F5F9";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = "#94A3B8";
+            e.currentTarget.style.color = "var(--color-text-muted)";
             e.currentTarget.style.backgroundColor = "transparent";
           }}
         >

@@ -87,7 +87,7 @@ export default function DoctorDirectory() {
               margin: 0,
               fontSize: "1.35rem",
               fontWeight: 800,
-              color: "var(--saas-fg)",
+              color: "var(--color-text)",
               letterSpacing: "-0.01em",
             }}
           >
@@ -97,7 +97,7 @@ export default function DoctorDirectory() {
             style={{
               margin: "4px 0 0 0",
               fontSize: "0.875rem",
-              color: "var(--saas-fg-muted)",
+              color: "var(--color-text-muted)",
             }}
           >
             {t("specialistsDirectorySub")}
@@ -116,13 +116,13 @@ export default function DoctorDirectory() {
         {doctors.map((doc) => (
           <div
             key={doc.id}
-            className="saas-card"
+            className="card"
             style={{
               padding: "24px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--color-surface)",
             }}
           >
             <div>
@@ -158,7 +158,7 @@ export default function DoctorDirectory() {
                         margin: 0,
                         fontSize: "1.05rem",
                         fontWeight: 700,
-                        color: "var(--saas-fg)",
+                        color: "var(--color-text)",
                       }}
                     >
                       {doc.name}
@@ -166,7 +166,7 @@ export default function DoctorDirectory() {
                     <span
                       style={{
                         fontSize: "0.75rem",
-                        color: "var(--saas-fg-muted)",
+                        color: "var(--color-text-muted)",
                         lineHeight: 1.2,
                         display: "block",
                       }}
@@ -201,7 +201,7 @@ export default function DoctorDirectory() {
                   style={{
                     fontSize: "0.8125rem",
                     fontWeight: 600,
-                    color: "var(--saas-accent)",
+                    color: "var(--color-primary)",
                     marginBottom: "4px",
                   }}
                 >
@@ -213,11 +213,11 @@ export default function DoctorDirectory() {
                     alignItems: "center",
                     gap: "6px",
                     fontSize: "0.78rem",
-                    color: "var(--saas-fg-muted)",
+                    color: "var(--color-text-muted)",
                     marginBottom: "2px",
                   }}
                 >
-                  <MapPin size={13} color="#94A3B8" />
+                  <MapPin size={13} color="var(--color-text-muted)" />
                   <span>{doc.center}</span>
                 </div>
                 <div
@@ -245,8 +245,8 @@ export default function DoctorDirectory() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Award size={14} color="var(--saas-fg-muted)" />
-                  <span style={{ fontWeight: 600, color: "var(--saas-fg)" }}>
+                  <Award size={14} color="var(--color-text-muted)" />
+                  <span style={{ fontWeight: 600, color: "var(--color-text)" }}>
                     {doc.experience}
                   </span>
                 </div>
@@ -261,7 +261,7 @@ export default function DoctorDirectory() {
             <button
               type="button"
               onClick={() => handleRequestClick(doc)}
-              className="saas-btn-primary"
+              className="btn btn-primary"
               style={{
                 width: "100%",
                 padding: "9px 14px",
@@ -298,9 +298,9 @@ export default function DoctorDirectory() {
             style={{
               width: "100%",
               maxWidth: "500px",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--color-surface)",
               borderRadius: "20px",
-              border: "1px solid var(--saas-border)",
+              border: "1px solid var(--color-border)",
               boxShadow: "0 25px 50px -12px rgba(15, 23, 42, 0.25)",
               overflow: "hidden",
             }}
@@ -308,17 +308,17 @@ export default function DoctorDirectory() {
             <div
               style={{
                 padding: "20px 24px",
-                borderBottom: "1px solid var(--saas-border-subtle)",
+                borderBottom: "1px solid var(--color-border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
               }}
             >
               <div>
-                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--color-text)" }}>
                   {t("reqSpecialistModalTitle")}
                 </h3>
-                <p style={{ margin: "2px 0 0 0", fontSize: "0.78rem", color: "var(--saas-fg-muted)" }}>
+                <p style={{ margin: "2px 0 0 0", fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
                   {t("connectingWith")} {selectedDoctor.name}
                 </p>
               </div>
@@ -330,7 +330,7 @@ export default function DoctorDirectory() {
                   border: "none",
                   fontSize: "1.2rem",
                   cursor: "pointer",
-                  color: "#94A3B8",
+                  color: "var(--color-text-muted)",
                 }}
               >
                 ✕
@@ -345,7 +345,7 @@ export default function DoctorDirectory() {
                     fontSize: "0.8125rem",
                     fontWeight: 600,
                     marginBottom: "6px",
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                   }}
                 >
                   {t("consultationUrgency")}
@@ -357,9 +357,9 @@ export default function DoctorDirectory() {
                     style={{
                       padding: "8px",
                       borderRadius: "8px",
-                      border: urgency === "Standard" ? "1.5px solid var(--saas-accent)" : "1px solid var(--saas-border)",
-                      backgroundColor: urgency === "Standard" ? "var(--saas-accent-light)" : "#FFFFFF",
-                      color: urgency === "Standard" ? "var(--saas-accent)" : "var(--saas-fg)",
+                      border: urgency === "Standard" ? "1.5px solid var(--color-primary)" : "1px solid var(--color-border)",
+                      backgroundColor: urgency === "Standard" ? "var(--saas-accent-light)" : "var(--color-surface)",
+                      color: urgency === "Standard" ? "var(--color-primary)" : "var(--color-text)",
                       fontWeight: 600,
                       fontSize: "0.8125rem",
                       cursor: "pointer",
@@ -373,9 +373,9 @@ export default function DoctorDirectory() {
                     style={{
                       padding: "8px",
                       borderRadius: "8px",
-                      border: urgency === "Priority" ? "1.5px solid #EF4444" : "1px solid var(--saas-border)",
-                      backgroundColor: urgency === "Priority" ? "#FEF2F2" : "#FFFFFF",
-                      color: urgency === "Priority" ? "#DC2626" : "var(--saas-fg)",
+                      border: urgency === "Priority" ? "1.5px solid #EF4444" : "1px solid var(--color-border)",
+                      backgroundColor: urgency === "Priority" ? "#FEF2F2" : "var(--color-surface)",
+                      color: urgency === "Priority" ? "#DC2626" : "var(--color-text)",
                       fontWeight: 600,
                       fontSize: "0.8125rem",
                       cursor: "pointer",
@@ -393,7 +393,7 @@ export default function DoctorDirectory() {
                     fontSize: "0.8125rem",
                     fontWeight: 600,
                     marginBottom: "6px",
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                   }}
                 >
                   {t("symptomsNotesLabel")}
@@ -407,7 +407,7 @@ export default function DoctorDirectory() {
                     width: "100%",
                     boxSizing: "border-box",
                     borderRadius: "10px",
-                    border: "1px solid var(--saas-border)",
+                    border: "1px solid var(--color-border)",
                     padding: "10px 12px",
                     fontSize: "0.875rem",
                     fontFamily: "var(--font-body)",
@@ -419,7 +419,7 @@ export default function DoctorDirectory() {
 
               <button
                 type="submit"
-                className="saas-btn-primary"
+                className="btn btn-primary"
                 style={{ width: "100%", padding: "10px" }}
               >
                 <Send size={16} />

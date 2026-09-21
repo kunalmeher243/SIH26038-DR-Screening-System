@@ -53,22 +53,22 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '400px', backgroundColor: '#fff', border: '1px solid var(--saas-border)', borderRadius: '12px', overflow: 'hidden' }}>
-      <div style={{ padding: '16px', borderBottom: '1px solid var(--saas-border)', backgroundColor: '#f9fafb' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '400px', backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden' }}>
+      <div style={{ padding: '16px', borderBottom: '1px solid var(--color-border)', backgroundColor: '#f9fafb' }}>
         <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Case Discussion</h3>
-        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--saas-fg-muted)' }}>Real-time chat</p>
+        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Real-time chat</p>
       </div>
       
       <div style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {messages.length === 0 ? (
-          <div style={{ textAlign: 'center', color: 'var(--saas-fg-muted)', marginTop: '20px' }}>No messages yet. Start the conversation!</div>
+          <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', marginTop: '20px' }}>No messages yet. Start the conversation!</div>
         ) : (
           messages.map((msg, idx) => {
             const isMe = msg.sender_role === senderRole;
             return (
               <div key={idx} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', maxWidth: '75%' }}>
                 {!isMe && (
-                  <div style={{ fontSize: '0.75rem', color: 'var(--saas-fg-muted)', marginBottom: '4px', marginLeft: '4px' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px', marginLeft: '4px' }}>
                     {msg.sender_name} ({msg.sender_role === 'doctor' ? 'Doctor' : msg.sender_role === 'patient' ? 'Patient' : 'PHC'})
                   </div>
                 )}
@@ -76,7 +76,7 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
                   padding: '10px 14px',
                   borderRadius: '16px',
                   backgroundColor: isMe ? '#0052FF' : '#f3f4f6',
-                  color: isMe ? '#fff' : '#1f2937',
+                  color: isMe ? 'var(--color-surface)' : '#1f2937',
                   borderBottomRightRadius: isMe ? '4px' : '16px',
                   borderBottomLeftRadius: !isMe ? '4px' : '16px',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
@@ -84,7 +84,7 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
                 }}>
                   {msg.content}
                 </div>
-                <div style={{ fontSize: '0.7rem', color: 'var(--saas-fg-muted)', marginTop: '4px', textAlign: isMe ? 'right' : 'left' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '4px', textAlign: isMe ? 'right' : 'left' }}>
                   {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>
@@ -94,13 +94,13 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={sendMessage} style={{ padding: '12px', borderTop: '1px solid var(--saas-border)', display: 'flex', gap: '8px', backgroundColor: '#f9fafb' }}>
+      <form onSubmit={sendMessage} style={{ padding: '12px', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '8px', backgroundColor: '#f9fafb' }}>
         <input 
           type="text" 
           value={input} 
           onChange={(e) => setInput(e.target.value)} 
           placeholder="Type a message..."
-          style={{ flex: 1, padding: '10px 14px', borderRadius: '24px', border: '1px solid var(--saas-border)', outline: 'none' }}
+          style={{ flex: 1, padding: '10px 14px', borderRadius: '24px', border: '1px solid var(--color-border)', outline: 'none' }}
         />
         <button 
           type="submit" 
@@ -110,7 +110,7 @@ export default function ChatBox({ ticketId, senderRole, senderName }) {
             borderRadius: '50%', 
             border: 'none', 
             backgroundColor: input.trim() ? '#0052FF' : '#e5e7eb', 
-            color: '#fff', 
+            color: 'var(--color-surface)', 
             cursor: input.trim() ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}

@@ -57,7 +57,7 @@ export default function FeaturesSection() {
       style={{
         paddingTop: "80px",
         paddingBottom: "80px",
-        backgroundColor: "var(--saas-bg)",
+        backgroundColor: "var(--color-bg)",
       }}
     >
       <div
@@ -74,7 +74,7 @@ export default function FeaturesSection() {
             style={{
               fontSize: "clamp(2rem, 3.5vw, 2.75rem)",
               lineHeight: 1.15,
-              color: "var(--saas-fg)",
+              color: "var(--color-text)",
               margin: "0 0 16px 0",
             }}
           >
@@ -85,7 +85,7 @@ export default function FeaturesSection() {
             style={{
               fontSize: "1.0625rem",
               lineHeight: 1.65,
-              color: "var(--saas-fg-muted)",
+              color: "var(--color-text-muted)",
               margin: 0,
             }}
           >
@@ -106,13 +106,13 @@ export default function FeaturesSection() {
             return (
               <div
                 key={index}
-                className="saas-card"
+                className="card"
                 style={{
                   padding: "36px 30px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--color-surface)",
                 }}
               >
                 <div>
@@ -134,7 +134,7 @@ export default function FeaturesSection() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        color: "#FFFFFF",
+                        color: "var(--color-surface)",
                         boxShadow: "var(--shadow-saas-accent)",
                       }}
                     >
@@ -147,7 +147,7 @@ export default function FeaturesSection() {
                     style={{
                       fontSize: "1.2rem",
                       fontWeight: 700,
-                      color: "var(--saas-fg)",
+                      color: "var(--color-text)",
                       margin: "0 0 12px 0",
                       lineHeight: 1.35,
                     }}
@@ -159,7 +159,7 @@ export default function FeaturesSection() {
                   <p
                     style={{
                       fontSize: "0.9rem",
-                      color: "var(--saas-fg-muted)",
+                      color: "var(--color-text-muted)",
                       lineHeight: 1.6,
                       margin: "0 0 24px 0",
                     }}
@@ -175,13 +175,13 @@ export default function FeaturesSection() {
                     alignItems: "center",
                     gap: "8px",
                     paddingTop: "16px",
-                    borderTop: "1px solid var(--saas-border-subtle)",
+                    borderTop: "1px solid var(--color-border)",
                     fontSize: "0.8125rem",
                     fontWeight: 600,
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                   }}
                 >
-                  <Check size={16} color="var(--saas-accent)" strokeWidth={2.5} />
+                  <Check size={16} color="var(--color-primary)" strokeWidth={2.5} />
                   <span>{feat.stat}</span>
                 </div>
               </div>

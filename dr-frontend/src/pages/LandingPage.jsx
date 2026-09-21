@@ -20,7 +20,7 @@ export default function LandingPage({ currentView, setCurrentView }) {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FAFAFA",
+        backgroundColor: "var(--color-bg)",
       }}
     >
       {/* Navigation Bar */}

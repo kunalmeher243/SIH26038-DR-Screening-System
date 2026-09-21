@@ -22,15 +22,15 @@ export default function DoctorWindow() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
       <div style={{ width: '100%', maxWidth: '900px', marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--saas-fg)' }}>Doctor Workspace</h1>
-        <p style={{ color: 'var(--saas-fg-muted)' }}>Review assigned cases and schedule consultations.</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)' }}>Doctor Workspace</h1>
+        <p style={{ color: 'var(--color-text-muted)' }}>Review assigned cases and schedule consultations.</p>
       </div>
 
       <div style={{ width: '100%', maxWidth: '900px' }}>
         {tickets.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px', backgroundColor: '#fff', borderRadius: '16px', border: '1px solid var(--saas-border)' }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--saas-fg)', marginBottom: '8px' }}>No cases assigned</div>
-            <div style={{ color: 'var(--saas-fg-muted)' }}>You're all caught up!</div>
+          <div style={{ textAlign: 'center', padding: '60px', backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px solid var(--color-border)' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '8px' }}>No cases assigned</div>
+            <div style={{ color: 'var(--color-text-muted)' }}>You're all caught up!</div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -38,19 +38,16 @@ export default function DoctorWindow() {
               <Link 
                 key={ticket._id} 
                 to={`/doctor/${ticket._id}`}
+                className="card"
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '24px', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid var(--saas-border)',
-                  textDecoration: 'none', color: 'inherit', transition: 'all 0.2s',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                  textDecoration: 'none', color: 'inherit', padding: '24px', marginBottom: '8px'
                 }}
-                onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.05)'; }}
-                onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; }}
               >
                 <div>
                   <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', fontWeight: 700 }}>Patient: {ticket.patient_name}</h3>
-                  <div style={{ display: 'flex', gap: '12px', fontSize: '0.85rem', color: 'var(--saas-fg-muted)' }}>
-                    <span>AI Grade: <strong style={{ color: ticket.dr_level >= 2 ? '#ef4444' : 'var(--saas-fg)' }}>{ticket.dr_label}</strong></span>
+                  <div style={{ display: 'flex', gap: '12px', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+                    <span>AI Grade: <strong style={{ color: ticket.dr_level >= 2 ? '#ef4444' : 'var(--color-text)' }}>{ticket.dr_label}</strong></span>
                     <span>•</span>
                     <span>Confidence: {Math.round(ticket.confidence * 100)}%</span>
                   </div>

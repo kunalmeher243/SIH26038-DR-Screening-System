@@ -68,38 +68,38 @@ export default function DoctorCaseDetail() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
       <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '24px' }}>
-        <Link to="/doctor" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--saas-accent)', textDecoration: 'none', fontWeight: 600, marginBottom: '16px' }}>
+        <Link to="/doctor" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 600, marginBottom: '16px' }}>
           <ArrowLeft size={16} /> Back to List
         </Link>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--saas-fg)', margin: 0 }}>Case Review</h1>
-        <p style={{ color: 'var(--saas-fg-muted)' }}>Patient: {ticket.patient_name}</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)', margin: 0 }}>Case Review</h1>
+        <p style={{ color: 'var(--color-text-muted)' }}>Patient: {ticket.patient_name}</p>
       </div>
 
       <div style={{ display: 'flex', gap: '24px', width: '100%', maxWidth: '1000px', alignItems: 'flex-start' }}>
         
         {/* Left Column: AI Findings & Images */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div style={{ backgroundColor: '#fff', borderRadius: '16px', border: '1px solid var(--saas-border)', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+          <div style={{ backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px solid var(--color-border)', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 16px 0' }}>AI Initial Findings</h2>
             
             <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
-              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>DR Level</div>
-                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: ticket.dr_level >= 2 ? '#ef4444' : 'var(--saas-fg)' }}>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>DR Level</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: ticket.dr_level >= 2 ? '#ef4444' : 'var(--color-text)' }}>
                   {ticket.dr_label}
                 </div>
               </div>
-              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Confidence</div>
-                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--saas-fg)' }}>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Confidence</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   {Math.round(ticket.confidence * 100)}%
                 </div>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
-              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Image Quality</div>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Image Quality</div>
                 <div style={{ fontSize: '1rem', fontWeight: 600, color: ticket.quality_label === 'REJECT' ? '#ef4444' : ticket.quality_label === 'BORDERLINE' ? '#d97706' : '#22c55e' }}>
                   {ticket.quality_label || "GOOD"} ({Math.round((ticket.quality_score || 1) * 100)}%)
                 </div>
@@ -109,13 +109,13 @@ export default function DoctorCaseDetail() {
                   </div>
                 )}
               </div>
-              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Clinical Action</div>
+              <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Clinical Action</div>
                 <div style={{ fontSize: '1rem', fontWeight: 600, color: ticket.refer ? '#ef4444' : '#22c55e' }}>
                   {ticket.refer ? 'Referral Recommended' : 'No Referral Needed'}
                 </div>
                 {ticket.refer && (
-                  <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginTop: '4px' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                     Routing: {ticket.routing || "STANDARD_REFERRAL"}
                   </div>
                 )}
@@ -123,7 +123,7 @@ export default function DoctorCaseDetail() {
             </div>
 
             <h3 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 12px 0' }}>Evidence Summary</h3>
-            <p style={{ fontSize: '0.9rem', color: 'var(--saas-fg-muted)', lineHeight: 1.5, backgroundColor: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.5, backgroundColor: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
               {ticket.clinical_summary || ticket.evidence_statement || "No detailed summary available."}
             </p>
             
@@ -133,7 +133,7 @@ export default function DoctorCaseDetail() {
                 <img 
                   src={`data:image/png;base64,${ticket.gradcam_b64}`} 
                   alt="Grad-CAM" 
-                  style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--saas-border)' }} 
+                  style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--color-border)' }} 
                 />
               </div>
             )}
@@ -143,7 +143,7 @@ export default function DoctorCaseDetail() {
         {/* Right Column: Actions & Chat */}
         <div style={{ width: '380px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          <div style={{ backgroundColor: '#fff', borderRadius: '16px', border: '1px solid var(--saas-border)', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+          <div style={{ backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px solid var(--color-border)', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 16px 0' }}>Consultation</h2>
             
             {isAccepted && slot ? (
@@ -151,13 +151,13 @@ export default function DoctorCaseDetail() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#16a34a', fontWeight: 600, marginBottom: '8px' }}>
                   <CheckCircle size={18} /> Scheduled
                 </div>
-                <div style={{ color: 'var(--saas-fg)', fontWeight: 500 }}>
+                <div style={{ color: 'var(--color-text)', fontWeight: 500 }}>
                   {new Date(slot.scheduled_at).toLocaleString()}
                 </div>
               </div>
             ) : (
               <div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--saas-fg-muted)', marginBottom: '16px' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
                   Review the AI findings and schedule a consultation with the patient at the PHC.
                 </p>
                 
@@ -167,7 +167,7 @@ export default function DoctorCaseDetail() {
                     type="date" 
                     value={scheduleDate}
                     onChange={(e) => setScheduleDate(e.target.value)}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--saas-border)' }}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   />
                 </div>
                 
@@ -177,7 +177,7 @@ export default function DoctorCaseDetail() {
                     type="time" 
                     value={scheduleTime}
                     onChange={(e) => setScheduleTime(e.target.value)}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--saas-border)' }}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   />
                 </div>
 
@@ -185,7 +185,7 @@ export default function DoctorCaseDetail() {
                   onClick={handleAcceptAndSchedule}
                   disabled={isScheduling}
                   style={{
-                    width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#0052FF', color: '#fff',
+                    width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#0052FF', color: 'var(--color-surface)',
                     border: 'none', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
                   }}
                 >
@@ -199,7 +199,7 @@ export default function DoctorCaseDetail() {
           {isAccepted ? (
             <ChatBox ticketId={id} senderRole="doctor" senderName="Dr. Demo" />
           ) : (
-            <div style={{ textAlign: 'center', padding: '30px', color: 'var(--saas-fg-muted)', backgroundColor: '#fff', border: '1px dashed var(--saas-border)', borderRadius: '16px' }}>
+            <div style={{ textAlign: 'center', padding: '30px', color: 'var(--color-text-muted)', backgroundColor: 'var(--color-surface)', border: '1px dashed var(--color-border)', borderRadius: '16px' }}>
               Accept and schedule to unlock chat with the PHC worker.
             </div>
           )}

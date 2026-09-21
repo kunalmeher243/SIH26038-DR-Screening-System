@@ -28,7 +28,7 @@ export default function HeroSection({ onAccessDashboard }) {
         paddingTop: "48px",
         paddingBottom: "80px",
         background:
-          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 82, 255, 0.08), transparent 70%), #FAFAFA",
+          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 82, 255, 0.08), transparent 70%), var(--color-bg)",
       }}
     >
       <div
@@ -56,7 +56,7 @@ export default function HeroSection({ onAccessDashboard }) {
                 fontSize: "clamp(2.4rem, 4.2vw, 3.75rem)",
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
-                color: "var(--saas-fg)",
+                color: "var(--color-text)",
                 margin: "0 0 20px 0",
               }}
             >
@@ -69,7 +69,7 @@ export default function HeroSection({ onAccessDashboard }) {
               style={{
                 fontSize: "1.0625rem",
                 lineHeight: 1.65,
-                color: "var(--saas-fg-muted)",
+                color: "var(--color-text-muted)",
                 margin: "0 0 32px 0",
                 maxWidth: "580px",
               }}
@@ -90,7 +90,7 @@ export default function HeroSection({ onAccessDashboard }) {
               <button
                 type="button"
                 onClick={handleCtaClick}
-                className="saas-btn-primary"
+                className="btn btn-primary"
                 style={{
                   padding: "14px 28px",
                   fontSize: "1rem",
@@ -112,13 +112,13 @@ export default function HeroSection({ onAccessDashboard }) {
                   const el = document.getElementById("about");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="saas-btn-secondary"
+                className="btn btn-outline"
                 style={{
                   padding: "14px 24px",
                   fontSize: "1rem",
                 }}
               >
-                <Layers size={18} color="var(--saas-accent)" />
+                <Layers size={18} color="var(--color-primary)" />
                 <span>{t("heroExploreBtn")}</span>
               </button>
             </div>
@@ -130,7 +130,7 @@ export default function HeroSection({ onAccessDashboard }) {
                 gridTemplateColumns: "repeat(3, 1fr)",
                 gap: "16px",
                 paddingTop: "24px",
-                borderTop: "1px solid var(--saas-border)",
+                borderTop: "1px solid var(--color-border)",
               }}
             >
               <div>
@@ -138,7 +138,7 @@ export default function HeroSection({ onAccessDashboard }) {
                   style={{
                     fontSize: "1.5rem",
                     fontWeight: 800,
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                     letterSpacing: "-0.02em",
                   }}
                 >
@@ -147,7 +147,7 @@ export default function HeroSection({ onAccessDashboard }) {
                 <div
                   style={{
                     fontSize: "0.78rem",
-                    color: "var(--saas-fg-muted)",
+                    color: "var(--color-text-muted)",
                     lineHeight: 1.3,
                   }}
                 >
@@ -160,7 +160,7 @@ export default function HeroSection({ onAccessDashboard }) {
                   style={{
                     fontSize: "1.5rem",
                     fontWeight: 800,
-                    color: "var(--saas-fg)",
+                    color: "var(--color-text)",
                     letterSpacing: "-0.02em",
                   }}
                 >
@@ -169,7 +169,7 @@ export default function HeroSection({ onAccessDashboard }) {
                 <div
                   style={{
                     fontSize: "0.78rem",
-                    color: "var(--saas-fg-muted)",
+                    color: "var(--color-text-muted)",
                     lineHeight: 1.3,
                   }}
                 >
@@ -182,7 +182,7 @@ export default function HeroSection({ onAccessDashboard }) {
                   style={{
                     fontSize: "1.5rem",
                     fontWeight: 800,
-                    color: "var(--saas-accent)",
+                    color: "var(--color-primary)",
                     letterSpacing: "-0.02em",
                   }}
                 >
@@ -191,7 +191,7 @@ export default function HeroSection({ onAccessDashboard }) {
                 <div
                   style={{
                     fontSize: "0.78rem",
-                    color: "var(--saas-fg-muted)",
+                    color: "var(--color-text-muted)",
                     lineHeight: 1.3,
                   }}
                 >
@@ -220,7 +220,7 @@ export default function HeroSection({ onAccessDashboard }) {
 
             {/* Main Interactive Visual Card */}
             <div
-              className="saas-card animate-float-slow"
+              className="card animate-float-slow"
               style={{
                 padding: "24px",
                 position: "relative",
@@ -238,7 +238,7 @@ export default function HeroSection({ onAccessDashboard }) {
                   justifyContent: "space-between",
                   marginBottom: "16px",
                   paddingBottom: "12px",
-                  borderBottom: "1px solid var(--saas-border-subtle)",
+                  borderBottom: "1px solid var(--color-border)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -254,7 +254,7 @@ export default function HeroSection({ onAccessDashboard }) {
                     style={{
                       fontSize: "0.8125rem",
                       fontWeight: 700,
-                      color: "var(--saas-fg)",
+                      color: "var(--color-text)",
                     }}
                   >
                     {t("liveViewTitle")}
@@ -329,7 +329,7 @@ export default function HeroSection({ onAccessDashboard }) {
 
                   <circle cx="120" cy="170" r="28" fill="url(#opticDisc)" opacity="0.95" />
                   <circle cx="120" cy="170" r="32" fill="none" stroke="#0052FF" strokeWidth="1.5" strokeDasharray="3 3" />
-                  <text x="120" y="218" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="600">
+                  <text x="120" y="218" textAnchor="middle" fill="var(--color-surface)" fontSize="10" fontWeight="600">
                     {t("opticDiscLabel")}
                   </text>
 
@@ -397,7 +397,7 @@ export default function HeroSection({ onAccessDashboard }) {
                         padding: "4px 8px",
                         borderRadius: "6px",
                         backgroundColor: "#F59E0B",
-                        color: "#FFFFFF",
+                        color: "var(--color-surface)",
                         fontWeight: 800,
                         fontSize: "0.75rem",
                       }}
@@ -405,10 +405,10 @@ export default function HeroSection({ onAccessDashboard }) {
                       {t("severityLevel2")}
                     </div>
                     <div>
-                      <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--saas-fg)" }}>
+                      <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--color-text)" }}>
                         {t("moderateNpdr")}
                       </div>
-                      <div style={{ fontSize: "0.68rem", color: "var(--saas-fg-muted)" }}>
+                      <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
                         {t("lesionsSummary")}
                       </div>
                     </div>
@@ -419,7 +419,7 @@ export default function HeroSection({ onAccessDashboard }) {
                       style={{
                         fontSize: "0.875rem",
                         fontWeight: 800,
-                        color: "var(--saas-accent)",
+                        color: "var(--color-primary)",
                       }}
                     >
                       91% Conf.
@@ -445,9 +445,9 @@ export default function HeroSection({ onAccessDashboard }) {
                   gap: "6px",
                   marginTop: "16px",
                   padding: "4px",
-                  backgroundColor: "var(--saas-bg-muted)",
+                  backgroundColor: "var(--color-surface-hover)",
                   borderRadius: "10px",
-                  border: "1px solid var(--saas-border)",
+                  border: "1px solid var(--color-border)",
                 }}
               >
                 <button
@@ -461,8 +461,8 @@ export default function HeroSection({ onAccessDashboard }) {
                     fontWeight: 600,
                     cursor: "pointer",
                     transition: "all 0.15s ease",
-                    backgroundColor: activeLayer === "raw" ? "#FFFFFF" : "transparent",
-                    color: activeLayer === "raw" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
+                    backgroundColor: activeLayer === "raw" ? "var(--color-surface)" : "transparent",
+                    color: activeLayer === "raw" ? "var(--color-text)" : "var(--color-text-muted)",
                     boxShadow: activeLayer === "raw" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
@@ -480,8 +480,8 @@ export default function HeroSection({ onAccessDashboard }) {
                     fontWeight: 600,
                     cursor: "pointer",
                     transition: "all 0.15s ease",
-                    backgroundColor: activeLayer === "enhanced" ? "#FFFFFF" : "transparent",
-                    color: activeLayer === "enhanced" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
+                    backgroundColor: activeLayer === "enhanced" ? "var(--color-surface)" : "transparent",
+                    color: activeLayer === "enhanced" ? "var(--color-text)" : "var(--color-text-muted)",
                     boxShadow: activeLayer === "enhanced" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
@@ -499,8 +499,8 @@ export default function HeroSection({ onAccessDashboard }) {
                     fontWeight: 600,
                     cursor: "pointer",
                     transition: "all 0.15s ease",
-                    backgroundColor: activeLayer === "gradcam" ? "#FFFFFF" : "transparent",
-                    color: activeLayer === "gradcam" ? "var(--saas-accent)" : "var(--saas-fg-muted)",
+                    backgroundColor: activeLayer === "gradcam" ? "var(--color-surface)" : "transparent",
+                    color: activeLayer === "gradcam" ? "var(--color-primary)" : "var(--color-text-muted)",
                     boxShadow: activeLayer === "gradcam" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >
@@ -518,8 +518,8 @@ export default function HeroSection({ onAccessDashboard }) {
                     fontWeight: 600,
                     cursor: "pointer",
                     transition: "all 0.15s ease",
-                    backgroundColor: activeLayer === "lesions" ? "#FFFFFF" : "transparent",
-                    color: activeLayer === "lesions" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
+                    backgroundColor: activeLayer === "lesions" ? "var(--color-surface)" : "transparent",
+                    color: activeLayer === "lesions" ? "var(--color-text)" : "var(--color-text-muted)",
                     boxShadow: activeLayer === "lesions" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
                   }}
                 >

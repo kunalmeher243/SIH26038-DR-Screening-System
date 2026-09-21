@@ -1608,7 +1608,7 @@ function ClinicalReport({
 
         .clinical-document-controls button:hover:not(:disabled) {
           background:
-            #ffffff;
+            var(--color-surface);
 
           transform:
             translateY(-1px);
@@ -1733,7 +1733,7 @@ function ClinicalReport({
             border-box;
 
           background:
-            #ffffff;
+            var(--color-surface);
 
           color:
             #20344c;
@@ -1792,7 +1792,7 @@ function ClinicalReport({
             #2167d8;
 
           color:
-            #ffffff;
+            var(--color-surface);
 
           font-size:
             24px;

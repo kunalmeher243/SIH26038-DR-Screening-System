@@ -63,8 +63,8 @@
 /* Global Reset & Typography Baseline */
 body {
   font-family: var(--font-body);
-  background-color: var(--saas-bg);
-  color: var(--saas-fg);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -175,15 +175,15 @@ body {
 }
 
 /* Glassmorphic Light Cards */
-.saas-card {
+.card {
   background: var(--saas-bg-pure);
-  border: 1px solid var(--saas-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-saas-sm);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.saas-card:hover {
+.card:hover {
   border-color: rgba(0, 82, 255, 0.28);
   box-shadow: var(--shadow-saas-md);
   transform: translateY(-2px);
@@ -203,11 +203,11 @@ body {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--saas-accent);
+  color: var(--color-primary);
 }
 
 /* Buttons */
-.saas-btn-primary {
+.btn btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -225,41 +225,41 @@ body {
   text-decoration: none;
 }
 
-.saas-btn-primary:hover {
+.btn btn-primary:hover {
   transform: translateY(-1.5px);
   box-shadow: var(--shadow-saas-accent-lg);
   filter: brightness(1.05);
 }
 
-.saas-btn-primary:active {
+.btn btn-primary:active {
   transform: scale(0.98);
 }
 
-.saas-btn-secondary {
+.btn btn-outline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   background: #FFFFFF;
-  color: var(--saas-fg);
+  color: var(--color-text);
   font-weight: 600;
   font-size: 0.9375rem;
   padding: 10px 22px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--saas-border);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   box-shadow: var(--shadow-saas-xs);
   transition: all 0.2s ease-out;
   text-decoration: none;
 }
 
-.saas-btn-secondary:hover {
+.btn btn-outline:hover {
   background: var(--saas-bg-subtle);
   border-color: rgba(0, 82, 255, 0.35);
   transform: translateY(-1px);
 }
 
-.saas-btn-secondary:active {
+.btn btn-outline:active {
   transform: scale(0.98);
 }
 

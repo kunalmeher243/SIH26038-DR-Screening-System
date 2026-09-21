@@ -851,7 +851,7 @@ export default function Navbar({
 
           border-radius: 12px;
 
-          color: #ffffff;
+          color: var(--color-surface);
 
           background:
             linear-gradient(
@@ -1020,7 +1020,7 @@ export default function Navbar({
 
 
         .rt-liquid-nav-item.active {
-          color: #ffffff;
+          color: var(--color-surface);
 
           background:
             linear-gradient(
@@ -1231,7 +1231,7 @@ export default function Navbar({
 
 
         .rt-liquid-language-option:hover {
-          color: #ffffff;
+          color: var(--color-surface);
 
           background:
             rgba(255,255,255,0.08);
@@ -1239,7 +1239,7 @@ export default function Navbar({
 
 
         .rt-liquid-language-option.selected {
-          color: #ffffff;
+          color: var(--color-surface);
 
           background:
             rgba(60,130,255,0.18);
@@ -1302,7 +1302,7 @@ export default function Navbar({
           border-color:
             rgba(255,255,255,0.27);
 
-          color: #ffffff;
+          color: var(--color-surface);
         }
 
 
@@ -1329,7 +1329,7 @@ export default function Navbar({
               #1658eb
             );
 
-          color: #ffffff;
+          color: var(--color-surface);
 
           font-family: inherit;
 
@@ -1402,7 +1402,7 @@ export default function Navbar({
               rgba(22,88,235,0.78)
             );
 
-          color: #ffffff;
+          color: var(--color-surface);
 
           font-family: inherit;
 
@@ -1747,7 +1747,7 @@ export default function Navbar({
 
         .rt-liquid-mobile-nav-item:hover,
         .rt-liquid-mobile-nav-item.active {
-          color: #ffffff;
+          color: var(--color-surface);
 
           background:
             rgba(255,255,255,0.08);
@@ -1847,7 +1847,7 @@ export default function Navbar({
 
 
         .rt-liquid-mobile-language-option.selected {
-          color: #ffffff;
+          color: var(--color-surface);
 
           border-color:
             rgba(75,140,255,0.48);
