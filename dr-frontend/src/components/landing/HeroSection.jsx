@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Layers,
@@ -7,15 +8,25 @@ import useAuthStore from "../../store/useAuthStore";
 import useLanguageStore from "../../store/useLanguageStore";
 
 export default function HeroSection({ onAccessDashboard }) {
-  const { isAuthenticated, user, openLogin } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const { t } = useLanguageStore();
+  const navigate = useNavigate();
   const [activeLayer, setActiveLayer] = useState("gradcam"); // "raw" | "enhanced" | "gradcam" | "lesions"
 
   const handleCtaClick = () => {
-    if (isAuthenticated) {
-      if (onAccessDashboard) onAccessDashboard();
+    if (isAuthenticated && user) {
+      if (onAccessDashboard) {
+        onAccessDashboard();
+      } else {
+        const portal = user.role === "PHC Worker" || user.portal === "phc"
+          ? "/phc"
+          : user.role === "Ophthalmologist" || user.portal === "doctor"
+          ? "/doctor"
+          : "/patient";
+        navigate(portal);
+      }
     } else {
-      openLogin("Patient");
+      navigate("/login");
     }
   };
 
@@ -373,68 +384,6 @@ export default function HeroSection({ onAccessDashboard }) {
                     style={{ transformOrigin: "200px 170px" }}
                   />
                 </svg>
-
-                {/* Severity Callout Box */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "12px",
-                    left: "12px",
-                    right: "12px",
-                    padding: "10px 14px",
-                    backgroundColor: "rgba(255, 255, 255, 0.94)",
-                    backdropFilter: "blur(8px)",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(0, 82, 255, 0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div
-                      style={{
-                        padding: "4px 8px",
-                        borderRadius: "6px",
-                        backgroundColor: "#F59E0B",
-                        color: "var(--color-surface)",
-                        fontWeight: 800,
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      {t("severityLevel2")}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--color-text)" }}>
-                        {t("moderateNpdr")}
-                      </div>
-                      <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
-                        {t("lesionsSummary")}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: "right" }}>
-                    <span
-                      style={{
-                        fontSize: "0.875rem",
-                        fontWeight: 800,
-                        color: "var(--color-primary)",
-                      }}
-                    >
-                      91% Conf.
-                    </span>
-                    <div
-                      style={{
-                        fontSize: "0.65rem",
-                        fontWeight: 700,
-                        color: "#DC2626",
-                      }}
-                    >
-                      {t("referralReq")}
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Layer Switcher Buttons */}

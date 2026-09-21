@@ -233,7 +233,7 @@ export default function Footer() {
               onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-primary)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-muted)"; }}
             >
-              Privacy Policy
+              {t("navPrivacy")}
             </Link>
 
             <Link
@@ -247,7 +247,7 @@ export default function Footer() {
               onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-primary)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-muted)"; }}
             >
-              Terms & Disclaimer
+              {t("termsDisclaimer")}
             </Link>
 
             <span style={{ color: "var(--color-border)" }}>•</span>

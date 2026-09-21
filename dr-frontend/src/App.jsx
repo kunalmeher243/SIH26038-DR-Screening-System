@@ -8,7 +8,8 @@ import LoadingFallback from "./components/common/LoadingFallback";
 import eventTracker from "./utils/eventTracker";
 import "./index.css";
 
-// Lazy-loaded routes for optimal page load speed (Point 12)
+// Lazy-loaded routes for optimal page load speed
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Login = lazy(() => import("./pages/Login"));
 const PHCWindow = lazy(() => import("./pages/PHCWindow"));
 const PHCTicketStatus = lazy(() => import("./pages/PHCTicketStatus"));
@@ -20,7 +21,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Telemetry / Route Change Tracker Component (Point 19)
+// Telemetry / Route Change Tracker Component
 function PageTracker() {
   const location = useLocation();
 
@@ -46,10 +47,14 @@ function App() {
         <main style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
           <Suspense fallback={<LoadingFallback message="Loading SERIX clinical workspace..." />}>
             <Routes>
-              {/* Authentication / Home */}
-              <Route path="/" element={<Login />} />
+              {/* Landing Page on root / */}
+              <Route path="/" element={<LandingPage />} />
               
-              {/* Legal & Compliance Pages (Points 1 & 2) */}
+              {/* Dedicated Login / Sign In Route */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/signin" element={<Login />} />
+              
+              {/* Legal & Compliance Pages */}
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsConditions />} />
 
@@ -107,7 +112,7 @@ function App() {
                 } 
               />
 
-              {/* Wildcard 404 Route (Point 15) */}
+              {/* Wildcard 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

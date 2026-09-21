@@ -6,7 +6,7 @@ const STORAGE_KEY = "retinatrack_lang";
 const getStoredLanguage = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && ["en", "hi", "or", "hinglish"].includes(saved)) {
+    if (saved && ["en", "hi", "or"].includes(saved)) {
       return saved;
     }
   } catch (e) {
@@ -19,7 +19,6 @@ export const availableLanguages = [
   { code: "en", label: "English", nativeName: "English" },
   { code: "hi", label: "Hindi", nativeName: "हिंदी" },
   { code: "or", label: "Odia", nativeName: "ଓଡ଼ିଆ" },
-  { code: "hinglish", label: "Hinglish", nativeName: "Hinglish" },
 ];
 
 const useLanguageStore = create((set, get) => ({

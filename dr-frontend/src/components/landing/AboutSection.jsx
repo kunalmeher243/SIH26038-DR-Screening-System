@@ -16,9 +16,9 @@ export default function AboutSection() {
       style={{
         paddingTop: "80px",
         paddingBottom: "80px",
-        backgroundColor: "var(--color-surface)",
-        borderTop: "1px solid var(--color-border)",
-        borderBottom: "1px solid var(--color-border)",
+        backgroundColor: "#FFFFFF",
+        borderTop: "1px solid #E2E8F0",
+        borderBottom: "1px solid #E2E8F0",
       }}
     >
       <div
@@ -28,25 +28,32 @@ export default function AboutSection() {
           padding: "0 24px",
         }}
       >
-        {/* Section Headline - Pill badge removed */}
+        {/* Section Headline */}
         <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 56px" }}>
           <h2
             className="font-display"
             style={{
               fontSize: "clamp(2rem, 3.5vw, 2.75rem)",
               lineHeight: 1.15,
-              color: "var(--color-text)",
+              color: "#0F172A",
               margin: "0 0 16px 0",
+              fontWeight: 800,
             }}
           >
             {t("aboutHeadlinePrefix")}{" "}
-            <span className="gradient-text-saas">{t("aboutHeadlineGradient")}</span>
+            <span style={{
+              background: "linear-gradient(135deg, #1976D2 0%, #16A085 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent"
+            }}>
+              {t("aboutHeadlineGradient")}
+            </span>
           </h2>
           <p
             style={{
               fontSize: "1.0625rem",
               lineHeight: 1.65,
-              color: "var(--color-text-muted)",
+              color: "#475569",
               margin: 0,
             }}
           >
@@ -70,6 +77,10 @@ export default function AboutSection() {
               padding: "32px 26px",
               position: "relative",
               overflow: "hidden",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+              borderRadius: "16px",
             }}
           >
             <div
@@ -77,8 +88,8 @@ export default function AboutSection() {
                 width: "48px",
                 height: "48px",
                 borderRadius: "12px",
-                backgroundColor: "rgba(239, 68, 68, 0.08)",
-                border: "1px solid rgba(239, 68, 68, 0.2)",
+                backgroundColor: "#FEF2F2",
+                border: "1px solid #FECACA",
                 color: "#DC2626",
                 display: "flex",
                 alignItems: "center",
@@ -93,7 +104,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--color-text)",
+                color: "#0F172A",
                 margin: "0 0 10px 0",
               }}
             >
@@ -103,7 +114,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--color-text-muted)",
+                color: "#475569",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -119,6 +130,10 @@ export default function AboutSection() {
               padding: "32px 26px",
               position: "relative",
               overflow: "hidden",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+              borderRadius: "16px",
             }}
           >
             <div
@@ -126,9 +141,9 @@ export default function AboutSection() {
                 width: "48px",
                 height: "48px",
                 borderRadius: "12px",
-                backgroundColor: "rgba(0, 82, 255, 0.08)",
-                border: "1px solid rgba(0, 82, 255, 0.2)",
-                color: "var(--color-primary)",
+                backgroundColor: "#EFF6FF",
+                border: "1px solid #BFDBFE",
+                color: "#1976D2",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -142,7 +157,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--color-text)",
+                color: "#0F172A",
                 margin: "0 0 10px 0",
               }}
             >
@@ -152,7 +167,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--color-text-muted)",
+                color: "#475569",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -168,6 +183,10 @@ export default function AboutSection() {
               padding: "32px 26px",
               position: "relative",
               overflow: "hidden",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+              borderRadius: "16px",
             }}
           >
             <div
@@ -175,8 +194,8 @@ export default function AboutSection() {
                 width: "48px",
                 height: "48px",
                 borderRadius: "12px",
-                backgroundColor: "rgba(245, 158, 11, 0.08)",
-                border: "1px solid rgba(245, 158, 11, 0.2)",
+                backgroundColor: "#FFFBEB",
+                border: "1px solid #FDE68A",
                 color: "#D97706",
                 display: "flex",
                 alignItems: "center",
@@ -191,7 +210,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--color-text)",
+                color: "#0F172A",
                 margin: "0 0 10px 0",
               }}
             >
@@ -201,7 +220,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--color-text-muted)",
+                color: "#475569",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -217,6 +236,10 @@ export default function AboutSection() {
               padding: "32px 26px",
               position: "relative",
               overflow: "hidden",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+              borderRadius: "16px",
             }}
           >
             <div
@@ -224,8 +247,8 @@ export default function AboutSection() {
                 width: "48px",
                 height: "48px",
                 borderRadius: "12px",
-                backgroundColor: "rgba(16, 185, 129, 0.08)",
-                border: "1px solid rgba(16, 185, 129, 0.2)",
+                backgroundColor: "#ECFDF5",
+                border: "1px solid #A7F3D0",
                 color: "#059669",
                 display: "flex",
                 alignItems: "center",
@@ -240,7 +263,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "1.18rem",
                 fontWeight: 700,
-                color: "var(--color-text)",
+                color: "#0F172A",
                 margin: "0 0 10px 0",
               }}
             >
@@ -250,7 +273,7 @@ export default function AboutSection() {
             <p
               style={{
                 fontSize: "0.875rem",
-                color: "var(--color-text-muted)",
+                color: "#475569",
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -260,17 +283,18 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Inverted Summary Banner - Badge removed */}
+        {/* Inverted Summary Banner (High-Contrast Dark Slate/Navy Card with Crisp White Text) */}
         <div
           style={{
-            backgroundColor: "var(--color-text)",
-            color: "var(--color-surface)",
+            backgroundColor: "#0F172A",
+            color: "#FFFFFF",
             borderRadius: "20px",
             padding: "40px 48px",
             display: "grid",
             gridTemplateColumns: "1.2fr 0.8fr",
             gap: "36px",
             alignItems: "center",
+            boxShadow: "0 12px 36px rgba(15, 23, 42, 0.15)",
           }}
           className="about-inverted-banner"
         >
@@ -278,9 +302,10 @@ export default function AboutSection() {
             <h3
               style={{
                 fontSize: "1.5rem",
-                fontWeight: 700,
-                color: "var(--color-surface)",
+                fontWeight: 800,
+                color: "#FFFFFF",
                 margin: "0 0 12px 0",
+                letterSpacing: "-0.01em",
               }}
             >
               {t("bannerTitle")}
@@ -289,7 +314,7 @@ export default function AboutSection() {
               style={{
                 fontSize: "0.9375rem",
                 lineHeight: 1.6,
-                color: "#CBD5E1",
+                color: "#94A3B8",
                 margin: 0,
               }}
             >
@@ -299,28 +324,28 @@ export default function AboutSection() {
 
           <div
             style={{
-              backgroundColor: "rgba(255, 255, 255, 0.06)",
+              backgroundColor: "rgba(255, 255, 255, 0.08)",
               borderRadius: "14px",
               padding: "24px",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.14)",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
-                <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
+                <span style={{ fontSize: "0.875rem", color: "#F8FAFC", fontWeight: 600 }}>
                   {t("bannerPoint1")}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
-                <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
+                <span style={{ fontSize: "0.875rem", color: "#F8FAFC", fontWeight: 600 }}>
                   {t("bannerPoint2")}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle size={18} color="#10B981" />
-                <span style={{ fontSize: "0.875rem", color: "#F8FAFC" }}>
+                <span style={{ fontSize: "0.875rem", color: "#F8FAFC", fontWeight: 600 }}>
                   {t("bannerPoint3")}
                 </span>
               </div>

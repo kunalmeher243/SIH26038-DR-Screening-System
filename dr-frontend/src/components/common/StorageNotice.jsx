@@ -1,11 +1,38 @@
 import { useState, useEffect } from "react";
-import { Shield, ShieldCheck, X, FileText } from "lucide-react";
+import { ShieldCheck, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import useLanguageStore from "../../store/useLanguageStore";
 
 const STORAGE_PREF_KEY = "serix_storage_pref";
 
+const noticeContent = {
+  en: {
+    title: "Privacy & Storage Notice",
+    desc: "We use essential local storage to securely maintain your clinician/patient login session and interface language settings. No commercial tracking cookies are deployed.",
+    learnMore: "Learn more",
+    acceptAll: "Accept All",
+    essentialOnly: "Essential Only"
+  },
+  hi: {
+    title: "गोपनीयता एवं स्टोरेज सूचना",
+    desc: "हम आपके सुरक्षित लॉगिन सत्र और भाषा प्राथमिकताओं को बनाए रखने के लिए आवश्यक स्थानीय संग्रहण का उपयोग करते हैं। कोई वाणिज्यिक ट्रैकिंग कुकीज़ नहीं हैं।",
+    learnMore: "और जानें",
+    acceptAll: "सभी स्वीकार करें",
+    essentialOnly: "केवल आवश्यक"
+  },
+  or: {
+    title: "ଗୋପନୀୟତା ଏବଂ ଷ୍ଟୋରେଜ୍ ସୂଚନା",
+    desc: "ଆମେ ଆପଣଙ୍କ ସୁରକ୍ଷିତ ଲଗଇନ୍ ସେସନ୍ ଏବଂ ଭାଷା ପସନ୍ଦ ପାଇଁ କେବଳ ଆବଶ୍ୟକୀୟ ଲୋକାଲ୍ ଷ୍ଟୋରେଜ୍ ବ୍ୟବହାର କରୁ। କୌଣସି ବ୍ୟବସାୟିକ ଟ୍ରାକିଂ କୁକିଜ୍ ବ୍ୟବହାର କରାଯାଏ ନାହିଁ।",
+    learnMore: "ଅଧିକ ଜାଣନ୍ତୁ",
+    acceptAll: "ସବୁ ଗ୍ରହଣ କରନ୍ତୁ",
+    essentialOnly: "କେବଳ ଆବଶ୍ୟକୀୟ"
+  }
+};
+
 export default function StorageNotice() {
   const [isVisible, setIsVisible] = useState(false);
+  const { language } = useLanguageStore();
+  const c = noticeContent[language] || noticeContent.en;
 
   useEffect(() => {
     try {
@@ -77,7 +104,7 @@ export default function StorageNotice() {
               color: "#1E293B",
               margin: 0
             }}>
-              Privacy & Storage Notice
+              {c.title}
             </h4>
             <button
               type="button"
@@ -102,9 +129,9 @@ export default function StorageNotice() {
             color: "#64748B",
             margin: "0 0 14px"
           }}>
-            We use essential local storage to securely maintain your clinician/patient login session and interface language settings. No commercial tracking cookies are deployed.{" "}
+            {c.desc}{" "}
             <Link to="/privacy" style={{ color: "#1976D2", fontWeight: 600, textDecoration: "underline" }}>
-              Learn more
+              {c.learnMore}
             </Link>.
           </p>
 
@@ -127,7 +154,7 @@ export default function StorageNotice() {
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1565C0"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#1976D2"; }}
             >
-              Accept All
+              {c.acceptAll}
             </button>
 
             <button
@@ -148,7 +175,7 @@ export default function StorageNotice() {
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#E2E8F0"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#F1F5F9"; }}
             >
-              Essential Only
+              {c.essentialOnly}
             </button>
           </div>
         </div>

@@ -1,49 +1,57 @@
-import Navbar from "../components/common/Navbar";
+import { useNavigate } from "react-router-dom";
 import HeroSection from "../components/landing/HeroSection";
 import AboutSection from "../components/landing/AboutSection";
 import FeaturesSection from "../components/landing/FeaturesSection";
 import Footer from "../components/common/Footer";
-import AuthModal from "../components/auth/AuthModal";
 import useAuthStore from "../store/useAuthStore";
+import usePageMeta from "../utils/usePageMeta";
 
-export default function LandingPage({ currentView, setCurrentView }) {
-  const handleAuthSuccess = () => {
-    // Navigate automatically to dashboard after successful authentication
-    if (setCurrentView) {
-      setCurrentView("dashboard");
+export default function LandingPage() {
+  const { isAuthenticated, user } = useAuthStore();
+  const navigate = useNavigate();
+
+  usePageMeta({
+    title: "SERIX — AI Diabetic Retinopathy Screening & Tele-Ophthalmology",
+    description: "Deep learning AI screening and tele-ophthalmology triage platform for rural health centers, ophthalmologists, and patients."
+  });
+
+  const handleAccessDashboard = () => {
+    if (isAuthenticated && user) {
+      const portal = user.role === "PHC Worker" || user.portal === "phc"
+        ? "/phc"
+        : user.role === "Ophthalmologist" || user.portal === "doctor"
+        ? "/doctor"
+        : "/patient";
+      navigate(portal);
+    } else {
+      navigate("/login");
     }
   };
 
   return (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 68px)",
         display: "flex",
         flexDirection: "column",
         backgroundColor: "var(--color-bg)",
       }}
     >
-      {/* Navigation Bar */}
-      <Navbar currentView={currentView} setCurrentView={setCurrentView} />
-
       {/* Hero Section */}
-      <HeroSection
-        onAccessDashboard={() => {
-          if (setCurrentView) setCurrentView("dashboard");
-        }}
-      />
-
-      {/* About Section */}
-      <AboutSection />
+      <HeroSection onAccessDashboard={handleAccessDashboard} />
 
       {/* Features Section */}
-      <FeaturesSection />
+      <div id="features">
+        <FeaturesSection />
+      </div>
+
+      {/* About Section */}
+      <div id="about">
+        <AboutSection />
+      </div>
 
       {/* Footer */}
       <Footer />
-
-      {/* Auth Modal Triggerable from anywhere */}
-      <AuthModal onAuthSuccess={handleAuthSuccess} />
     </div>
   );
 }

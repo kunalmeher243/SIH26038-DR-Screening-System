@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Stethoscope, Heart, Lock, Mail, ShieldCheck, AlertCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { User, Stethoscope, Heart, Lock, Mail, ShieldCheck, AlertCircle, ArrowLeft } from "lucide-react";
 import useAuthStore from "../store/useAuthStore";
 import useToastStore from "../store/useToastStore";
 import usePageMeta from "../utils/usePageMeta";
@@ -20,11 +20,24 @@ export default function Login() {
   const [honeypot, setHoneypot] = useState(""); // Bot spam protection
   const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const login = useAuthStore((state) => state.login);
   const signup = useAuthStore((state) => state.signup);
   const showToast = useToastStore((state) => state.showToast);
   const navigate = useNavigate();
+
+  // If already logged in, redirect to respective workspace
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const portal = user.role === "PHC Worker" || user.portal === "phc"
+        ? "/phc"
+        : user.role === "Ophthalmologist" || user.portal === "doctor"
+        ? "/doctor"
+        : "/patient";
+      navigate(portal);
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,6 +96,30 @@ export default function Login() {
       backgroundColor: "#F8FAFC",
       padding: "32px 20px"
     }}>
+      {/* Back to Home Link */}
+      <div style={{ width: "100%", maxWidth: "460px", marginBottom: "16px" }}>
+        <Link
+          to="/"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            color: "#1976D2",
+            textDecoration: "none",
+            padding: "6px 12px",
+            borderRadius: "8px",
+            backgroundColor: "#EFF6FF",
+            transition: "all 0.15s ease"
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#DBEAFE"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#EFF6FF"; }}
+        >
+          <ArrowLeft size={15} /> Back to Home
+        </Link>
+      </div>
+
       {/* LOGIN CARD */}
       <div className="card glass-panel" style={{
         width: "100%",
