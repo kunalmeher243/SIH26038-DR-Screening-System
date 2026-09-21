@@ -51,7 +51,7 @@ cors_origins = [
     origin.strip()
     for origin in os.getenv(
         "SERIX_CORS_ORIGINS",
-        "http://localhost:5173,http://localhost:3000",
+        "http://localhost:5173,http://localhost:8000",
     ).split(",")
     if origin.strip()
 ]
@@ -185,6 +185,20 @@ async def create_ticket(
     doctor_id: int = Form(...),
     file: UploadFile = File(...)
 ):
+    # 0. Validate old user or create new one
+    is_new_patient = False
+    existing_user = await users_col.find_one({"email": patient_email, "role": "patient"})
+    if not existing_user:
+        is_new_patient = True
+        new_user = {
+            "name": patient_name,
+            "email": patient_email,
+            "password_hash": auth_service.get_password_hash("password"),
+            "role": "patient",
+            "created_at": datetime.utcnow()
+        }
+        await users_col.insert_one(new_user)
+
     # 1. Run ML pipeline internally
     report = await report_service.generate(file)
     
@@ -237,7 +251,8 @@ async def create_ticket(
         "ticket_id": ticket_id,
         "status": "pending",
         "dr_level": dr_level,
-        "dr_label": dr_label
+        "dr_label": dr_label,
+        "is_new_patient": is_new_patient
     }
 
 def format_doc(doc):
