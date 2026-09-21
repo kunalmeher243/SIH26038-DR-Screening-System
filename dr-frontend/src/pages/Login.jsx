@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Stethoscope, Heart, Lock, Mail, Eye, ShieldCheck } from "lucide-react";
+import { User, Stethoscope, Heart, Lock, Mail, ShieldCheck } from "lucide-react";
 import useAuthStore from "../store/useAuthStore";
 import useToastStore from "../store/useToastStore";
 
@@ -11,7 +11,7 @@ export default function Login() {
   const [name, setName] = useState("");
   const [role, setRole] = useState("Patient");
   const [loading, setLoading] = useState(false);
-  
+
   const login = useAuthStore(state => state.login);
   const signup = useAuthStore(state => state.signup);
   const showToast = useToastStore(state => state.showToast);
@@ -48,25 +48,27 @@ export default function Login() {
       backgroundColor: "#FFFFFF",
       padding: "32px 24px"
     }}>
-      {/* BRAND LOGO */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}>
-        <div style={{
-          width: "44px", height: "44px", borderRadius: "12px",
-          backgroundColor: "#E3F2FD",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          border: "1px solid rgba(25, 118, 210, 0.25)"
-        }}>
-          <Eye size={26} color="#1976D2" strokeWidth={2.5} />
-        </div>
-        <div>
-          <span style={{ fontSize: "1.5rem", fontWeight: 800, color: "#1976D2", letterSpacing: "-0.02em" }}>
-            RetinaTrack
+      {/* BRAND LOGO: SERIX */}
+      {/* <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "28px" }}>
+        <img 
+          src="/retinal.png" 
+          alt="SERIX Logo" 
+          style={{ 
+            height: "50px", 
+            width: "auto", 
+            objectFit: "contain",
+            display: "block"
+          }} 
+        />
+        <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
+          <span style={{ fontSize: "1.75rem", fontWeight: 800, color: "#1976D2", letterSpacing: "-0.03em" }}>
+            SERIX
           </span>
-          <span style={{ fontSize: "1.5rem", fontWeight: 800, color: "#16A085", marginLeft: "4px" }}>
-            AI
+          <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#16A085", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            Health
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* LOGIN CARD */}
       <div className="card glass-panel" style={{
@@ -105,8 +107,8 @@ export default function Login() {
                   position: "absolute", left: "14px", top: "50%",
                   transform: "translateY(-50%)", color: "#90A4AE"
                 }} />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Dr. Jane Smith"
@@ -124,8 +126,8 @@ export default function Login() {
                 position: "absolute", left: "14px", top: "50%",
                 transform: "translateY(-50%)", color: "#90A4AE"
               }} />
-              <input 
-                type="email" 
+              <input
+                type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -150,8 +152,8 @@ export default function Login() {
                 position: "absolute", left: "14px", top: "50%",
                 transform: "translateY(-50%)", color: "#90A4AE"
               }} />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -167,16 +169,16 @@ export default function Login() {
             <label className="input-label">Select Workspace Role</label>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
               {/* Patient: Blue Accent */}
-              <button 
+              <button
                 type="button"
                 onClick={() => setRole("Patient")}
-                style={{ 
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px", 
-                  borderRadius: "10px", 
-                  border: role === "Patient" ? "2px solid #1976D2" : "1px solid #D9E2E8", 
-                  backgroundColor: role === "Patient" ? "#E3F2FD" : "#FFFFFF", 
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px",
+                  borderRadius: "10px",
+                  border: role === "Patient" ? "2px solid #1976D2" : "1px solid #D9E2E8",
+                  backgroundColor: role === "Patient" ? "#E3F2FD" : "#FFFFFF",
                   boxShadow: role === "Patient" ? "0 2px 8px rgba(25, 118, 210, 0.15)" : "none",
-                  cursor: "pointer", transition: "all 0.18s ease" 
+                  cursor: "pointer", transition: "all 0.18s ease"
                 }}
               >
                 <Heart size={22} color={role === "Patient" ? "#1976D2" : "#90A4AE"} />
@@ -188,18 +190,18 @@ export default function Login() {
                   Patient
                 </span>
               </button>
-              
+
               {/* PHC Worker: Green Accent */}
-              <button 
+              <button
                 type="button"
                 onClick={() => setRole("PHC Worker")}
-                style={{ 
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px", 
-                  borderRadius: "10px", 
-                  border: role === "PHC Worker" ? "2px solid #16A085" : "1px solid #D9E2E8", 
-                  backgroundColor: role === "PHC Worker" ? "#E8F8F5" : "#FFFFFF", 
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px",
+                  borderRadius: "10px",
+                  border: role === "PHC Worker" ? "2px solid #16A085" : "1px solid #D9E2E8",
+                  backgroundColor: role === "PHC Worker" ? "#E8F8F5" : "#FFFFFF",
                   boxShadow: role === "PHC Worker" ? "0 2px 8px rgba(22, 160, 133, 0.15)" : "none",
-                  cursor: "pointer", transition: "all 0.18s ease" 
+                  cursor: "pointer", transition: "all 0.18s ease"
                 }}
               >
                 <ShieldCheck size={22} color={role === "PHC Worker" ? "#16A085" : "#90A4AE"} />
@@ -213,16 +215,16 @@ export default function Login() {
               </button>
 
               {/* Doctor: Blue + Green Medical Accent */}
-              <button 
+              <button
                 type="button"
                 onClick={() => setRole("Ophthalmologist")}
-                style={{ 
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px", 
-                  borderRadius: "10px", 
-                  border: role === "Ophthalmologist" ? "2px solid #1976D2" : "1px solid #D9E2E8", 
-                  backgroundColor: role === "Ophthalmologist" ? "#F0FDF4" : "#FFFFFF", 
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "14px 8px",
+                  borderRadius: "10px",
+                  border: role === "Ophthalmologist" ? "2px solid #1976D2" : "1px solid #D9E2E8",
+                  backgroundColor: role === "Ophthalmologist" ? "#F0FDF4" : "#FFFFFF",
                   boxShadow: role === "Ophthalmologist" ? "0 2px 8px rgba(22, 160, 133, 0.15)" : "none",
-                  cursor: "pointer", transition: "all 0.18s ease" 
+                  cursor: "pointer", transition: "all 0.18s ease"
                 }}
               >
                 <Stethoscope size={22} color={role === "Ophthalmologist" ? "#16A085" : "#90A4AE"} />
@@ -238,8 +240,8 @@ export default function Login() {
           </div>
 
           {/* SIGN IN BUTTON: BLUE FILLED */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
             className="btn btn-primary"
             style={{ width: "100%", padding: "14px", fontSize: "1rem", fontWeight: 700, borderRadius: "10px" }}
@@ -250,9 +252,9 @@ export default function Login() {
 
         <div style={{ marginTop: "24px", textAlign: "center", fontSize: "0.9rem", color: "#546E7A" }}>
           {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <button 
-            type="button" 
-            onClick={() => setIsLogin(!isLogin)} 
+          <button
+            type="button"
+            onClick={() => setIsLogin(!isLogin)}
             style={{ background: "none", border: "none", color: "#1976D2", fontWeight: 700, cursor: "pointer", padding: 0 }}
           >
             {isLogin ? "Sign Up" : "Sign In"}

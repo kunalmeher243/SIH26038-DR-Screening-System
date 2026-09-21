@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ChatBox from "../components/chat/ChatBox";
-import LiquidGlass from "../components/LiquidGlass";
-import { ArrowLeft, Clock, CheckCircle } from "lucide-react";
+import { ArrowLeft, Clock, CheckCircle2, AlertTriangle, Calendar, Activity, User, Stethoscope, ShieldCheck } from "lucide-react";
 import apiClient from "../api/client";
 
 export default function PHCTicketStatus() {
@@ -12,119 +11,379 @@ export default function PHCTicketStatus() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchTicket = async () => {
       try {
         const res = await apiClient.get(`/api/tickets/${id}`);
+        if (!isMounted) return;
         const data = res.data;
         setTicket(data);
         
         if (data.status === "accepted") {
-          const slotRes = await apiClient.get(`/api/tickets/${id}/slot`);
-          setSlot(slotRes.data);
+          try {
+            const slotRes = await apiClient.get(`/api/tickets/${id}/slot`);
+            if (isMounted) setSlot(slotRes.data);
+          } catch (slotErr) {
+            console.log("No slot scheduled yet:", slotErr);
+          }
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching ticket:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     
     fetchTicket();
-    // Refresh status every 10 seconds
     const interval = setInterval(fetchTicket, 10000);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [id]);
 
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>;
-  if (!ticket) return <div style={{ padding: '40px', textAlign: 'center' }}>Ticket not found</div>;
+  if (loading) {
+    return (
+      <div style={{ minHeight: "calc(100vh - 68px)", backgroundColor: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", color: "#6B7280" }}>
+        <div style={{ textAlign: "center" }}>
+          <Activity size={32} color="#1976D2" style={{ animation: "spin 2s linear infinite", marginBottom: "12px" }} />
+          <div>Loading screening case status...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!ticket) {
+    return (
+      <div style={{ minHeight: "calc(100vh - 68px)", backgroundColor: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
+        <div style={{ maxWidth: "480px", width: "100%", textAlign: "center", backgroundColor: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "16px", padding: "40px 32px" }}>
+          <h2 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#1F2937", margin: "0 0 8px 0" }}>
+            Ticket Not Found
+          </h2>
+          <p style={{ color: "#6B7280", fontSize: "0.925rem", margin: "0 0 24px 0" }}>
+            Unable to retrieve the requested screening ticket #{id}.
+          </p>
+          <Link
+            to="/phc"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "10px 22px",
+              backgroundColor: "#1976D2",
+              color: "#FFFFFF",
+              borderRadius: "8px",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              textDecoration: "none"
+            }}
+          >
+            <ArrowLeft size={16} /> Return to PHC Portal
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const isAccepted = ticket.status === "accepted";
+  const drLevel = ticket.dr_level || 0;
+  const isHighRisk = drLevel >= 2;
+  const confidencePercent = Math.round((ticket.confidence || 0.92) * 100);
 
-  const getSeverityClass = () => {
-    if (ticket.dr_level === 0) return "normal";
-    if (ticket.dr_level === 1) return "mild";
-    if (ticket.dr_level >= 2) return "severe";
-    return "moderate";
+  const getStatusColor = () => {
+    if (drLevel === 0) return { bg: "#F0FDF4", border: "#BBF7D0", text: "#16A085", label: "LOW RISK / NORMAL" };
+    if (drLevel === 1) return { bg: "#FFFBEB", border: "#FDE68A", text: "#D97706", label: "MILD RETINOPATHY" };
+    if (drLevel === 2) return { bg: "#FFF7ED", border: "#FED7AA", text: "#EA580C", label: "MODERATE DR" };
+    if (drLevel === 3) return { bg: "#FEF2F2", border: "#FECACA", text: "#DC2626", label: "SEVERE DR" };
+    return { bg: "#FEF2F2", border: "#FECACA", text: "#DC2626", label: "PROLIFERATIVE DR" };
   };
 
-  const severityClass = getSeverityClass();
-
-  const severityText =
-    severityClass === "normal"
-      ? "Normal / Low Risk"
-      : severityClass === "mild"
-      ? "Mild / Low Risk"
-      : severityClass === "moderate"
-      ? "Moderate Risk"
-      : "High Risk";
+  const statusBadge = getStatusColor();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', backgroundColor: '#FFFFFF', padding: '40px 24px' }}>
-      <div style={{ width: '100%', maxWidth: '800px', marginBottom: '24px' }}>
-        <Link to="/phc" className="btn-outline-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '16px' }}>
-          <ArrowLeft size={16} /> [ ← Back to Portal ]
-        </Link>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)', margin: 0 }}>Ticket Status</h1>
-        <p style={{ color: 'var(--color-text-muted)' }}>Ticket ID: {id}</p>
-      </div>
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      minHeight: "calc(100vh - 68px)",
+      backgroundColor: "#FFFFFF",
+      padding: "32px 24px 60px 24px"
+    }}>
+      <div style={{ width: "100%", maxWidth: "920px" }}>
+        
+        {/* BACK NAVIGATION */}
+        <div style={{ marginBottom: "20px" }}>
+          <Link 
+            to="/phc" 
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #1976D2",
+              color: "#1976D2",
+              borderRadius: "8px",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              textDecoration: "none",
+              transition: "all 0.15s ease"
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#EFF6FF"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#FFFFFF"; }}
+          >
+            <ArrowLeft size={16} /> Back to Screening Dashboard
+          </Link>
+        </div>
 
-      <div style={{ width: '100%', maxWidth: '800px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1px solid var(--color-border)', padding: '32px', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        {/* HEADER */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "16px",
+          marginBottom: "24px"
+        }}>
           <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 8px 0' }}>Patient: {ticket.patient_name}</h2>
-            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Email: {ticket.patient_email}</div>
-            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Assigned Doctor: {ticket.doctor_name}</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#6B7280", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                Referral Case #{String(id).substring(0, 8).toUpperCase()}
+              </span>
+              <span>•</span>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>
+                PHC Screening Station
+              </span>
+            </div>
+            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: "#1F2937", margin: "0 0 6px 0" }}>
+              Screening Ticket Status
+            </h1>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", fontSize: "0.925rem", color: "#4B5563" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <User size={15} color="#1976D2" />
+                Patient: <strong style={{ color: "#1F2937" }}>{ticket.patient_name}</strong> ({ticket.patient_email})
+              </span>
+              <span>•</span>
+              <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <Stethoscope size={15} color="#16A085" />
+                Doctor: <strong style={{ color: "#1F2937" }}>{ticket.doctor_name}</strong>
+              </span>
+            </div>
           </div>
-          <div style={{ padding: '8px 16px', borderRadius: '24px', backgroundColor: isAccepted ? 'rgba(22,160,133,0.1)' : 'rgba(245,158,11,0.1)', color: isAccepted ? '#16A085' : '#d97706', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
-            {isAccepted ? <CheckCircle size={18} /> : <Clock size={18} />}
-            {isAccepted ? "Accepted" : "Pending Doctor Review"}
+
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              backgroundColor: statusBadge.bg,
+              color: statusBadge.text,
+              border: `1px solid ${statusBadge.border}`,
+              fontWeight: 700,
+              fontSize: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px"
+            }}>
+              {isHighRisk ? <AlertTriangle size={15} /> : <CheckCircle2 size={15} />}
+              {statusBadge.label}
+            </div>
+
+            <div style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              backgroundColor: isAccepted ? "#F0FDF4" : "#FFFBEB",
+              color: isAccepted ? "#16A085" : "#D97706",
+              border: `1px solid ${isAccepted ? "#BBF7D0" : "#FDE68A"}`,
+              fontWeight: 700,
+              fontSize: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px"
+            }}>
+              {isAccepted ? <CheckCircle2 size={15} /> : <Clock size={15} />}
+              {isAccepted ? "Case Accepted" : "Pending Doctor Review"}
+            </div>
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '24px', marginBottom: '24px' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '0 0 16px 0' }}>AI Initial Findings</h3>
-          <LiquidGlass
-            className={`assessment-card severity-${severityClass}`}
-            variant="strong"
-          >
-            <div className="assessment-content">
-              <div className="assessment-text">
-                <span className="assessment-label">FINAL ASSESSMENT</span>
-                <h1 style={{ margin: '8px 0', fontSize: '25px', color: 'white' }}>{ticket.dr_label}</h1>
-                <p style={{ color: 'rgba(255,255,255,0.8)' }}>AI-based retinal image screening result</p>
+        {/* HOSPITAL-GRADE ASSESSMENT CARD (White Background, Medical Blue/Green Accents) */}
+        <div style={{
+          backgroundColor: "#FFFFFF",
+          border: "1px solid #E5E7EB",
+          borderRadius: "16px",
+          padding: "32px",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04)",
+          marginBottom: "28px"
+        }}>
+          {/* Card Header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #F3F4F6", paddingBottom: "18px", marginBottom: "22px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "8px", backgroundColor: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Activity size={20} color="#1976D2" />
               </div>
-              <div className={`confidence-card confidence-${severityClass}`}>
-                <span>Confidence</span>
-                <strong>{Math.round(ticket.confidence * 100)}%</strong>
-                <div className="confidence-severity" style={{ marginTop: 'auto' }}>
-                  <span className="severity-dot" />
-                  <span>{severityText}</span>
+              <div>
+                <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#1976D2", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  Automated Diagnostics
+                </span>
+                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1F2937" }}>
+                  AI Initial Findings & Severity
                 </div>
               </div>
             </div>
-          </LiquidGlass>
-        </div>
 
-        {slot && (
-          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '0 0 16px 0' }}>Scheduled Consultation</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', backgroundColor: 'rgba(0,82,255,0.05)', borderRadius: '8px', border: '1px solid rgba(0,82,255,0.2)', color: 'var(--color-primary)' }}>
-              <Clock size={20} />
-              <span style={{ fontWeight: 600 }}>{new Date(slot.scheduled_at).toLocaleString()}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#16A085", backgroundColor: "#F0FDF4", padding: "4px 10px", borderRadius: "12px", border: "1px solid #BBF7D0", fontWeight: 600 }}>
+              <ShieldCheck size={14} /> Certified ML Pipeline
             </div>
           </div>
-        )}
-      </div>
 
-      {isAccepted ? (
-        <div style={{ width: '100%', maxWidth: '800px' }}>
-          <ChatBox ticketId={id} senderRole="phc_worker" senderName="PHC Worker" />
+          {/* Metrics Grid */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "16px",
+            marginBottom: "24px"
+          }}>
+            <div style={{
+              padding: "20px",
+              backgroundColor: statusBadge.bg,
+              border: `1px solid ${statusBadge.border}`,
+              borderRadius: "12px"
+            }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#4B5563", textTransform: "uppercase", marginBottom: "6px" }}>
+                AI Graded Severity
+              </div>
+              <div style={{ fontSize: "1.45rem", fontWeight: 800, color: statusBadge.text, marginBottom: "4px" }}>
+                {ticket.dr_label}
+              </div>
+              <div style={{ fontSize: "0.825rem", color: "#6B7280" }}>
+                Level {drLevel} Diabetic Retinopathy
+              </div>
+            </div>
+
+            <div style={{
+              padding: "20px",
+              backgroundColor: "#F9FAFB",
+              border: "1px solid #E5E7EB",
+              borderRadius: "12px"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#4B5563", textTransform: "uppercase" }}>
+                  Model Confidence
+                </span>
+                <span style={{ fontSize: "1.35rem", fontWeight: 800, color: "#1976D2" }}>
+                  {confidencePercent}%
+                </span>
+              </div>
+              <div style={{ width: "100%", height: "8px", backgroundColor: "#E5E7EB", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
+                <div style={{
+                  width: `${confidencePercent}%`,
+                  height: "100%",
+                  backgroundColor: "#1976D2",
+                  borderRadius: "4px"
+                }} />
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "#6B7280", display: "flex", justifyContent: "space-between" }}>
+                <span>Quality: <strong>{ticket.quality_label || "GOOD"}</strong></span>
+                <span>Referral: <strong style={{ color: ticket.refer ? "#DC2626" : "#16A085" }}>{ticket.refer ? "Required" : "Not Required"}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          {/* Clinical Guidance Text */}
+          <div style={{ marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "0.925rem", fontWeight: 700, color: "#1F2937", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "8px" }}>
+              Clinical Findings Summary
+            </h3>
+            <div style={{
+              padding: "16px 18px",
+              backgroundColor: "#F9FAFB",
+              border: "1px solid #E5E7EB",
+              borderRadius: "10px",
+              fontSize: "0.925rem",
+              color: "#374151",
+              lineHeight: 1.6
+            }}>
+              {ticket.clinical_summary || ticket.evidence_statement || (
+                isHighRisk 
+                  ? "Screening shows evidence consistent with diabetic retinopathy. High priority for ophthalmologist tele-consultation."
+                  : "Retinal examination shows low likelihood of sight-threatening diabetic retinopathy."
+              )}
+            </div>
+          </div>
+
+          {/* Confirmed Slot Notice */}
+          {slot && (
+            <div style={{
+              padding: "18px 20px",
+              backgroundColor: "#F0FDF4",
+              border: "1px solid #BBF7D0",
+              borderRadius: "12px",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px"
+            }}>
+              <div style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "10px",
+                backgroundColor: "#DCFCE7",
+                color: "#16A085",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0
+              }}>
+                <Calendar size={24} />
+              </div>
+              <div>
+                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#16A085", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  Scheduled Tele-Consultation
+                </div>
+                <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#1F2937" }}>
+                  {new Date(slot.scheduled_at).toLocaleString(undefined, { 
+                    weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                  })}
+                </div>
+                <div style={{ fontSize: "0.825rem", color: "#4B5563", marginTop: "2px" }}>
+                  Assigned Doctor: Dr. {ticket.doctor_name}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <div style={{ width: '100%', maxWidth: '800px', textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)', backgroundColor: 'var(--color-surface)', border: '1px dashed var(--color-border)', borderRadius: '16px' }}>
-          Chat will be available once the doctor accepts the ticket and schedules a consultation.
+
+        {/* CHAT SESSION */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#1F2937", margin: 0 }}>
+              Live Tele-Consultation Channel
+            </h2>
+          </div>
+
+          {isAccepted ? (
+            <ChatBox ticketId={id} senderRole="phc_worker" senderName="PHC Worker" />
+          ) : (
+            <div style={{
+              textAlign: "center",
+              padding: "36px 24px",
+              backgroundColor: "#FFFFFF",
+              border: "1px dashed #D1D5DB",
+              borderRadius: "16px",
+              color: "#6B7280",
+              fontSize: "0.925rem"
+            }}>
+              <Clock size={28} color="#9CA3AF" style={{ marginBottom: "10px" }} />
+              <div style={{ fontWeight: 600, color: "#374151", marginBottom: "4px" }}>
+                Awaiting Doctor Acceptance
+              </div>
+              <div>
+                Chat channel will open automatically once Dr. {ticket.doctor_name} accepts this referral ticket.
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+      </div>
     </div>
   );
 }

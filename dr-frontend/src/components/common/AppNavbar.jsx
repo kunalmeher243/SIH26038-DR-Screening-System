@@ -1,10 +1,9 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Eye, LogOut, User, ShieldCheck, Stethoscope } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { LogOut, User, ShieldCheck, Stethoscope } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function AppNavbar() {
   const { user, isAuthenticated, logout } = useAuthStore();
-  const location = useLocation();
   const navigate = useNavigate();
 
   // Determine portal route
@@ -22,20 +21,6 @@ export default function AppNavbar() {
     navigate("/");
   };
 
-  // Nav items configuration
-  const navItems = [
-    { label: "Dashboard", path: dashboardPath },
-    { label: "Screenings", path: dashboardPath },
-    { label: "Patients", path: dashboardPath },
-    { label: "Reports", path: dashboardPath },
-  ];
-
-  const isCurrentActive = (itemPath) => {
-    if (location.pathname === "/" && itemPath === "/") return true;
-    if (itemPath !== "/" && location.pathname.startsWith(itemPath)) return true;
-    return false;
-  };
-
   const getRoleBadge = () => {
     if (!user) return null;
     const isDoctor = user.role === "Ophthalmologist" || user.portal === "doctor";
@@ -44,13 +29,13 @@ export default function AppNavbar() {
     if (isDoctor) {
       return (
         <span style={{
-          display: "inline-flex", alignItems: "center", gap: "5px",
-          padding: "4px 10px", borderRadius: "16px",
+          display: "inline-flex", alignItems: "center", gap: "6px",
+          padding: "5px 12px", borderRadius: "16px",
           backgroundColor: "#F0FDF4", color: "#16A085",
           border: "1px solid rgba(22, 160, 133, 0.3)",
-          fontSize: "0.75rem", fontWeight: 700
+          fontSize: "0.8rem", fontWeight: 700
         }}>
-          <Stethoscope size={13} /> Doctor
+          <Stethoscope size={14} /> Doctor
         </span>
       );
     }
@@ -58,26 +43,26 @@ export default function AppNavbar() {
     if (isPHC) {
       return (
         <span style={{
-          display: "inline-flex", alignItems: "center", gap: "5px",
-          padding: "4px 10px", borderRadius: "16px",
+          display: "inline-flex", alignItems: "center", gap: "6px",
+          padding: "5px 12px", borderRadius: "16px",
           backgroundColor: "#E8F8F5", color: "#16A085",
           border: "1px solid rgba(22, 160, 133, 0.3)",
-          fontSize: "0.75rem", fontWeight: 700
+          fontSize: "0.8rem", fontWeight: 700
         }}>
-          <ShieldCheck size={13} /> PHC Worker
+          <ShieldCheck size={14} /> PHC Worker
         </span>
       );
     }
 
     return (
       <span style={{
-        display: "inline-flex", alignItems: "center", gap: "5px",
-        padding: "4px 10px", borderRadius: "16px",
+        display: "inline-flex", alignItems: "center", gap: "6px",
+        padding: "5px 12px", borderRadius: "16px",
         backgroundColor: "#E3F2FD", color: "#1976D2",
         border: "1px solid rgba(25, 118, 210, 0.3)",
-        fontSize: "0.75rem", fontWeight: 700
+        fontSize: "0.8rem", fontWeight: 700
       }}>
-        <User size={13} /> Patient
+        <User size={14} /> Patient
       </span>
     );
   };
@@ -87,13 +72,13 @@ export default function AppNavbar() {
       width: "100%",
       backgroundColor: "#FFFFFF",
       borderBottom: "1px solid #E2E8F0",
-      boxShadow: "0 2px 10px rgba(30, 60, 90, 0.04)",
+      boxShadow: "0 2px 8px rgba(30, 60, 90, 0.04)",
       position: "sticky",
       top: 0,
       zIndex: 100
     }}>
       <div style={{
-        maxWidth: "1200px",
+        maxWidth: "1280px",
         margin: "0 auto",
         padding: "0 24px",
         height: "68px",
@@ -101,106 +86,98 @@ export default function AppNavbar() {
         alignItems: "center",
         justifyContent: "space-between"
       }}>
-        {/* LOGO: Blue + Green */}
-        <Link to={dashboardPath} style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-          <div style={{
-            width: "38px", height: "38px", borderRadius: "10px",
-            backgroundColor: "#E3F2FD",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            border: "1px solid rgba(25, 118, 210, 0.2)"
-          }}>
-            <Eye size={22} color="#1976D2" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#1976D2", letterSpacing: "-0.02em" }}>
-              RetinaTrack
+        {/* BRAND LOGO: SERIX with retinal.png */}
+        <Link to={dashboardPath} style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+          <img 
+            src="/retinal.png" 
+            alt="SERIX Logo" 
+            style={{ 
+              height: "40px", 
+              width: "auto", 
+              objectFit: "contain",
+              display: "block" 
+            }} 
+          />
+          <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
+            <span style={{ 
+              fontSize: "1.35rem", 
+              fontWeight: 800, 
+              color: "#1976D2", 
+              letterSpacing: "-0.03em" 
+            }}>
+              SERIX
             </span>
-            <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#16A085", marginLeft: "4px" }}>
-              AI
+            <span style={{ 
+              fontSize: "0.75rem", 
+              fontWeight: 700, 
+              color: "#16A085", 
+              letterSpacing: "0.08em",
+              textTransform: "uppercase" 
+            }}>
+              Health
             </span>
           </div>
         </Link>
 
-        {/* NAVIGATION LINKS */}
-        {isAuthenticated && (
-          <nav style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            {navItems.map((item, idx) => {
-              const active = idx === 0 && isCurrentActive(item.path);
-              return (
-                <Link
-                  key={item.label}
-                  to={item.path}
-                  style={{
-                    position: "relative",
-                    padding: "8px 14px",
-                    borderRadius: "8px",
-                    fontSize: "0.925rem",
-                    fontWeight: active ? 700 : 500,
-                    color: active ? "#1976D2" : "#546E7A",
-                    textDecoration: "none",
-                    transition: "all 0.15s ease",
-                    backgroundColor: active ? "rgba(25, 118, 210, 0.06)" : "transparent"
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.backgroundColor = "rgba(25, 118, 210, 0.05)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  {item.label}
-                  {active && (
-                    <span style={{
-                      position: "absolute",
-                      bottom: "-10px",
-                      left: "14px",
-                      right: "14px",
-                      height: "3px",
-                      backgroundColor: "#1976D2",
-                      borderRadius: "2px"
-                    }} />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-        )}
-
-        {/* USER PROFILE & ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+        {/* ROLE-SPECIFIC LOGIN STATUS & ACTIONS */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {isAuthenticated && user ? (
-            <>
-              {getRoleBadge()}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#263238" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                {getRoleBadge()}
+                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#374151" }}>
                   {user.name}
                 </span>
-                <span style={{ fontSize: "0.75rem", color: "#90A4AE" }}>
-                  {user.email}
-                </span>
               </div>
+              <span style={{ color: "#D1D5DB", fontWeight: 300 }}>|</span>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="btn-outline-gray"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "7px 12px",
+                  padding: "6px 14px",
                   borderRadius: "8px",
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid #D1D5DB",
+                  color: "#4B5563",
                   fontSize: "0.825rem",
                   fontWeight: 600,
                   cursor: "pointer",
-                  marginLeft: "6px"
+                  transition: "all 0.15s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#FEF2F2";
+                  e.currentTarget.style.borderColor = "#FCA5A5";
+                  e.currentTarget.style.color = "#DC2626";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.borderColor = "#D1D5DB";
+                  e.currentTarget.style.color = "#4B5563";
                 }}
                 title="Log out"
               >
-                <LogOut size={15} /> Logout
+                <LogOut size={14} /> Logout
               </button>
-            </>
+            </div>
           ) : (
-            <Link to="/" className="btn btn-primary" style={{ padding: "8px 18px", fontSize: "0.875rem" }}>
+            <Link 
+              to="/" 
+              style={{ 
+                padding: "8px 18px", 
+                fontSize: "0.875rem", 
+                fontWeight: 600,
+                color: "#FFFFFF",
+                backgroundColor: "#1976D2",
+                borderRadius: "8px",
+                textDecoration: "none",
+                transition: "background-color 0.15s ease"
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1565C0"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#1976D2"; }}
+            >
               Sign In
             </Link>
           )}

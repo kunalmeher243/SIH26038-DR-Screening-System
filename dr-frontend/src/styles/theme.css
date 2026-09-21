@@ -32,7 +32,7 @@
 
     --color-background-soft: #FFFFFF;
 
-    --color-surface: #FFFFFF;
+    --color-surface: #010101;
 
     --color-surface-solid: #FFFFFF;
 
@@ -161,25 +161,19 @@
 
 body {
     background:
-        radial-gradient(
-            circle at 12% 12%,
+        radial-gradient(circle at 12% 12%,
             rgba(190, 220, 231, 0.16) 0%,
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at 88% 18%,
+            transparent 34%),
+        radial-gradient(circle at 88% 18%,
             rgba(198, 225, 231, 0.14) 0%,
-            transparent 34%
-        ),
-        linear-gradient(
-            180deg,
+            transparent 34%),
+        linear-gradient(180deg,
             #7295a7 0%,
             #7b9eaf 42%,
-            #89aabd 100%
-        );
+            #89aabd 100%);
 
     background-attachment: fixed;
-} 
+}
 
 
 /* =========================================================

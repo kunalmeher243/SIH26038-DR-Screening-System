@@ -41,20 +41,15 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              <div
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  background: "var(--saas-accent-gradient)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--color-surface)",
-                }}
-              >
-                <Eye size={18} strokeWidth={2.4} />
-              </div>
+              <img 
+                src="/retinal.png" 
+                alt="SERIX Logo" 
+                style={{ 
+                  height: "28px", 
+                  width: "auto", 
+                  objectFit: "contain" 
+                }} 
+              />
               <span
                 style={{
                   fontSize: "1.1rem",
@@ -63,7 +58,7 @@ export default function Footer() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                {t("brandName")}<span style={{ color: "var(--color-primary)" }}>.AI</span>
+                SERIX<span style={{ color: "var(--color-primary)", marginLeft: "4px" }}>Health</span>
               </span>
             </div>
             <p
@@ -222,10 +217,10 @@ export default function Footer() {
           }}
         >
           <p style={{ margin: 0 }}>
-            © {new Date().getFullYear()} RetinaTrack AI / GramDrishti. Built for Rural India.
+            © {new Date().getFullYear()} SERIX Health. Built for Rural Triage.
           </p>
           <div style={{ display: "flex", gap: "300px" }}>
-            <span>RetinTrack.AI</span>
+            <span>SERIX Health</span>
             <span>IEC 62304 / Good Machine Learning Practice</span>
           </div>
         </div>

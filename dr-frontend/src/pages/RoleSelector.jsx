@@ -8,7 +8,7 @@ export default function RoleSelector() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#FFFFFF', padding: '32px 24px' }}>
       <div style={{ textAlign: 'center', maxWidth: '640px', marginBottom: '40px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '20px', backgroundColor: 'rgba(25, 118, 210, 0.08)', color: '#1976D2', fontSize: '0.85rem', fontWeight: 700, marginBottom: '16px' }}>
-          RetinaTrack AI Portal
+          SERIX Health Portal
         </div>
         <h1 style={{ marginBottom: '12px', fontSize: '2.4rem', fontWeight: 800, color: '#263238', letterSpacing: '-0.02em' }}>
           Select Your Portal

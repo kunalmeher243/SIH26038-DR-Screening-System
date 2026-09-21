@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Navbar
-    brandName: "RetinaTrack",
+    brandName: "SERIX",
     brandSubtitle: "Intelligent Fundus Screening",
     navHome: "Home",
     navAbout: "About Us",
@@ -1114,7 +1114,7 @@ export const translations = {
 
   hinglish: {
     // Navbar
-    brandName: "RetinaTrack",
+    brandName: "SERIX",
     brandSubtitle: "AI-Powered Retinal Screening",
     navHome: "Home",
     navAbout: "About Us",

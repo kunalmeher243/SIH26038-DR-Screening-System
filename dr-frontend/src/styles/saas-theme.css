@@ -9,7 +9,7 @@
   --saas-bg-pure: #FFFFFF;
   --saas-bg-subtle: #FFFFFF;
   --saas-bg-muted: #F8FAFC;
-  
+
   /* Text & Foreground */
   --saas-fg: #263238;
   --saas-fg-secondary: #546E7A;
@@ -91,28 +91,37 @@ body {
 
 /* Floating Animations */
 @keyframes floatSlow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
+
   50% {
     transform: translateY(-8px) rotate(0.5deg);
   }
 }
 
 @keyframes floatGentle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-5px);
   }
 }
 
 @keyframes pulseSubtle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.15);
     opacity: 0.75;
@@ -123,6 +132,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -133,6 +143,7 @@ body {
     opacity: 0;
     transform: translate(-50%, -20px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
@@ -144,6 +155,7 @@ body {
     opacity: 0;
     transform: scale(0.97) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -268,13 +280,16 @@ body {
   width: 7px;
   height: 7px;
 }
+
 ::-webkit-scrollbar-track {
   background: #F8FAFC;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }

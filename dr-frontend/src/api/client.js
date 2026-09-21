@@ -34,6 +34,12 @@ apiClient.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${parsed.token}`;
       }
     }
+    if (!config.headers.Authorization) {
+      const direct = localStorage.getItem("token") || localStorage.getItem("access_token");
+      if (direct) {
+        config.headers.Authorization = `Bearer ${direct}`;
+      }
+    }
   } catch (err) {}
   return config;
 });

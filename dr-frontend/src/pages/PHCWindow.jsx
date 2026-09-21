@@ -25,7 +25,12 @@ export default function PHCWindow() {
     reset();
     
     apiClient.get("/api/doctors")
-      .then(res => setDoctors(res.data))
+      .then(res => {
+        setDoctors(res.data);
+        if (res.data.length > 0) {
+          setDoctorId(res.data[0].id);
+        }
+      })
       .catch(err => console.error("Failed to fetch doctors", err));
       
     apiClient.get("/api/tickets/phc/me")
@@ -263,12 +268,22 @@ export default function PHCWindow() {
                 className="input-field"
                 style={{ paddingLeft: "42px", cursor: "pointer", backgroundColor: "#FFFFFF" }}
               >
-                <option value="" disabled>Select reviewing ophthalmologist...</option>
-                {doctors.map(doc => (
-                  <option key={doc.id} value={doc.id}>{doc.name} — {doc.specialization}</option>
-                ))}
+                {doctors.length === 0 ? (
+                  <option value="" disabled>No registered doctors found in MongoDB Atlas</option>
+                ) : (
+                  doctors.map(doc => (
+                    <option key={doc.id} value={doc.id}>
+                      {doc.name} — {doc.specialization} {doc.email ? `(${doc.email})` : ''}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
+            {doctors.length === 0 && (
+              <p style={{ margin: "6px 0 0", fontSize: "0.8rem", color: "#E67E22" }}>
+                No registered doctors in the database yet. Doctors who sign up will appear here automatically.
+              </p>
+            )}
           </div>
         </div>
 

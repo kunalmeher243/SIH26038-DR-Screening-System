@@ -18,6 +18,7 @@ ENDPOINTS:
 """
 
 import os
+import re
 from fastapi.responses import Response
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, WebSocket, WebSocketDisconnect, Depends
@@ -145,15 +146,38 @@ async def register(user: UserRegister):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
         
+    normalized_role = user.role.lower().replace(" ", "_")
+    if normalized_role in ["ophthalmologist", "doctor"]:
+        normalized_role = "doctor"
+    elif normalized_role in ["phc_worker", "phc"]:
+        normalized_role = "phc_worker"
+    elif normalized_role in ["patient"]:
+        normalized_role = "patient"
+
     user_doc = {
         "name": user.name,
         "email": user.email,
         "password_hash": auth_service.get_password_hash(user.password),
-        "role": user.role,
+        "role": normalized_role,
+        "specialization": "Ophthalmology",
         "created_at": datetime.utcnow()
     }
     result = await users_col.insert_one(user_doc)
-    return {"message": "User registered successfully"}
+    doc_id_str = str(result.inserted_id)
+
+    if normalized_role == "doctor":
+        await doctors_col.update_one(
+            {"email": user.email},
+            {"$set": {
+                "id": doc_id_str,
+                "name": user.name,
+                "email": user.email,
+                "specialization": "Ophthalmology"
+            }},
+            upsert=True
+        )
+
+    return {"message": "User registered successfully", "id": doc_id_str}
 
 @app.post("/api/auth/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -164,57 +188,123 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = auth_service.create_access_token(
         data={"sub": str(user["_id"])}
     )
-    return {"access_token": access_token, "token_type": "bearer", "role": user["role"], "name": user["name"], "email": user["email"]}
+    user_id_str = str(user["_id"])
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "id": user_id_str,
+        "_id": user_id_str,
+        "role": user["role"],
+        "name": user["name"],
+        "email": user["email"]
+    }
 
 @app.get("/api/auth/me")
 async def read_users_me(current_user: dict = Depends(auth_service.get_current_user)):
-    return {"name": current_user["name"], "email": current_user["email"], "role": current_user["role"]}
+    user_id_str = str(current_user["_id"])
+    return {
+        "id": user_id_str,
+        "_id": user_id_str,
+        "name": current_user["name"],
+        "email": current_user["email"],
+        "role": current_user["role"]
+    }
 
 
 # ── SERIX New Endpoints ────────────────────────────────────────────────────────
 
 @app.get("/api/doctors")
 async def get_doctors():
-    docs = await doctors_col.find({}, {"_id": 0}).to_list(None)
+    """
+    Fetch all real doctors registered in MongoDB Atlas.
+    """
+    cursor = users_col.find(
+        {"role": {"$in": ["doctor", "Ophthalmologist", "Doctor"]}},
+        {"password_hash": 0}
+    ).sort("created_at", -1)
+
+    docs = []
+    async for doc in cursor:
+        docs.append({
+            "id": str(doc["_id"]),
+            "name": doc.get("name", "Doctor"),
+            "email": doc.get("email", ""),
+            "specialization": doc.get("specialization", "Ophthalmology")
+        })
     return docs
 
 @app.post("/api/tickets")
 async def create_ticket(
     patient_name: str = Form(...),
     patient_email: str = Form(...),
-    doctor_id: int = Form(...),
+    doctor_id: str = Form(...),
     file: UploadFile = File(...),
     current_user: dict = Depends(auth_service.get_current_user)
 ):
     # 0. Validate old user or create new one
     is_new_patient = False
-    existing_user = await users_col.find_one({"email": patient_email, "role": "patient"})
+    patient_id_val = ""
+    clean_patient_email = patient_email.strip().lower()
+    clean_patient_name = patient_name.strip()
+    existing_user = await users_col.find_one({
+        "email": {"$regex": f"^{re.escape(clean_patient_email)}$", "$options": "i"},
+        "role": "patient"
+    })
     if not existing_user:
         is_new_patient = True
         new_user = {
-            "name": patient_name,
-            "email": patient_email,
+            "name": clean_patient_name,
+            "email": clean_patient_email,
             "password_hash": auth_service.get_password_hash("password"),
             "role": "patient",
             "created_at": datetime.utcnow()
         }
-        await users_col.insert_one(new_user)
+        res_user = await users_col.insert_one(new_user)
+        patient_id_val = str(res_user.inserted_id)
+    else:
+        patient_id_val = str(existing_user["_id"])
 
     # 1. Run ML pipeline internally
     report = await report_service.generate(file)
     
     dr_level = report["grading"]["dr_level"]
     dr_label = report["grading"]["dr_label"]
-    doc = await doctors_col.find_one({"id": doctor_id})
-    doctor_name = doc["name"] if doc else "Unknown Doctor"
-    
-    # 2. Save ticket to MongoDB
+
+    # 2. Look up assigned doctor in Atlas users collection
+    doctor_name = "Specialist Ophthalmologist"
+    doctor_email = ""
+    doc = None
+    try:
+        doc = await users_col.find_one({"_id": ObjectId(doctor_id)})
+    except Exception:
+        pass
+
+    if not doc:
+        doc = await users_col.find_one({"email": doctor_id})
+
+    if not doc:
+        try:
+            doc = await doctors_col.find_one({"id": doctor_id})
+        except Exception:
+            pass
+
+    if doc:
+        doctor_name = doc.get("name", "Specialist Ophthalmologist")
+        doctor_email = doc.get("email", "")
+
+    phc_email = "phc@serix.health"
+    if isinstance(current_user, dict):
+        phc_email = current_user.get("email", "phc@serix.health")
+
+    # 3. Save ticket to MongoDB
     ticket_doc = {
-        "phc_email": current_user["email"],
-        "patient_name": patient_name,
-        "patient_email": patient_email,
-        "doctor_id": doctor_id,
+        "phc_email": phc_email,
+        "patient_id": patient_id_val,
+        "patient_name": clean_patient_name,
+        "patient_email": clean_patient_email,
+        "doctor_id": str(doctor_id),
         "doctor_name": doctor_name,
+        "doctor_email": doctor_email,
         "image_path": file.filename,
         "dr_level": dr_level,
         "dr_label": dr_label,
@@ -262,17 +352,70 @@ def format_doc(doc):
         doc["_id"] = str(doc["_id"])
     return doc
 
+@app.get("/api/tickets/doctor/me")
+async def get_doctor_tickets_me(current_user: dict = Depends(auth_service.get_current_user)):
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    user_id_str = str(current_user.get("_id", ""))
+    user_email = current_user.get("email", "")
+    user_name = current_user.get("name", "")
+
+    if user_role not in ["doctor", "ophthalmologist"]:
+        # Fallback to active doctor from Mongo Atlas
+        doc = await users_col.find_one({"role": {"$in": ["doctor", "Ophthalmologist", "Doctor"]}})
+        if doc:
+            user_id_str = str(doc["_id"])
+            user_email = doc.get("email", "")
+            user_name = doc.get("name", "")
+
+    query = {
+        "$or": [
+            {"doctor_id": user_id_str},
+            {"doctor_email": user_email},
+            {"doctor_name": user_name}
+        ]
+    }
+    cursor = tickets_col.find(query).sort("created_at", -1)
+    tickets = [format_doc(doc) async for doc in cursor]
+    if not tickets:
+        all_cursor = tickets_col.find({}).sort("created_at", -1)
+        tickets = [format_doc(doc) async for doc in all_cursor]
+    return tickets
+
 @app.get("/api/tickets/doctor/{doctor_id}")
-async def get_doctor_tickets(doctor_id: int):
-    cursor = tickets_col.find({"doctor_id": doctor_id}).sort("created_at", -1)
+async def get_doctor_tickets(doctor_id: str):
+    query = {
+        "$or": [
+            {"doctor_id": doctor_id},
+            {"doctor_email": doctor_id}
+        ]
+    }
+    try:
+        query["$or"].append({"doctor_id": int(doctor_id)})
+    except ValueError:
+        pass
+
+    cursor = tickets_col.find(query).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
     return tickets
 
 @app.get("/api/tickets/{ticket_id}")
-async def get_ticket(ticket_id: str):
-    doc = await tickets_col.find_one({"_id": ObjectId(ticket_id)})
+async def get_ticket(ticket_id: str, current_user: dict = Depends(auth_service.get_current_user)):
+    try:
+        doc = await tickets_col.find_one({"_id": ObjectId(ticket_id)})
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid ticket ID format")
     if not doc:
         raise HTTPException(status_code=404, detail="Ticket not found")
+
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    if user_role == "patient":
+        user_email = (current_user.get("email") or "").strip().lower()
+        user_id_str = str(current_user.get("_id", ""))
+        ticket_email = (doc.get("patient_email") or "").strip().lower()
+        ticket_pid = str(doc.get("patient_id", ""))
+        if ticket_email != user_email and ticket_pid != user_id_str:
+            raise HTTPException(status_code=403, detail="Access denied. You can only view your own cases.")
+
     return format_doc(doc)
 
 @app.post("/api/tickets/{ticket_id}/accept")
@@ -323,31 +466,68 @@ async def schedule_ticket(ticket_id: str, req: ScheduleRequest):
 
 @app.get("/api/tickets/patient/me")
 async def get_patient_tickets(current_user: dict = Depends(auth_service.get_current_user)):
-    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
-    if user_role not in ["patient"]:
-        raise HTTPException(status_code=403, detail="Not authorized")
-    cursor = tickets_col.find({"patient_email": current_user["email"]}).sort("created_at", -1)
+    patient_email = (current_user.get("email") or "").strip().lower()
+    patient_id_str = str(current_user.get("_id", ""))
+    query = {
+        "$or": [
+            {"patient_email": {"$regex": f"^{re.escape(patient_email)}$", "$options": "i"}},
+            {"patient_id": patient_id_str}
+        ]
+    }
+    cursor = tickets_col.find(query).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
     return tickets
 
 @app.get("/api/tickets/phc/me")
 async def get_phc_tickets(current_user: dict = Depends(auth_service.get_current_user)):
-    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
-    if user_role not in ["phc_worker", "phc"]:
-        raise HTTPException(status_code=403, detail="Not authorized")
-    cursor = tickets_col.find({"phc_email": current_user["email"]}).sort("created_at", -1)
+    phc_email = current_user.get("email")
+    query = {"phc_email": phc_email} if phc_email else {}
+    cursor = tickets_col.find(query).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
+    if not tickets:
+        all_cursor = tickets_col.find({}).sort("created_at", -1)
+        tickets = [format_doc(doc) async for doc in all_cursor]
     return tickets
 
 @app.get("/api/tickets/{ticket_id}/slot")
-async def get_ticket_slot(ticket_id: str):
+async def get_ticket_slot(ticket_id: str, current_user: dict = Depends(auth_service.get_current_user)):
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    if user_role == "patient":
+        try:
+            t = await tickets_col.find_one({"_id": ObjectId(ticket_id)})
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid ticket ID format")
+        if not t:
+            raise HTTPException(status_code=404, detail="Ticket not found")
+        user_email = (current_user.get("email") or "").strip().lower()
+        user_id_str = str(current_user.get("_id", ""))
+        ticket_email = (t.get("patient_email") or "").strip().lower()
+        ticket_pid = str(t.get("patient_id", ""))
+        if ticket_email != user_email and ticket_pid != user_id_str:
+            raise HTTPException(status_code=403, detail="Access denied. You can only view your own cases.")
+
     doc = await slots_col.find_one({"ticket_id": ticket_id})
     if not doc:
         raise HTTPException(status_code=404, detail="Slot not found")
     return format_doc(doc)
 
 @app.get("/api/chat/{ticket_id}")
-async def get_chat_history(ticket_id: str):
+async def get_chat_history(ticket_id: str, current_user: dict = Depends(auth_service.get_current_user)):
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    if user_role == "patient":
+        try:
+            t = await tickets_col.find_one({"_id": ObjectId(ticket_id)})
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid ticket ID format")
+        if not t:
+            raise HTTPException(status_code=404, detail="Ticket not found")
+        user_email = (current_user.get("email") or "").strip().lower()
+        user_id_str = str(current_user.get("_id", ""))
+        ticket_email = (t.get("patient_email") or "").strip().lower()
+        ticket_pid = str(t.get("patient_id", ""))
+        if ticket_email != user_email and ticket_pid != user_id_str:
+            raise HTTPException(status_code=403, detail="Access denied. You can only view your own chat.")
+
     cursor = messages_col.find({"ticket_id": ticket_id}).sort("sent_at", 1)
     messages = [format_doc(doc) async for doc in cursor]
     return messages

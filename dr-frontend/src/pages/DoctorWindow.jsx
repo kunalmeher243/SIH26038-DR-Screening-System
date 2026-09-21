@@ -2,20 +2,29 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Clock, CheckCircle2, AlertTriangle, Stethoscope, ArrowRight, User } from "lucide-react";
 import apiClient from "../api/client";
+import useAuthStore from "../store/useAuthStore";
 
 export default function DoctorWindow() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("active");
-
-  const DOCTOR_ID = 1;
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    apiClient.get(`/api/tickets/doctor/${DOCTOR_ID}`)
+    // Dynamically fetch tickets assigned to the logged-in doctor
+    apiClient.get("/api/tickets/doctor/me")
       .then(res => setTickets(res.data))
-      .catch(err => console.error("Failed to fetch tickets", err))
+      .catch(err => {
+        console.warn("Could not fetch /api/tickets/doctor/me, attempting fallback:", err);
+        const doctorKey = user?.id || user?._id || user?.email;
+        if (doctorKey) {
+          apiClient.get(`/api/tickets/doctor/${doctorKey}`)
+            .then(res => setTickets(res.data))
+            .catch(fallbackErr => console.error("Doctor tickets fallback failed", fallbackErr));
+        }
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [user]);
 
   if (loading) return <div style={{ padding: "60px 24px", textAlign: "center", color: "#546E7A" }}>Loading assigned clinical cases...</div>;
 
@@ -43,7 +52,7 @@ export default function DoctorWindow() {
         {/* HEADER */}
         <div style={{ marginBottom: "28px" }}>
           <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#263238", marginBottom: "6px" }}>
-            Ophthalmologist Workspace
+            Ophthalmologist Workspace {user?.name ? `• ${user.name}` : ""}
           </h1>
           <p style={{ color: "#546E7A", fontSize: "1rem" }}>
             Review AI screening explanations, validate findings, and schedule patient tele-consultations.

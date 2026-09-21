@@ -106,7 +106,7 @@ export default function Toast() {
             flexShrink: 0,
             background: "transparent",
             border: "none",
-            color: "var(--color-text-muted)",
+            color: "black",
             cursor: "pointer",
             padding: "4px",
             borderRadius: "6px",
