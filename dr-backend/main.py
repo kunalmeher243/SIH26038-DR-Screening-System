@@ -20,15 +20,16 @@ ENDPOINTS:
 import os
 from fastapi.responses import Response
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from bson import ObjectId
 from collections import defaultdict
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Optional
+from pydantic import BaseModel
 
-from database import tickets_col, slots_col, messages_col, doctors_col, init_db
+from database import tickets_col, slots_col, messages_col, doctors_col, users_col, init_db
 from services import (
     iqa_service,
     enhance_service,

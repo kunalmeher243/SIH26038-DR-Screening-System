@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ChatBox from "../components/chat/ChatBox";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, CheckCircle } from "lucide-react";
 import apiClient from "../api/client";
 
 export default function DoctorCaseDetail() {
