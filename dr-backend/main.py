@@ -183,7 +183,8 @@ async def create_ticket(
     patient_name: str = Form(...),
     patient_email: str = Form(...),
     doctor_id: int = Form(...),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    current_user: dict = Depends(auth_service.get_current_user)
 ):
     # 0. Validate old user or create new one
     is_new_patient = False
@@ -209,6 +210,7 @@ async def create_ticket(
     
     # 2. Save ticket to MongoDB
     ticket_doc = {
+        "phc_email": current_user["email"],
         "patient_name": patient_name,
         "patient_email": patient_email,
         "doctor_id": doctor_id,
@@ -324,6 +326,15 @@ async def get_patient_tickets(current_user: dict = Depends(auth_service.get_curr
     if current_user["role"] != "patient":
         raise HTTPException(status_code=403, detail="Not authorized")
     cursor = tickets_col.find({"patient_email": current_user["email"]}).sort("created_at", -1)
+    tickets = [format_doc(doc) async for doc in cursor]
+    return tickets
+
+@app.get("/api/tickets/phc/me")
+async def get_phc_tickets(current_user: dict = Depends(auth_service.get_current_user)):
+    # Assuming "PHC Worker" or similar role. We check just in case.
+    if current_user["role"] not in ["PHC Worker", "phc"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    cursor = tickets_col.find({"phc_email": current_user["email"]}).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
     return tickets
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { MessageSquare, Clock, CheckCircle } from "lucide-react";
 import Upload from "./Upload";
 import useAnalysisStore from "../store/useAnalysisStore";
 import apiClient from "../api/client";
@@ -13,6 +14,7 @@ export default function PHCWindow() {
   const [patientEmail, setPatientEmail] = useState("");
   const [doctorId, setDoctorId] = useState("");
   const [doctors, setDoctors] = useState([]);
+  const [historyTickets, setHistoryTickets] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,6 +26,11 @@ export default function PHCWindow() {
     apiClient.get("/api/doctors")
       .then(res => setDoctors(res.data))
       .catch(err => console.error("Failed to fetch doctors", err));
+      
+    // Fetch PHC history
+    apiClient.get("/api/tickets/phc/me")
+      .then(res => setHistoryTickets(res.data))
+      .catch(err => console.error("Failed to fetch PHC history", err));
   }, [reset]);
 
   const handleSubmit = async (selectedFile) => {
@@ -43,9 +50,7 @@ export default function PHCWindow() {
 
     try {
       const response = await apiClient.post("/api/tickets", formData);
-
       const data = response.data;
-      // Navigate to ticket status page
       navigate(`/phc/ticket/${data.ticket_id}`);
     } catch (err) {
       console.error(err);
@@ -61,8 +66,8 @@ export default function PHCWindow() {
         <p style={{ color: 'var(--color-text-muted)' }}>Upload retinal images and assign to an ophthalmologist.</p>
       </div>
 
-      <div className="card" style={{ width: '100%', maxWidth: '800px', marginBottom: '24px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '24px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>Patient Details</h2>
+      <div className="card" style={{ width: '100%', maxWidth: '800px', marginBottom: '32px' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '24px', borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>New Patient Screening</h2>
         
         <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
           <div style={{ flex: 1 }}>
@@ -103,22 +108,65 @@ export default function PHCWindow() {
       </div>
 
       {error && (
-        <div style={{ width: '100%', maxWidth: '800px', backgroundColor: '#fef2f2', border: '1px solid #f87171', color: '#b91c1c', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
+        <div style={{ width: '100%', maxWidth: '800px', backgroundColor: 'var(--color-danger-bg)', border: '1px solid var(--color-danger)', color: 'var(--color-danger)', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
           {error}
         </div>
       )}
 
-      {/* Upload Component handles the image selection, eye detection, etc. */}
-      {/* We pass onAnalyze to hijack the "Start Analysis" button */}
-      <div style={{ width: '100%', maxWidth: '800px', pointerEvents: isSubmitting ? 'none' : 'auto', opacity: isSubmitting ? 0.6 : 1 }}>
+      <div style={{ width: '100%', maxWidth: '800px', pointerEvents: isSubmitting ? 'none' : 'auto', opacity: isSubmitting ? 0.6 : 1, marginBottom: '48px' }}>
         <Upload onAnalyze={handleSubmit} />
       </div>
 
       {isSubmitting && (
-        <div style={{ marginTop: '24px', fontSize: '1.1rem', fontWeight: 600, color: 'var(--color-primary)' }}>
+        <div style={{ marginBottom: '24px', fontSize: '1.1rem', fontWeight: 600, color: 'var(--color-primary)' }}>
           Processing and running ML pipeline... Please wait.
         </div>
       )}
+
+      {/* HISTORY SECTION */}
+      <div style={{ width: '100%', maxWidth: '800px' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '24px', color: 'var(--color-text)' }}>Your Recent Screenings</h2>
+        
+        {historyTickets.length === 0 ? (
+          <div className="card" style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)' }}>
+            You haven't uploaded any screenings yet.
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gap: '16px' }}>
+            {historyTickets.map(ticket => (
+              <Link 
+                key={ticket._id} 
+                to={`/phc/ticket/${ticket._id}`}
+                className="card"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  textDecoration: 'none', color: 'inherit', padding: '24px', transition: 'var(--transition)'
+                }}
+              >
+                <div>
+                  <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', fontWeight: 700 }}>Patient: {ticket.patient_name}</h3>
+                  <div style={{ display: 'flex', gap: '12px', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+                    <span>AI Grade: <strong style={{ color: ticket.dr_level >= 2 ? 'var(--color-danger)' : 'var(--color-text)' }}>{ticket.dr_label}</strong></span>
+                    <span>•</span>
+                    <span>Doctor: {ticket.doctor_name}</span>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ padding: '8px 16px', borderRadius: '24px', backgroundColor: ticket.status === 'accepted' ? 'var(--color-success-bg)' : 'var(--color-warning-bg)', color: ticket.status === 'accepted' ? 'var(--color-success)' : 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, fontSize: '0.85rem' }}>
+                    {ticket.status === 'accepted' ? <CheckCircle size={16} /> : <Clock size={16} />}
+                    {ticket.status === 'accepted' ? "Accepted" : "Pending"}
+                  </div>
+                  
+                  <div style={{ padding: '8px', borderRadius: '50%', backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <MessageSquare size={20} />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
