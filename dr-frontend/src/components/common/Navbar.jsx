@@ -4,6 +4,7 @@ import {
   LogOut,
   Stethoscope,
   UserCheck,
+  ShieldCheck,
   ChevronRight,
   Globe,
   Menu,
@@ -47,8 +48,26 @@ export default function Navbar({
 
   const langDropdownRef = useRef(null);
 
-  const isDoctor =
-    user?.role === "Ophthalmologist";
+  const isDoctor = user?.role === "Ophthalmologist";
+  const isPHCWorker = user?.role === "PHC Worker";
+
+  const roleClass = isDoctor
+    ? "doctor"
+    : isPHCWorker
+      ? "phc"
+      : "patient";
+
+  const roleLabel = isDoctor
+    ? t("roleDoctor")
+    : isPHCWorker
+      ? "PHC Worker"
+      : t("rolePatient");
+
+  const portalLabel = isDoctor
+    ? t("navDoctorPortal")
+    : isPHCWorker
+      ? "PHC Worker Portal"
+      : t("navPatientPortal");
 
   /* =========================================================
      CLOSE LANGUAGE DROPDOWN WHEN CLICKING OUTSIDE
@@ -177,7 +196,7 @@ export default function Navbar({
             }}
           >
             <span className="rt-liquid-brand-icon">
-              <img src="../../../dist/assets/Retina.png" alt="Logo" width={30} height={30}/>
+              <img src="../../../dist/assets/Retina.png" alt="Logo" width={30} height={30} />
             </span>
 
             <span className="rt-liquid-brand-text">
@@ -312,10 +331,10 @@ export default function Navbar({
 
                         {language ===
                           lang.code && (
-                          <Check
-                            size={14}
-                          />
-                        )}
+                            <Check
+                              size={14}
+                            />
+                          )}
                       </button>
                     )
                   )}
@@ -356,7 +375,7 @@ export default function Navbar({
                 {/* Portal button */}
 
                 {currentView ===
-                "landing" ? (
+                  "landing" ? (
                   <button
                     type="button"
                     className="rt-liquid-portal-button"
@@ -371,13 +390,7 @@ export default function Navbar({
                     }}
                   >
                     <span>
-                      {isDoctor
-                        ? t(
-                            "navDoctorPortal"
-                          )
-                        : t(
-                            "navPatientPortal"
-                          )}
+                      {portalLabel}
                     </span>
 
                     <ChevronRight
@@ -409,20 +422,15 @@ export default function Navbar({
 
                   <span
                     className={
-                      "rt-liquid-user-icon " +
-                      (isDoctor
-                        ? "doctor"
-                        : "patient")
+                      "rt-liquid-user-icon " + roleClass
                     }
                   >
                     {isDoctor ? (
-                      <Stethoscope
-                        size={16}
-                      />
+                      <Stethoscope size={16} />
+                    ) : isPHCWorker ? (
+                      <ShieldCheck size={16} />
                     ) : (
-                      <UserCheck
-                        size={16}
-                      />
+                      <UserCheck size={16} />
                     )}
                   </span>
 
@@ -434,40 +442,24 @@ export default function Navbar({
 
                     <span
                       className={
-                        "rt-liquid-user-role " +
-                        (isDoctor
-                          ? "doctor"
-                          : "patient")
+                        "rt-liquid-user-role " + roleClass
                       }
                     >
-                      {isDoctor
-                        ? t(
-                            "roleDoctor"
-                          )
-                        : t(
-                            "rolePatient"
-                          )}
+                      {roleLabel}
                     </span>
                   </span>
                 </div>
-
-
                 {/* Logout */}
 
                 <button
                   type="button"
                   className="rt-liquid-logout"
-                  title={t(
-                    "navLogout"
-                  )}
-                  onClick={() =>
-                    logout()
-                  }
+                  title={t("navLogout")}
+                  onClick={() => logout()}
                 >
-                  <LogOut
-                    size={16}
-                  />
+                  <LogOut size={16} />
                 </button>
+
               </div>
             )}
           </div>
@@ -518,7 +510,7 @@ export default function Navbar({
                 className={
                   "rt-liquid-mobile-nav-item " +
                   (currentView ===
-                  "landing"
+                    "landing"
                     ? "active"
                     : "")
                 }
@@ -582,7 +574,7 @@ export default function Navbar({
                       className={
                         "rt-liquid-mobile-language-option " +
                         (language ===
-                        lang.code
+                          lang.code
                           ? "selected"
                           : "")
                       }
@@ -596,10 +588,10 @@ export default function Navbar({
 
                       {language ===
                         lang.code && (
-                        <Check
-                          size={13}
-                        />
-                      )}
+                          <Check
+                            size={13}
+                          />
+                        )}
                     </button>
                   )
                 )}
@@ -674,25 +666,19 @@ export default function Navbar({
                   >
                     <span>
                       {currentView ===
-                      "landing"
-                        ? isDoctor
-                          ? t(
-                              "navDoctorPortal"
-                            )
-                          : t(
-                              "navPatientPortal"
-                            )
+                        "landing"
+                        ? portalLabel
                         : t(
-                            "navLandingPage"
-                          )}
+                          "navLandingPage"
+                        )}
                     </span>
 
                     {currentView ===
                       "landing" && (
-                      <ChevronRight
-                        size={16}
-                      />
-                    )}
+                        <ChevronRight
+                          size={16}
+                        />
+                      )}
                   </button>
 
 
@@ -1546,6 +1532,12 @@ export default function Navbar({
         }
 
 
+        .rt-liquid-user-icon.phc {
+          color:
+            #fbbf24;
+        }
+
+
         .rt-liquid-user-info {
           display: flex;
           flex-direction: column;
@@ -1592,6 +1584,12 @@ export default function Navbar({
         }
 
 
+        .rt-liquid-user-role.phc {
+          color:
+            #fbbf24;
+        }
+
+
         /* ===================================================
            LOGOUT
            =================================================== */
@@ -1604,38 +1602,31 @@ export default function Navbar({
           align-items: center;
           justify-content: center;
 
-          border:
-            1px solid
-              rgba(255,255,255,0.15);
-
+          border: 1px solid rgba(255, 100, 100, 0.38);
           border-radius: 12px;
 
-          background:
-            rgba(255,255,255,0.045);
+          background: rgba(255, 70, 70, 0.10);
 
-          color:
-            rgba(255,255,255,0.60);
+          color: #ff6b6b;
 
           cursor: pointer;
 
-          transition:
-            all 180ms ease;
+          transition: all 180ms ease;
         }
-
 
         .rt-liquid-logout:hover {
-          color:
-            #ff7676;
+          color: #ff8b8b;
 
-          border-color:
-            rgba(255,100,100,0.35);
+          border-color: rgba(255, 110, 110, 0.55);
 
-          background:
-            rgba(255,80,80,0.09);
+          background: rgba(255, 70, 70, 0.17);
+
+          box-shadow:
+            0 6px 18px rgba(255, 70, 70, 0.16);
         }
 
 
-        /* ===================================================
+          /* ===================================================
            MOBILE TOGGLE
            =================================================== */
 

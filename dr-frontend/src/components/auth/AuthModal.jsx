@@ -1,9 +1,39 @@
-import { useState, useEffect } from "react";
-import { X, Stethoscope, User, Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowRight,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Stethoscope,
+  User,
+  X,
+} from "lucide-react";
+
 import useAuthStore from "../../store/useAuthStore";
 import useToastStore from "../../store/useToastStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { loginSchema, signupSchema } from "./authSchema";
+
+const ROLES = [
+  {
+    id: "Patient",
+    label: "Patient",
+    icon: User,
+    description: "View screening results and care options.",
+  },
+  {
+    id: "PHC Worker",
+    label: "PHC Worker",
+    icon: ShieldCheck,
+    description: "Capture retinal images and create screening cases.",
+  },
+  {
+    id: "Ophthalmologist",
+    label: "Ophthalmologist",
+    icon: Stethoscope,
+    description: "Review AI-assisted cases and record clinical decisions.",
+  },
+];
 
 export default function AuthModal({ onAuthSuccess }) {
   const {
@@ -28,7 +58,6 @@ export default function AuthModal({ onAuthSuccess }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset form when modal opens or mode changes
   useEffect(() => {
     if (isAuthModalOpen) {
       setFormData({
@@ -36,6 +65,7 @@ export default function AuthModal({ onAuthSuccess }) {
         email: "",
         password: "",
       });
+      setIsSubmitting(false);
     }
   }, [isAuthModalOpen, authModalMode]);
 
@@ -43,90 +73,60 @@ export default function AuthModal({ onAuthSuccess }) {
 
   const isLogin = authModalMode === "login";
 
+  const selectedRole =
+    ROLES.find((role) => role.id === selectedModalRole) || ROLES[0];
+
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((previous) => ({
+      ...previous,
       [field]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setIsSubmitting(true);
 
     try {
-      if (isLogin) {
-        // Validate with Zod
-        const validationResult = loginSchema.safeParse({
-          email: formData.email,
-          password: formData.password,
-          role: selectedModalRole,
-        });
+      const payload = {
+        ...(isLogin ? {} : { name: formData.name }),
+        email: formData.email,
+        password: formData.password,
+        role: selectedModalRole,
+      };
 
-        if (!validationResult.success) {
-          const firstError = validationResult.error.errors[0]?.message || "Invalid input data";
-          showToast(firstError, "error");
-          setIsSubmitting(false);
-          return;
-        }
+      const schema = isLogin ? loginSchema : signupSchema;
+      const validationResult = schema.safeParse(payload);
 
-        const user = await login({
-          email: formData.email,
-          password: formData.password,
-          role: selectedModalRole,
-        });
+      if (!validationResult.success) {
+        const firstError =
+          validationResult.error.errors?.[0]?.message ||
+          "Please check the entered information.";
 
-        showToast(`Welcome back, ${user.name}! Accessing ${user.role} portal.`, "success");
-        if (onAuthSuccess) onAuthSuccess(user);
-      } else {
-        // Validate Signup with Zod
-        const validationResult = signupSchema.safeParse({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: selectedModalRole,
-        });
-
-        if (!validationResult.success) {
-          const firstError = validationResult.error.errors[0]?.message || "Invalid registration data";
-          showToast(firstError, "error");
-          setIsSubmitting(false);
-          return;
-        }
-
-        const user = await signup({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: selectedModalRole,
-        });
-
-        showToast(`Account created! Welcome, ${user.name}.`, "success");
-        if (onAuthSuccess) onAuthSuccess(user);
+        showToast(firstError, "error");
+        return;
       }
-    } catch (err) {
-      showToast(err.message || "Authentication failed. Please try again.", "error");
+
+      const user = isLogin
+        ? await login(payload)
+        : await signup(payload);
+
+      showToast(
+        isLogin
+          ? `Welcome back, ${user.name}.`
+          : `Account created. Welcome, ${user.name}.`,
+        "success"
+      );
+
+      onAuthSuccess?.(user);
+    } catch (error) {
+      showToast(
+        error?.message || "Authentication failed. Please try again.",
+        "error"
+      );
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const fillDemoDoctor = () => {
-    setSelectedModalRole("Ophthalmologist");
-    setFormData({
-      name: "Dr. Ananya Sharma",
-      email: "dr.sharma@aims-hospital.org",
-      password: "password123",
-    });
-  };
-
-  const fillDemoPatient = () => {
-    setSelectedModalRole("Patient");
-    setFormData({
-      name: "Ramesh Patil",
-      email: "ramesh.patil@ruralphc.in",
-      password: "password123",
-    });
   };
 
   return (
@@ -134,323 +134,236 @@ export default function AuthModal({ onAuthSuccess }) {
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 100,
+        zIndex: 1000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "rgba(15, 23, 42, 0.45)",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)",
         padding: "16px",
+        backgroundColor: "rgba(15, 23, 42, 0.48)",
+        backdropFilter: "blur(7px)",
+        WebkitBackdropFilter: "blur(7px)",
       }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) closeAuthModal();
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          closeAuthModal();
+        }
       }}
     >
       <div
         className="animate-modal-pop"
         style={{
           width: "100%",
-          maxWidth: "460px",
+          maxWidth: "540px",
+          maxHeight: "calc(100vh - 32px)",
+          overflowY: "auto",
           backgroundColor: "#FFFFFF",
-          borderRadius: "20px",
           border: "1px solid var(--saas-border)",
-          boxShadow: "0 25px 50px -12px rgba(15, 23, 42, 0.25)",
-          overflow: "hidden",
-          position: "relative",
+          borderRadius: "22px",
+          boxShadow: "0 25px 60px rgba(15, 23, 42, 0.28)",
         }}
       >
-        {/* Header with Title & Close button */}
         <div
           style={{
             padding: "24px 28px 18px",
             borderBottom: "1px solid var(--saas-border-subtle)",
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
+            gap: "16px",
           }}
         >
           <div>
             <h3
               style={{
                 margin: 0,
-                fontSize: "1.28rem",
+                fontSize: "1.3rem",
                 fontWeight: 800,
                 color: "var(--saas-fg)",
-                letterSpacing: "-0.01em",
               }}
             >
-              {isLogin ? t("authLoginTitle") : t("authSignupTitle")}
+              {isLogin
+                ? t("authLoginTitle")
+                : t("authSignupTitle")}
             </h3>
+
             <p
               style={{
-                margin: "4px 0 0 0",
-                fontSize: "0.8125rem",
+                margin: "5px 0 0",
+                fontSize: "0.82rem",
+                lineHeight: 1.45,
                 color: "var(--saas-fg-muted)",
               }}
             >
-              {isLogin ? t("authLoginSubtitle") : t("authSignupSubtitle")}
+              {isLogin
+                ? "Choose your role to access the appropriate SERIX workspace."
+                : "Create an account for the SERIX healthcare workflow."}
             </p>
           </div>
 
           <button
             type="button"
             onClick={closeAuthModal}
+            aria-label="Close authentication dialog"
             style={{
-              background: "transparent",
-              border: "none",
-              padding: "6px",
-              borderRadius: "8px",
-              color: "#94A3B8",
-              cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "all 0.15s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#0F172A";
-              e.currentTarget.style.backgroundColor = "#F1F5F9";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#94A3B8";
-              e.currentTarget.style.backgroundColor = "transparent";
+              width: "34px",
+              height: "34px",
+              flexShrink: 0,
+              border: "none",
+              borderRadius: "9px",
+              background: "transparent",
+              color: "#64748B",
+              cursor: "pointer",
             }}
           >
-            <X size={20} />
+            <X size={19} />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div style={{ padding: "24px 28px 28px" }}>
-          {/* Role Switcher Segmented Tab */}
+        <div style={{ padding: "22px 28px 28px" }}>
           <div style={{ marginBottom: "22px" }}>
-            <label
+            <div
               style={{
-                display: "block",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                textTransform: "uppercase",
+                marginBottom: "9px",
+                fontSize: "0.74rem",
+                fontWeight: 800,
                 letterSpacing: "0.06em",
+                textTransform: "uppercase",
                 color: "var(--saas-fg-muted)",
-                marginBottom: "8px",
               }}
             >
-              {t("authRoleLabel")}
-            </label>
+              Account role
+            </div>
+
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                padding: "4px",
-                backgroundColor: "var(--saas-bg-muted)",
-                borderRadius: "12px",
-                border: "1px solid var(--saas-border)",
-                gap: "4px",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap: "8px",
               }}
             >
-              <button
-                type="button"
-                onClick={() => setSelectedModalRole("Patient")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  padding: "9px 12px",
-                  borderRadius: "9px",
-                  border: "none",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                  transition: "all 0.18s ease",
-                  backgroundColor: selectedModalRole === "Patient" ? "#FFFFFF" : "transparent",
-                  color: selectedModalRole === "Patient" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
-                  boxShadow:
-                    selectedModalRole === "Patient"
-                      ? "0 2px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)"
-                      : "none",
-                }}
-              >
-                <User size={16} color={selectedModalRole === "Patient" ? "#0052FF" : "#64748B"} />
-                <span>{t("rolePatient")}</span>
-              </button>
+              {ROLES.map((role) => {
+                const Icon = role.icon;
+                const active = selectedModalRole === role.id;
 
-              <button
-                type="button"
-                onClick={() => setSelectedModalRole("Ophthalmologist")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  padding: "9px 12px",
-                  borderRadius: "9px",
-                  border: "none",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                  transition: "all 0.18s ease",
-                  backgroundColor: selectedModalRole === "Ophthalmologist" ? "#FFFFFF" : "transparent",
-                  color: selectedModalRole === "Ophthalmologist" ? "var(--saas-fg)" : "var(--saas-fg-muted)",
-                  boxShadow:
-                    selectedModalRole === "Ophthalmologist"
-                      ? "0 2px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)"
-                      : "none",
-                }}
-              >
-                <Stethoscope
-                  size={16}
-                  color={selectedModalRole === "Ophthalmologist" ? "#0052FF" : "#64748B"}
-                />
-                <span>{t("roleDoctor")}</span>
-              </button>
+                return (
+                  <button
+                    key={role.id}
+                    type="button"
+                    onClick={() => setSelectedModalRole(role.id)}
+                    style={{
+                      minHeight: "88px",
+                      padding: "10px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "7px",
+                      borderRadius: "12px",
+                      border: active
+                        ? "1.5px solid var(--saas-accent)"
+                        : "1px solid var(--saas-border)",
+                      backgroundColor: active
+                        ? "rgba(0, 82, 255, 0.06)"
+                        : "#FFFFFF",
+                      color: active
+                        ? "var(--saas-accent)"
+                        : "var(--saas-fg)",
+                      cursor: "pointer",
+                      transition: "all 0.18s ease",
+                    }}
+                  >
+                    <Icon size={19} />
+                    <span
+                      style={{
+                        fontSize: "0.75rem",
+                        lineHeight: 1.2,
+                        fontWeight: 750,
+                        textAlign: "center",
+                      }}
+                    >
+                      {role.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            <p
+              style={{
+                margin: "9px 2px 0",
+                fontSize: "0.76rem",
+                lineHeight: 1.4,
+                color: "var(--saas-fg-muted)",
+              }}
+            >
+              {selectedRole.description}
+            </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
             {!isLogin && (
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "0.8125rem",
-                    fontWeight: 600,
-                    color: "var(--saas-fg)",
-                    marginBottom: "6px",
-                  }}
-                >
-                  {t("fullNameLabel")}
-                </label>
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    required
-                    placeholder={selectedModalRole === "Ophthalmologist" ? "Dr. Priya Patel" : "Priya Patel"}
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    style={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      height: "46px",
-                      padding: "0 14px 0 40px",
-                      borderRadius: "10px",
-                      border: "1px solid var(--saas-border)",
-                      fontSize: "0.9375rem",
-                      backgroundColor: "var(--saas-bg-subtle)",
-                      outline: "none",
-                      color: "var(--saas-fg)",
-                    }}
-                  />
-                  <User
-                    size={18}
-                    color="#94A3B8"
-                    style={{
-                      position: "absolute",
-                      left: "14px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      pointerEvents: "none",
-                    }}
-                  />
-                </div>
-              </div>
+              <Field
+                label={t("fullNameLabel")}
+                icon={<User size={18} />}
+              >
+                <input
+                  type="text"
+                  required
+                  autoComplete="name"
+                  placeholder={
+                    selectedModalRole === "Ophthalmologist"
+                      ? "Dr. Priya Patel"
+                      : selectedModalRole === "PHC Worker"
+                      ? "Asha Kumari"
+                      : "Priya Patel"
+                  }
+                  value={formData.name}
+                  onChange={(event) =>
+                    handleInputChange("name", event.target.value)
+                  }
+                />
+              </Field>
             )}
 
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "0.8125rem",
-                  fontWeight: 600,
-                  color: "var(--saas-fg)",
-                  marginBottom: "6px",
-                }}
-              >
-                {t("emailLabel")}
-              </label>
-              <div style={{ position: "relative" }}>
-                <input
-                  type="email"
-                  required
-                  placeholder="name@gmail.com"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  style={{
-                    width: "100%",
-                    boxSizing: "border-box",
-                    height: "46px",
-                    padding: "0 14px 0 40px",
-                    borderRadius: "10px",
-                    border: "1px solid var(--saas-border)",
-                    fontSize: "0.9375rem",
-                    backgroundColor: "var(--saas-bg-subtle)",
-                    outline: "none",
-                    color: "var(--saas-fg)",
-                  }}
-                />
-                <Mail
-                  size={18}
-                  color="#94A3B8"
-                  style={{
-                    position: "absolute",
-                    left: "14px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    pointerEvents: "none",
-                  }}
-                />
-              </div>
-            </div>
+            <Field label={t("emailLabel")} icon={<Mail size={18} />}>
+              <input
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="name@gmail.com"
+                value={formData.email}
+                onChange={(event) =>
+                  handleInputChange("email", event.target.value)
+                }
+              />
+            </Field>
 
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "0.8125rem",
-                  fontWeight: 600,
-                  color: "var(--saas-fg)",
-                  marginBottom: "6px",
-                }}
-              >
-                {t("passwordLabel")}
-              </label>
-              <div style={{ position: "relative" }}>
-                <input
-                  type="password"
-                  required
-                  placeholder={t("passwordPlaceholder")}
-                  value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  style={{
-                    width: "100%",
-                    boxSizing: "border-box",
-                    height: "46px",
-                    padding: "0 14px 0 40px",
-                    borderRadius: "10px",
-                    border: "1px solid var(--saas-border)",
-                    fontSize: "0.9375rem",
-                    backgroundColor: "var(--saas-bg-subtle)",
-                    outline: "none",
-                    color: "var(--saas-fg)",
-                  }}
-                />
-                <Lock
-                  size={18}
-                  color="#94A3B8"
-                  style={{
-                    position: "absolute",
-                    left: "14px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    pointerEvents: "none",
-                  }}
-                />
-              </div>
-            </div>
+            <Field
+              label={t("passwordLabel")}
+              icon={<Lock size={18} />}
+            >
+              <input
+                type="password"
+                required
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                placeholder={t("passwordPlaceholder")}
+                value={formData.password}
+                onChange={(event) =>
+                  handleInputChange("password", event.target.value)
+                }
+              />
+            </Field>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -458,131 +371,54 @@ export default function AuthModal({ onAuthSuccess }) {
               style={{
                 width: "100%",
                 height: "46px",
-                marginTop: "8px",
-                fontSize: "0.9375rem",
+                marginTop: "4px",
+                fontSize: "0.92rem",
+                opacity: isSubmitting ? 0.7 : 1,
               }}
             >
               <span>
                 {isSubmitting
                   ? t("processing")
                   : isLogin
-                  ? `${t("btnSignIn")} ${selectedModalRole === "Ophthalmologist" ? t("roleDoctor") : t("rolePatient")}`
-                  : `${t("btnRegister")} ${selectedModalRole === "Ophthalmologist" ? t("roleDoctor") : t("rolePatient")}`}
+                  ? `Sign in as ${selectedRole.label}`
+                  : `Create ${selectedRole.label} account`}
               </span>
-              <ArrowRight size={18} />
+              <ArrowRight size={17} />
             </button>
           </form>
 
-          {/* Quick 1-Click Demo Fillers */}
           <div
             style={{
               marginTop: "20px",
-              padding: "12px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(0, 82, 255, 0.04)",
-              border: "1px dashed rgba(0, 82, 255, 0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                fontSize: "0.72rem",
-                fontWeight: 700,
-                color: "var(--saas-accent)",
-                textTransform: "uppercase",
-                marginBottom: "8px",
-              }}
-            >
-              <Sparkles size={13} />
-              <span>{t("demoCredentialsTitle")}</span>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-              <button
-                type="button"
-                onClick={fillDemoDoctor}
-                style={{
-                  padding: "6px 10px",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  backgroundColor: "#FFFFFF",
-                  border: "1px solid var(--saas-border)",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  color: "var(--saas-fg)",
-                  textAlign: "center",
-                }}
-              >
-                {t("fillDoctorDemo")}
-              </button>
-              <button
-                type="button"
-                onClick={fillDemoPatient}
-                style={{
-                  padding: "6px 10px",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  backgroundColor: "#FFFFFF",
-                  border: "1px solid var(--saas-border)",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  color: "var(--saas-fg)",
-                  textAlign: "center",
-                }}
-              >
-                {t("fillPatientDemo")}
-              </button>
-            </div>
-          </div>
-
-          {/* Mode Switcher Link */}
-          <div
-            style={{
-              marginTop: "20px",
+              paddingTop: "18px",
+              borderTop: "1px solid var(--saas-border-subtle)",
               textAlign: "center",
-              fontSize: "0.875rem",
+              fontSize: "0.85rem",
               color: "var(--saas-fg-muted)",
             }}
           >
             {isLogin ? (
-              <span>
+              <>
                 {t("noAccount")}{" "}
                 <button
                   type="button"
                   onClick={() => setAuthModalMode("signup")}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "var(--saas-accent)",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    padding: 0,
-                    textDecoration: "underline",
-                  }}
+                  style={linkStyle}
                 >
                   {t("linkSignUp")}
                 </button>
-              </span>
+              </>
             ) : (
-              <span>
+              <>
                 {t("haveAccount")}{" "}
                 <button
                   type="button"
                   onClick={() => setAuthModalMode("login")}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "var(--saas-accent)",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    padding: 0,
-                    textDecoration: "underline",
-                  }}
+                  style={linkStyle}
                 >
                   {t("linkLogIn")}
                 </button>
-              </span>
+              </>
             )}
           </div>
         </div>
@@ -590,3 +426,73 @@ export default function AuthModal({ onAuthSuccess }) {
     </div>
   );
 }
+
+function Field({ label, icon, children }) {
+  return (
+    <div>
+      <label
+        style={{
+          display: "block",
+          marginBottom: "6px",
+          fontSize: "0.8125rem",
+          fontWeight: 650,
+          color: "var(--saas-fg)",
+        }}
+      >
+        {label}
+      </label>
+
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            left: "13px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            display: "flex",
+            color: "#94A3B8",
+            pointerEvents: "none",
+          }}
+        >
+          {icon}
+        </span>
+
+        {children}
+
+        <style>{`
+          input {
+            width: 100%;
+            box-sizing: border-box;
+            height: 46px;
+            padding: 0 14px 0 40px;
+            border-radius: 10px;
+            border: 1px solid var(--saas-border);
+            background: var(--saas-bg-subtle);
+            color: var(--saas-fg);
+            font-size: 0.9375rem;
+            outline: none;
+          }
+
+          input:focus {
+            border-color: var(--saas-accent);
+            box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.08);
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+}
+
+const linkStyle = {
+  padding: 0,
+  border: "none",
+  background: "transparent",
+  color: "var(--saas-accent)",
+  fontWeight: 750,
+  cursor: "pointer",
+  textDecoration: "underline",
+};

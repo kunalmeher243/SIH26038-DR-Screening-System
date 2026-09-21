@@ -205,7 +205,7 @@ function GradCAMViewer() {
 
                 <div className="gradcam-real-label">
                   <span className="demo-dot" />
-                  GRAD-CAM
+                
                 </div>
               </div>
             ) : originalImage ? (

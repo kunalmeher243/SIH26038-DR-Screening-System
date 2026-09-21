@@ -1,39 +1,26 @@
-import { useState, useEffect } from "react";
-import LandingPage from "./pages/LandingPage";
-import DashboardRouter from "./pages/DashboardRouter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Toast from "./components/common/Toast";
-import useAnalysisStore from "./store/useAnalysisStore";
+import RoleSelector from "./pages/RoleSelector";
+import PHCWindow from "./pages/PHCWindow";
+import PHCTicketStatus from "./pages/PHCTicketStatus";
+import DoctorWindow from "./pages/DoctorWindow";
+import DoctorCaseDetail from "./pages/DoctorCaseDetail";
+import "./index.css";
 
 function App() {
-  const stage = useAnalysisStore((state) => state.stage);
-
-  const [currentView, setCurrentView] = useState("landing"); // "landing" | "dashboard"
-
-  // If analysis starts or is active, ensure we are in dashboard view
-  useEffect(() => {
-    if (stage && stage !== "idle") {
-      setCurrentView("dashboard");
-    }
-  }, [stage]);
-
   return (
-    <div className="retinatrack-app">
-      {/* Top-Center Floating Flash Toast Notification */}
-      <Toast />
-
-      {/* Main View Router */}
-      {currentView === "landing" ? (
-        <LandingPage
-          currentView={currentView}
-          setCurrentView={setCurrentView}
-        />
-      ) : (
-        <DashboardRouter
-          currentView={currentView}
-          setCurrentView={setCurrentView}
-        />
-      )}
-    </div>
+    <BrowserRouter>
+      <div className="retinatrack-app" style={{ minHeight: "100vh", backgroundColor: "#FAFAFA" }}>
+        <Toast />
+        <Routes>
+          <Route path="/" element={<RoleSelector />} />
+          <Route path="/phc" element={<PHCWindow />} />
+          <Route path="/phc/ticket/:id" element={<PHCTicketStatus />} />
+          <Route path="/doctor" element={<DoctorWindow />} />
+          <Route path="/doctor/:id" element={<DoctorCaseDetail />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

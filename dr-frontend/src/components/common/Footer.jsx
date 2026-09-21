@@ -222,11 +222,10 @@ export default function Footer() {
           }}
         >
           <p style={{ margin: 0 }}>
-            © {new Date().getFullYear()} RetinaTrack AI / GramDrishti. Built for Smart India Hackathon (SIH26038).
+            © {new Date().getFullYear()} RetinaTrack AI / GramDrishti. Built for Rural India.
           </p>
-          <div style={{ display: "flex", gap: "20px" }}>
-            <span>Pure JavaScript (MERN Stack)</span>
-            <span>•</span>
+          <div style={{ display: "flex", gap: "300px" }}>
+            <span>RetinTrack.AI</span>
             <span>IEC 62304 / Good Machine Learning Practice</span>
           </div>
         </div>

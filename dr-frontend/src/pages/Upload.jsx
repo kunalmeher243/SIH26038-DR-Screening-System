@@ -453,25 +453,19 @@ function detectEyeFromImage(file, imageUrl) {
           error
         );
 
-        /*
-         * Last-resort prototype fallback.
-         *
-         * This keeps the UI usable when the browser
-         * cannot process the image.
-         */
         resolve({
-          eye: "right",
-          confidence: 0.70,
-          method: "fallback",
+          eye: null,
+          confidence: 0,
+          method: "unavailable",
         });
       }
     };
 
     img.onerror = () => {
       resolve({
-        eye: "right",
-        confidence: 0.70,
-        method: "fallback",
+        eye: null,
+        confidence: 0,
+        method: "unavailable",
       });
     };
 
@@ -484,7 +478,7 @@ function detectEyeFromImage(file, imageUrl) {
    UPLOAD COMPONENT
    ========================================================= */
 
-function Upload() {
+function Upload({ onAnalyze }) {
   const inputRef =
     useRef(null);
 
@@ -669,25 +663,15 @@ function Upload() {
       }
 
       /*
-       * We no longer stop the entire workflow
-       * just because the heuristic is uncertain.
-       *
-       * Use a neutral prototype fallback.
+       * Laterality is safety-critical. Never silently
+       * substitute an eye when automatic detection fails.
        */
-      const fallbackEye =
-        "right";
-
-      setEye(
-        fallbackEye
-      );
+      setEye(null);
 
       setEyeDetection({
-        status:
-          "detected",
-        eye:
-          fallbackEye,
-        confidence:
-          0.70,
+        status: "uncertain",
+        eye: null,
+        confidence: 0,
       });
     }
 
@@ -874,6 +858,11 @@ function Upload() {
   const startAnalysis =
     async () => {
       if (!file) {
+        return;
+      }
+
+      if (onAnalyze) {
+        onAnalyze(file);
         return;
       }
 
@@ -1174,6 +1163,20 @@ function Upload() {
                       </>
                     )}
 
+
+                    {eyeDetection.status ===
+                      "uncertain" && (
+                      <>
+                        <strong>
+                          Eye laterality could not be determined
+                        </strong>
+
+                        <span>
+                          Upload a clearer fundus image. The system will not assume an eye automatically.
+                        </span>
+                      </>
+                    )}
+
                   </div>
 
                 </div>
@@ -1253,8 +1256,8 @@ function Upload() {
                 }
                 disabled={
                   analysisRunning ||
-                  eyeDetection.status ===
-                    "detecting"
+                  eyeDetection.status !==
+                    "detected"
                 }
               >
 
@@ -1265,6 +1268,9 @@ function Upload() {
                   : eyeDetection.status ===
                     "detecting"
                   ? "Detecting Eye..."
+                  : eyeDetection.status ===
+                    "uncertain"
+                  ? "Eye Detection Unavailable"
                   : t(
                       "startAnalysisBtn"
                     )}

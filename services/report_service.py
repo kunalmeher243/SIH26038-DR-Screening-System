@@ -275,6 +275,7 @@ async def generate(file: UploadFile) -> dict:
         },
         "gradcam_image":        gradcam_result["gradcam_image"],
         "gradcam_image_base64": gradcam_result["gradcam_image_base64"],
+        "grading":              grade_result,
         "lesion_overlay_image": lesion_overlay,
         "lesion_annotations":   lesion_annotations,
         "lesions":              lesions,
