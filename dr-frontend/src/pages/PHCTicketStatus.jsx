@@ -3,9 +3,16 @@ import { useParams, Link } from "react-router-dom";
 import ChatBox from "../components/chat/ChatBox";
 import { ArrowLeft, Clock, CheckCircle2, AlertTriangle, Calendar, Activity, User, Stethoscope, ShieldCheck } from "lucide-react";
 import apiClient from "../api/client";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function PHCTicketStatus() {
   const { id } = useParams();
+
+  usePageMeta({
+    title: `PHC Ticket #${id ? id.slice(-6).toUpperCase() : ""} | SERIX Health`,
+    description: "Real-time tele-ophthalmology consultation and triage tracking for rural health workers."
+  });
+
   const [ticket, setTicket] = useState(null);
   const [slot, setSlot] = useState(null);
   const [loading, setLoading] = useState(true);

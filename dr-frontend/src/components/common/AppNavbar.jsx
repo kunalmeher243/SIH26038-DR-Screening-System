@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut, User, ShieldCheck, Stethoscope } from "lucide-react";
+import { LogOut, User, ShieldCheck, Stethoscope, Menu, X, Shield, FileText } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function AppNavbar() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Determine portal route
   const getDashboardPath = () => {
@@ -17,6 +19,7 @@ export default function AppNavbar() {
   const dashboardPath = getDashboardPath();
 
   const handleLogout = () => {
+    setMobileMenuOpen(false);
     logout();
     navigate("/");
   };
@@ -80,19 +83,23 @@ export default function AppNavbar() {
       <div style={{
         maxWidth: "1280px",
         margin: "0 auto",
-        padding: "0 24px",
+        padding: "0 20px",
         height: "68px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between"
       }}>
         {/* BRAND LOGO: SERIX with retinal.png */}
-        <Link to={dashboardPath} style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+        <Link 
+          to={dashboardPath} 
+          style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
+          onClick={() => setMobileMenuOpen(false)}
+        >
           <img 
             src="/retinal.png" 
-            alt="SERIX Logo" 
+            alt="SERIX Health Logo" 
             style={{ 
-              height: "40px", 
+              height: "38px", 
               width: "auto", 
               objectFit: "contain",
               display: "block" 
@@ -119,17 +126,17 @@ export default function AppNavbar() {
           </div>
         </Link>
 
-        {/* ROLE-SPECIFIC LOGIN STATUS & ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* DESKTOP ROLE-SPECIFIC LOGIN STATUS & ACTIONS */}
+        <div className="hidden-mobile" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           {isAuthenticated && user ? (
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 {getRoleBadge()}
                 <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#374151" }}>
                   {user.name}
                 </span>
               </div>
-              <span style={{ color: "#D1D5DB", fontWeight: 300 }}>|</span>
+              <span style={{ color: "#E2E8F0", fontWeight: 300 }}>|</span>
               <button
                 type="button"
                 onClick={handleLogout}
@@ -137,11 +144,11 @@ export default function AppNavbar() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "6px 14px",
+                  padding: "7px 14px",
                   borderRadius: "8px",
                   backgroundColor: "#FFFFFF",
                   border: "1px solid #D1D5DB",
-                  color: "#4B5563",
+                  color: "#475569",
                   fontSize: "0.825rem",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -155,9 +162,9 @@ export default function AppNavbar() {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "#FFFFFF";
                   e.currentTarget.style.borderColor = "#D1D5DB";
-                  e.currentTarget.style.color = "#4B5563";
+                  e.currentTarget.style.color = "#475569";
                 }}
-                title="Log out"
+                title="Log out of session"
               >
                 <LogOut size={14} /> Logout
               </button>
@@ -168,11 +175,12 @@ export default function AppNavbar() {
               style={{ 
                 padding: "8px 18px", 
                 fontSize: "0.875rem", 
-                fontWeight: 600,
+                fontWeight: 700,
                 color: "#FFFFFF",
                 backgroundColor: "#1976D2",
                 borderRadius: "8px",
                 textDecoration: "none",
+                boxShadow: "0 2px 8px rgba(25, 118, 210, 0.2)",
                 transition: "background-color 0.15s ease"
               }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1565C0"; }}
@@ -182,7 +190,141 @@ export default function AppNavbar() {
             </Link>
           )}
         </div>
+
+        {/* MOBILE HAMBURGER BUTTON */}
+        <button
+          type="button"
+          className="show-mobile-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          style={{
+            display: "none",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px",
+            height: "40px",
+            borderRadius: "8px",
+            border: "1px solid #E2E8F0",
+            backgroundColor: "#F8FAFC",
+            color: "#334155",
+            cursor: "pointer"
+          }}
+        >
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
+
+      {/* MOBILE DRAWER */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            borderTop: "1px solid #E2E8F0",
+            backgroundColor: "#FFFFFF",
+            padding: "16px 20px 20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "14px",
+            boxShadow: "0 8px 20px rgba(0, 0, 0, 0.06)"
+          }}
+        >
+          {isAuthenticated && user ? (
+            <>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#1E293B" }}>
+                  {user.name}
+                </span>
+                {getRoleBadge()}
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <Link
+                  to={dashboardPath}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    backgroundColor: "#EFF6FF",
+                    color: "#1976D2",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                    fontSize: "0.875rem"
+                  }}
+                >
+                  Workspace
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  style={{
+                    flex: 1,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "1px solid #FCA5A5",
+                    backgroundColor: "#FEF2F2",
+                    color: "#DC2626",
+                    fontWeight: 700,
+                    fontSize: "0.875rem",
+                    cursor: "pointer"
+                  }}
+                >
+                  <LogOut size={15} /> Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                width: "100%",
+                textAlign: "center",
+                padding: "12px",
+                borderRadius: "8px",
+                backgroundColor: "#1976D2",
+                color: "#FFFFFF",
+                fontWeight: 700,
+                textDecoration: "none",
+                fontSize: "0.95rem"
+              }}
+            >
+              Sign In to Workspace
+            </Link>
+          )}
+
+          <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: "10px", display: "flex", gap: "16px" }}>
+            <Link
+              to="/privacy"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ fontSize: "0.8125rem", color: "#64748B", textDecoration: "none", fontWeight: 500 }}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to="/terms"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ fontSize: "0.8125rem", color: "#64748B", textDecoration: "none", fontWeight: 500 }}
+            >
+              Terms of Use
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .hidden-mobile {
+            display: none !important;
+          }
+          .show-mobile-btn {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </header>
   );
 }

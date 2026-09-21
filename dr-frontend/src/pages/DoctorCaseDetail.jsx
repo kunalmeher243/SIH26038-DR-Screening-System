@@ -3,9 +3,16 @@ import { useParams, Link } from "react-router-dom";
 import ChatBox from "../components/chat/ChatBox";
 import { ArrowLeft, Clock, Calendar, CheckCircle2, AlertCircle, FileText, Check } from "lucide-react";
 import apiClient from "../api/client";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function DoctorCaseDetail() {
   const { id } = useParams();
+
+  usePageMeta({
+    title: `Case Review #${id ? id.slice(-6).toUpperCase() : ""} | SERIX Health`,
+    description: "Detailed retinal AI triage analysis, Grad-CAM heatmap, and clinical tele-consultation workspace."
+  });
+
   const [ticket, setTicket] = useState(null);
   const [slot, setSlot] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -1,4 +1,5 @@
 import { Eye, ShieldCheck, Activity } from "lucide-react";
+import { Link } from "react-router-dom";
 import useLanguageStore from "../../store/useLanguageStore";
 
 export default function Footer() {
@@ -212,16 +213,45 @@ export default function Footer() {
             flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "16px",
+            gap: "20px",
             fontSize: "0.8125rem",
           }}
         >
-          <p style={{ margin: 0 }}>
-            © {new Date().getFullYear()} SERIX Health. Built for Rural Triage.
+          <p style={{ margin: 0, color: "var(--color-text-muted)" }}>
+            © {new Date().getFullYear()} SERIX Health. AI-Assisted Clinical Triage.
           </p>
-          <div style={{ display: "flex", gap: "300px" }}>
-            <span>SERIX Health</span>
-            <span>IEC 62304 / Good Machine Learning Practice</span>
+
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "24px" }}>
+            <Link
+              to="/privacy"
+              style={{
+                color: "var(--color-text-muted)",
+                textDecoration: "none",
+                fontWeight: 600,
+                transition: "color 0.15s ease"
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-primary)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-muted)"; }}
+            >
+              Privacy Policy
+            </Link>
+
+            <Link
+              to="/terms"
+              style={{
+                color: "var(--color-text-muted)",
+                textDecoration: "none",
+                fontWeight: 600,
+                transition: "color 0.15s ease"
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-primary)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-muted)"; }}
+            >
+              Terms & Disclaimer
+            </Link>
+
+            <span style={{ color: "var(--color-border)" }}>•</span>
+            <span style={{ color: "#64748B" }}>IEC 62304 / Good Machine Learning Practice</span>
           </div>
         </div>
       </div>

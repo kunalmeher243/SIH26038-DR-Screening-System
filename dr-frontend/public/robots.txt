@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /privacy
+Allow: /terms
+Disallow: /phc/
+Disallow: /doctor/
+Disallow: /patient/
+Disallow: /api/
+
+Sitemap: https://serixhealth.org/sitemap.xml

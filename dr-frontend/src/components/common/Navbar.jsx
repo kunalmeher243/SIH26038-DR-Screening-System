@@ -196,7 +196,7 @@ export default function Navbar({
             }}
           >
             <span className="rt-liquid-brand-icon">
-              <img src="../../../dist/assets/Retina.png" alt="Logo" width={30} height={30} />
+              <img src="/retinal.png" alt="SERIX Health Logo" width={30} height={30} style={{ objectFit: "contain" }} />
             </span>
 
             <span className="rt-liquid-brand-text">

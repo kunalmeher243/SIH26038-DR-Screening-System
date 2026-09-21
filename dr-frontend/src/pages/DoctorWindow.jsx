@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import { Clock, CheckCircle2, AlertTriangle, Stethoscope, ArrowRight, User } from "lucide-react";
 import apiClient from "../api/client";
 import useAuthStore from "../store/useAuthStore";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function DoctorWindow() {
+  usePageMeta({
+    title: "Ophthalmologist Workspace | SERIX Health",
+    description: "Review AI-triaged diabetic retinopathy cases, confirm clinical severity, and provide tele-consultation feedback."
+  });
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("active");

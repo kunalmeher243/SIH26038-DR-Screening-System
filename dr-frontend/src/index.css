@@ -38,11 +38,11 @@
   --color-danger-bg: #FDEDEC;
   --color-danger-border: rgba(231, 76, 60, 0.35);
 
-  /* Typography Colors */
-  --color-heading: #263238;
+  /* Typography Colors (WCAG AA Compliant >= 4.5:1 contrast against #FFFFFF) */
+  --color-heading: #1E293B;
   --color-text: #263238;
-  --color-text-secondary: #546E7A;
-  --color-text-muted: #90A4AE;
+  --color-text-secondary: #475569;
+  --color-text-muted: #546E7A;
 
   /* Borders & Dividers */
   --color-border: #D9E2E8;

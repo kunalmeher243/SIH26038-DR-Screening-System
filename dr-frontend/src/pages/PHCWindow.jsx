@@ -7,8 +7,14 @@ import {
 import Upload from "./Upload";
 import useAnalysisStore from "../store/useAnalysisStore";
 import apiClient from "../api/client";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function PHCWindow() {
+  usePageMeta({
+    title: "PHC Worker Portal | SERIX Health",
+    description: "Capture retinal fundus scans, conduct instant image quality assessment, and create specialist tele-screening tickets."
+  });
+
   const navigate = useNavigate();
   const file = useAnalysisStore((state) => state.file);
   const reset = useAnalysisStore((state) => state.reset);

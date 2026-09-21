@@ -7,9 +7,16 @@ import {
 } from "lucide-react";
 import apiClient from "../api/client";
 import useAuthStore from "../store/useAuthStore";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function PatientTicketStatus() {
   const { id } = useParams();
+
+  usePageMeta({
+    title: `Consultation Status #${id ? id.slice(-6).toUpperCase() : ""} | SERIX Health`,
+    description: "View doctor appointment schedule, clinical notes, and interactive ophthalmologist chat."
+  });
+
   const [ticket, setTicket] = useState(null);
   const [slot, setSlot] = useState(null);
   const [loading, setLoading] = useState(true);

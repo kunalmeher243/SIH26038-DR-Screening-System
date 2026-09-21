@@ -3,8 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Clock, CheckCircle2, ArrowRight, ShieldCheck, FileSearch, Calendar, AlertCircle } from "lucide-react";
 import useAuthStore from "../store/useAuthStore";
 import apiClient from "../api/client";
+import usePageMeta from "../utils/usePageMeta";
 
 export default function PatientDashboard() {
+  usePageMeta({
+    title: "Patient Care Portal | SERIX Health",
+    description: "View your retinal screening results, tele-ophthalmology triage status, and clinical follow-up advice."
+  });
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("active");

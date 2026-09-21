@@ -20,7 +20,7 @@ import axios from "axios";
 const apiClient = axios.create({
   baseURL:
     import.meta.env.VITE_API_URL ||
-    "http://10.173.166.53:8080",
+    "http://localhost:8000",
 
   timeout: 35000,
 });

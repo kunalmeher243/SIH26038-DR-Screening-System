@@ -85,6 +85,13 @@ export default function AuthModal({ onAuthSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (formData.website) {
+      console.warn("Spam submission blocked by honeypot filter.");
+      closeAuthModal();
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -311,6 +318,17 @@ export default function AuthModal({ onAuthSuccess }) {
               gap: "16px",
             }}
           >
+            {/* Honeypot field for bot protection */}
+            <input
+              type="text"
+              name="website"
+              value={formData.website || ""}
+              onChange={(e) => handleInputChange("website", e.target.value)}
+              style={{ display: "none" }}
+              tabIndex="-1"
+              autoComplete="off"
+            />
+
             {!isLogin && (
               <Field
                 label={t("fullNameLabel")}
