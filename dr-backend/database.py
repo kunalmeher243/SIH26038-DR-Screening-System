@@ -13,3 +13,18 @@ db = client["serix_db"]
 tickets_col = db["tickets"]
 slots_col = db["slots"]
 messages_col = db["messages"]
+doctors_col = db["doctors"]
+
+# Dummy hardcoded doctor details
+DOCTORS = [
+    {"id": 1, "name": "Dr. Sharma", "specialization": "Ophthalmology"},
+    {"id": 2, "name": "Dr. Patel",  "specialization": "Ophthalmology"},
+    {"id": 3, "name": "Dr. Reddy",  "specialization": "Ophthalmology"},
+]
+
+async def init_db():
+    """Seed the doctors collection with dummy data if it's empty."""
+    count = await doctors_col.count_documents({})
+    if count == 0:
+        await doctors_col.insert_many(DOCTORS)
+

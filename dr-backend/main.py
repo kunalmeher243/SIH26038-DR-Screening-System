@@ -26,7 +26,7 @@ from datetime import datetime
 from bson import ObjectId
 from collections import defaultdict
 
-from database import tickets_col, slots_col, messages_col
+from database import tickets_col, slots_col, messages_col, doctors_col, init_db
 from services import (
     iqa_service,
     enhance_service,
@@ -129,15 +129,10 @@ async def generate_report_pdf(file: UploadFile = File(...)):
 
 # ── SERIX New Endpoints ────────────────────────────────────────────────────────
 
-DOCTORS = [
-    {"id": 1, "name": "Dr. Sharma", "specialization": "Ophthalmology"},
-    {"id": 2, "name": "Dr. Patel",  "specialization": "Ophthalmology"},
-    {"id": 3, "name": "Dr. Reddy",  "specialization": "Ophthalmology"},
-]
-
 @app.get("/api/doctors")
 async def get_doctors():
-    return DOCTORS
+    docs = await doctors_col.find({}, {"_id": 0}).to_list(None)
+    return docs
 
 @app.post("/api/tickets")
 async def create_ticket(
@@ -151,7 +146,8 @@ async def create_ticket(
     
     dr_level = report["grading"]["dr_level"]
     dr_label = report["grading"]["dr_label"]
-    doctor_name = next((d["name"] for d in DOCTORS if d["id"] == doctor_id), "Unknown Doctor")
+    doc = await doctors_col.find_one({"id": doctor_id})
+    doctor_name = doc["name"] if doc else "Unknown Doctor"
     
     # 2. Save ticket to MongoDB
     ticket_doc = {
@@ -321,6 +317,7 @@ async def startup_event():
     Load model into memory at startup.
     First request is instant — no cold start delay.
     """
+    await init_db()
     try:
         model_service.load_model()
         print("[startup] Model loaded successfully.")

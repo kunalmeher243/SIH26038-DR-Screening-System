@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ChatBox from "../components/chat/ChatBox";
+import LiquidGlass from "../components/LiquidGlass";
 import { ArrowLeft, Clock, CheckCircle } from "lucide-react";
 import apiClient from "../api/client";
 
@@ -39,6 +40,24 @@ export default function PHCTicketStatus() {
 
   const isAccepted = ticket.status === "accepted";
 
+  const getSeverityClass = () => {
+    if (ticket.dr_level === 0) return "normal";
+    if (ticket.dr_level === 1) return "mild";
+    if (ticket.dr_level >= 2) return "severe";
+    return "moderate";
+  };
+
+  const severityClass = getSeverityClass();
+
+  const severityText =
+    severityClass === "normal"
+      ? "Normal / Low Risk"
+      : severityClass === "mild"
+      ? "Mild / Low Risk"
+      : severityClass === "moderate"
+      ? "Moderate Risk"
+      : "High Risk";
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
       <div style={{ width: '100%', maxWidth: '800px', marginBottom: '24px' }}>
@@ -64,16 +83,26 @@ export default function PHCTicketStatus() {
 
         <div style={{ borderTop: '1px solid var(--saas-border)', paddingTop: '24px', marginBottom: '24px' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '0 0 16px 0' }}>AI Initial Findings</h3>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>DR Level</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--saas-fg)' }}>{ticket.dr_label} (Level {ticket.dr_level})</div>
+          <LiquidGlass
+            className={`assessment-card severity-${severityClass}`}
+            variant="strong"
+          >
+            <div className="assessment-content">
+              <div className="assessment-text">
+                <span className="assessment-label">FINAL ASSESSMENT</span>
+                <h1 style={{ margin: '8px 0', fontSize: '25px', color: 'white' }}>{ticket.dr_label}</h1>
+                <p style={{ color: 'rgba(255,255,255,0.8)' }}>AI-based retinal image screening result</p>
+              </div>
+              <div className={`confidence-card confidence-${severityClass}`}>
+                <span>Confidence</span>
+                <strong>{Math.round(ticket.confidence * 100)}%</strong>
+                <div className="confidence-severity" style={{ marginTop: 'auto' }}>
+                  <span className="severity-dot" />
+                  <span>{severityText}</span>
+                </div>
+              </div>
             </div>
-            <div style={{ flex: 1, padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid var(--saas-border)' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--saas-fg-muted)', marginBottom: '4px' }}>Confidence</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--saas-fg)' }}>{Math.round(ticket.confidence * 100)}%</div>
-            </div>
-          </div>
+          </LiquidGlass>
         </div>
 
         {slot && (
