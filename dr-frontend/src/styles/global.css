@@ -2,14 +2,10 @@
 
 /* =========================================================
    RETINA AI — GLOBAL STYLES
-   Healthcare / Hospital inspired foundation
+   Clean White Background (#FFFFFF) Foundation
    ========================================================= */
 
-
-/* =========================================================
-   1. RESET
-   ========================================================= */
-
+/* 1. RESET */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -20,139 +16,67 @@ html {
     scroll-behavior: smooth;
     width: 100%;
     min-height: 100%;
+    background-color: #FFFFFF !important;
 }
 
 body {
     min-width: 320px;
     min-height: 100vh;
-
     font-family: "Inter", Arial, sans-serif;
-    color: var(--color-text-primary);
-
-    /* RetinaSense / Heltro-inspired medical blue background */
-    background:
-        radial-gradient(
-            circle at 12% 12%,
-            rgba(190, 220, 231, 0.16) 0%,
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at 88% 18%,
-            rgba(198, 225, 231, 0.14) 0%,
-            transparent 34%
-        ),
-        linear-gradient(
-            180deg,
-            #7295a7 0%,
-            #7b9eaf 42%,
-            #89aabd 100%
-        );
-
-    background-attachment: fixed;
+    color: var(--color-text-primary, #263238);
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
     line-height: 1.5;
 }
 
 body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.035) 0%,
-            rgba(255, 255, 255, 0.00) 55%,
-            rgba(42, 86, 107, 0.045) 100%
-        );
-
-    z-index: -1;
+    display: none;
 }
 
-/* =========================================================
-   2. ROOT
-   ========================================================= */
-
+/* 2. ROOT */
 #root {
     width: 100%;
     min-height: 100vh;
+    background-color: #FFFFFF !important;
 }
 
-
-/* =========================================================
-   3. TYPOGRAPHY
-   ========================================================= */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* 3. TYPOGRAPHY */
+h1, h2, h3, h4, h5, h6 {
     font-family: "Manrope", Arial, sans-serif;
-
-    color: var(--color-heading);
-
+    color: var(--color-heading, #263238);
     font-weight: 700;
-
-    line-height: 1.15;
+    line-height: 1.2;
 }
 
-h1 {
-    font-size: 48px;
-}
-
-h2 {
-    font-size: 32px;
-}
-
-h3 {
-    font-size: 24px;
-}
-
-h4 {
-    font-size: 20px;
-}
+h1 { font-size: 40px; }
+h2 { font-size: 28px; }
+h3 { font-size: 22px; }
+h4 { font-size: 18px; }
 
 p {
-    color: var(--color-text-secondary);
-    line-height: 1.65;
+    color: var(--color-text-secondary, #546E7A);
+    line-height: 1.6;
 }
 
-
-/* =========================================================
-   4. FORM ELEMENTS
-   ========================================================= */
-
-button,
-input,
-textarea,
-select {
+/* 4. FORM ELEMENTS */
+button, input, textarea, select {
     font: inherit;
 }
 
-
-/* =========================================================
-   5. LINKS
-   ========================================================= */
-
+/* 5. LINKS */
 a {
-    color: var(--color-primary);
+    color: var(--color-primary, #1976D2);
     text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: var(--color-primary-hover, #1565C0);
 }
 
-
-/* =========================================================
-   6. BUTTON BASE
-   ========================================================= */
-
+/* 6. BUTTON BASE */
 button {
     cursor: pointer;
     border: none;
@@ -163,118 +87,63 @@ button:disabled {
     opacity: 0.6;
 }
 
-
-/* =========================================================
-   7. TEXT SELECTION
-   ========================================================= */
-
+/* 7. TEXT SELECTION */
 ::selection {
-    background: rgba(22, 119, 200, 0.18);
-    color: var(--color-heading);
+    background: rgba(25, 118, 210, 0.15);
+    color: #1976D2;
 }
 
-
-/* =========================================================
-   8. SCROLLBAR
-   ========================================================= */
-
+/* 8. SCROLLBAR */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(214, 231, 243, 0.65);
+    background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(20, 38, 61, 0.20);
+    background: #CFD8DC;
     border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(20, 38, 61, 0.30);
+    background: #B0BEC5;
 }
 
-
-/* =========================================================
-   9. IMAGES
-   ========================================================= */
-
+/* 9. IMAGES */
 img {
     max-width: 100%;
     display: block;
 }
 
-
-/* =========================================================
-   10. COMMON CONTAINER
-   ========================================================= */
-
+/* 10. COMMON CONTAINER */
 .container {
     width: min(1120px, calc(100% - 40px));
     margin: 0 auto;
 }
 
-
-/* =========================================================
-   11. SECTION SPACING
-   ========================================================= */
-
 section {
     position: relative;
+    background-color: #FFFFFF;
 }
-
-
-/* =========================================================
-   12. RESPONSIVE TYPOGRAPHY
-   ========================================================= */
 
 @media (max-width: 900px) {
-    h1 {
-        font-size: 40px;
-    }
-
-    h2 {
-        font-size: 28px;
-    }
-
-    h3 {
-        font-size: 22px;
-    }
+    h1 { font-size: 32px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 20px; }
 }
-
 
 @media (max-width: 600px) {
-    h1 {
-        font-size: 34px;
-    }
-
-    h2 {
-        font-size: 26px;
-    }
-
-    h3 {
-        font-size: 20px;
-    }
-
-    .container {
-        width: min(100% - 24px, 1120px);
-    }
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 18px; }
+    .container { width: min(100% - 24px, 1120px); }
 }
 
-
-/* =========================================================
-   13. REDUCED MOTION
-   ========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;

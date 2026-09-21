@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { RotateCcw, Trash2, ArrowRight } from "lucide-react";
 
 import useAnalysisStore from "../store/useAnalysisStore";
 import useLanguageStore from "../store/useLanguageStore";
@@ -850,6 +851,13 @@ function Upload({ onAnalyze }) {
       setFile(null);
     };
 
+  const handleRecapture = () => {
+    removeImage();
+    setTimeout(() => {
+      inputRef.current?.click();
+    }, 60);
+  };
+
 
   /* =========================================================
      START ANALYSIS
@@ -1182,24 +1190,28 @@ function Upload({ onAnalyze }) {
                 </div>
 
 
-                {/* =================================================
-                    REMOVE IMAGE
-                    ================================================= */}
+                {/* Action controls for captured image */}
+                <div style={{ display: "flex", gap: "12px", marginTop: "16px", justifyContent: "center" }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-green"
+                    onClick={handleRecapture}
+                    disabled={analysisRunning}
+                    style={{ padding: "8px 16px", fontSize: "0.875rem" }}
+                  >
+                    <RotateCcw size={15} /> Recapture
+                  </button>
 
-                <button
-                  type="button"
-                  className="glass-button remove-image-button"
-                  onClick={
-                    removeImage
-                  }
-                  disabled={
-                    analysisRunning
-                  }
-                >
-                  {t(
-                    "removeImageBtn"
-                  )}
-                </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-red"
+                    onClick={removeImage}
+                    disabled={analysisRunning}
+                    style={{ padding: "8px 16px", fontSize: "0.875rem" }}
+                  >
+                    <Trash2 size={15} /> Remove Image
+                  </button>
+                </div>
 
               </div>
             )}
@@ -1246,37 +1258,27 @@ function Upload({ onAnalyze }) {
               ================================================= */}
 
           {file && (
-            <div className="upload-actions">
-
+            <div className="upload-actions" style={{ display: "flex", justifyContent: "center", marginTop: "24px" }}>
               <button
                 type="button"
-                className="glass-button analysis-button"
-                onClick={
-                  startAnalysis
-                }
+                className="btn btn-primary"
+                onClick={startAnalysis}
                 disabled={
                   analysisRunning ||
-                  eyeDetection.status !==
-                    "detected"
+                  eyeDetection.status !== "detected"
                 }
+                style={{ padding: "14px 32px", fontSize: "1rem", fontWeight: 700, borderRadius: "12px" }}
               >
-
-                {analysisRunning
-                  ? t(
-                      "analyzingBtn"
-                    )
-                  : eyeDetection.status ===
-                    "detecting"
-                  ? "Detecting Eye..."
-                  : eyeDetection.status ===
-                    "uncertain"
-                  ? "Eye Detection Unavailable"
-                  : t(
-                      "startAnalysisBtn"
-                    )}
-
+                {analysisRunning ? (
+                  "Analyzing Fundus Image..."
+                ) : eyeDetection.status === "detecting" ? (
+                  "Detecting Laterality..."
+                ) : eyeDetection.status === "uncertain" ? (
+                  "Laterality Undetermined"
+                ) : (
+                  <>Start AI Analysis <ArrowRight size={18} style={{ marginLeft: "6px" }} /></>
+                )}
               </button>
-
             </div>
           )}
 

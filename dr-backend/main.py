@@ -323,7 +323,8 @@ async def schedule_ticket(ticket_id: str, req: ScheduleRequest):
 
 @app.get("/api/tickets/patient/me")
 async def get_patient_tickets(current_user: dict = Depends(auth_service.get_current_user)):
-    if current_user["role"] != "patient":
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    if user_role not in ["patient"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     cursor = tickets_col.find({"patient_email": current_user["email"]}).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
@@ -331,8 +332,8 @@ async def get_patient_tickets(current_user: dict = Depends(auth_service.get_curr
 
 @app.get("/api/tickets/phc/me")
 async def get_phc_tickets(current_user: dict = Depends(auth_service.get_current_user)):
-    # Assuming "PHC Worker" or similar role. We check just in case.
-    if current_user["role"] not in ["PHC Worker", "phc"]:
+    user_role = str(current_user.get("role", "")).lower().replace(" ", "_")
+    if user_role not in ["phc_worker", "phc"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     cursor = tickets_col.find({"phc_email": current_user["email"]}).sort("created_at", -1)
     tickets = [format_doc(doc) async for doc in cursor]
@@ -401,7 +402,10 @@ async def startup_event():
     Load model into memory at startup.
     First request is instant — no cold start delay.
     """
-    await init_db()
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"[startup] WARNING: Database initialization error: {e}")
     try:
         model_service.load_model()
         print("[startup] Model loaded successfully.")

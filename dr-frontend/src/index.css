@@ -1,67 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
+
+/* =========================================================
+   RETINATRACK AI — FINAL HEALTHCARE DESIGN SYSTEM
+   Clean White Background (#FFFFFF) + Medical Blue (#1976D2)
+   + Hospital Green (#16A085)
+   ========================================================= */
 
 :root {
-  /* Medical/Clinical Theme - Light Mode */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: #eff6ff;
+  /* Main Canvas & Surface: STRICTLY WHITE */
+  --color-bg: #FFFFFF;
+  --color-canvas: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8FAFC;
+  --color-surface-subtle: #FAFAFA;
   
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
-  
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  
-  --color-border: #e2e8f0;
-  
-  --color-success: #10b981;
-  --color-success-bg: #ecfdf5;
-  --color-warning: #f59e0b;
-  --color-warning-bg: #fffbeb;
-  --color-danger: #ef4444;
-  --color-danger-bg: #fef2f2;
+  /* Primary Medical Blue */
+  --color-primary: #1976D2;
+  --color-primary-hover: #1565C0;
+  --color-primary-light: #E3F2FD;
+  --color-primary-subtle: rgba(25, 118, 210, 0.08);
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* Hospital Green (Healthcare Confirmation & Approvals) */
+  --color-success: #16A085;
+  --color-success-hover: #0F8A70;
+  --color-success-bg: #E8F8F5;
+  --color-success-border: rgba(22, 160, 133, 0.35);
+
+  /* Warning / Pending / Review (Amber) */
+  --color-warning: #F39C12;
+  --color-warning-hover: #D68910;
+  --color-warning-bg: #FEF9E7;
+  --color-warning-border: rgba(243, 156, 18, 0.35);
+
+  /* Danger / Destructive / High Risk (Red) */
+  --color-danger: #E74C3C;
+  --color-danger-hover: #C0392B;
+  --color-danger-bg: #FDEDEC;
+  --color-danger-border: rgba(231, 76, 60, 0.35);
+
+  /* Typography Colors */
+  --color-heading: #263238;
+  --color-text: #263238;
+  --color-text-secondary: #546E7A;
+  --color-text-muted: #90A4AE;
+
+  /* Borders & Dividers */
+  --color-border: #D9E2E8;
+  --color-border-subtle: #ECEFF1;
+  --color-border-glass: rgba(210, 220, 230, 0.8);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 3px rgba(30, 60, 90, 0.04);
+  --shadow-sm: 0 2px 6px rgba(30, 60, 90, 0.05);
+  --shadow-md: 0 4px 16px rgba(30, 60, 90, 0.06);
+  --shadow-lg: 0 8px 30px rgba(30, 60, 90, 0.08);
+  --shadow-glass: 0 8px 30px rgba(30, 60, 90, 0.08);
   
+  /* Radii */
   --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Medical/Clinical Theme - Dark Mode */
-    --color-primary: #3b82f6;
-    --color-primary-hover: #60a5fa;
-    --color-primary-light: rgba(59, 130, 246, 0.1);
-    
-    --color-bg: #0f172a;
-    --color-surface: #1e293b;
-    --color-surface-hover: #334155;
-    
-    --color-text: #f8fafc;
-    --color-text-muted: #94a3b8;
-    
-    --color-border: #334155;
-    
-    --color-success: #34d399;
-    --color-success-bg: rgba(16, 185, 129, 0.1);
-    --color-warning: #fbbf24;
-    --color-warning-bg: rgba(245, 158, 11, 0.1);
-    --color-danger: #f87171;
-    --color-danger-bg: rgba(239, 68, 68, 0.1);
-
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  }
-}
+/* =========================================================
+   GLOBAL RESET & PURE WHITE CANVAS
+   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -69,19 +76,28 @@
   padding: 0;
 }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--color-bg);
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFFFFF !important;
   color: var(--color-text);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root, .retinatrack-app {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFFFFF !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--color-text);
+  font-family: 'Manrope', 'Inter', sans-serif;
+  color: var(--color-heading);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 a {
@@ -94,7 +110,91 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Global utility classes for rapid development */
+/* =========================================================
+   FORM INPUTS & STATES
+   ========================================================= */
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 8px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: #FFFFFF;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.input-field::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.10);
+  background-color: #FFFFFF;
+}
+
+/* Input States */
+.input-field.input-success {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success);
+}
+
+.input-field.input-warning {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
+}
+
+.input-field.input-error {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger);
+}
+
+/* =========================================================
+   CARDS & CLEAN SUBTLE GLASS
+   ========================================================= */
+
+.card {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.glass-panel, .glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass);
+}
+
+/* =========================================================
+   STANDARDIZED BUTTON COLOR SYSTEM
+   ========================================================= */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -105,132 +205,148 @@ a:hover {
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
   transition: var(--transition);
   text-decoration: none;
+  font-family: inherit;
 }
 
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none !important;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  box-shadow: var(--shadow-md);
+/* 1. BLUE BUTTON: Primary Action */
+.btn-primary, .btn-blue {
+  background-color: #1976D2;
+  color: #FFFFFF;
+  border-color: #1976D2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.25);
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+.btn-primary:hover:not(:disabled), .btn-blue:hover:not(:disabled) {
+  background-color: #1565C0;
+  border-color: #1565C0;
+  box-shadow: 0 4px 14px rgba(25, 118, 210, 0.35);
 }
 
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
+/* 2. GREEN BUTTON: Healthcare Confirmation / Success */
+.btn-success, .btn-green, .btn-confirm {
+  background-color: #16A085;
+  color: #FFFFFF;
+  border-color: #16A085;
+  box-shadow: 0 2px 8px rgba(22, 160, 133, 0.25);
 }
 
-.btn-outline {
-  background-color: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+.btn-success:hover:not(:disabled), .btn-green:hover:not(:disabled), .btn-confirm:hover:not(:disabled) {
+  background-color: #0F8A70;
+  border-color: #0F8A70;
+  box-shadow: 0 4px 14px rgba(22, 160, 133, 0.35);
 }
 
-.btn-outline:hover:not(:disabled) {
-  background-color: var(--color-surface-hover);
-  border-color: var(--color-text-muted);
+/* 3. OUTLINE BLUE: Navigation / Secondary / Back */
+.btn-outline-blue, .btn-back {
+  background-color: #FFFFFF;
+  color: #1976D2;
+  border: 1.5px solid #1976D2;
 }
 
-.card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition);
+.btn-outline-blue:hover:not(:disabled), .btn-back:hover:not(:disabled) {
+  background-color: rgba(25, 118, 210, 0.06);
+  color: #1565C0;
+  border-color: #1565C0;
 }
 
-.card:hover {
-  box-shadow: var(--shadow-lg);
+/* 4. OUTLINE GREEN: Healthcare Secondary / Recapture */
+.btn-outline-green, .btn-recapture {
+  background-color: #FFFFFF;
+  color: #16A085;
+  border: 1.5px solid #16A085;
 }
 
-.input-group {
-  margin-bottom: 20px;
+.btn-outline-green:hover:not(:disabled), .btn-recapture:hover:not(:disabled) {
+  background-color: rgba(22, 160, 133, 0.06);
+  color: #0F8A70;
+  border-color: #0F8A70;
 }
 
-.input-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 8px;
+/* 5. RED OUTLINE: Destructive / Remove Image */
+.btn-outline-red, .btn-remove {
+  background-color: #FFFFFF;
+  color: #E74C3C;
+  border: 1.5px solid #E74C3C;
 }
 
-.input-field {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: var(--transition);
+.btn-outline-red:hover:not(:disabled), .btn-remove:hover:not(:disabled) {
+  background-color: rgba(231, 76, 60, 0.06);
+  color: #C0392B;
+  border-color: #C0392B;
 }
 
-.input-field:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-  background-color: var(--color-surface);
+/* 6. GRAY OUTLINE: Cancel */
+.btn-outline-gray, .btn-cancel, .btn-outline {
+  background-color: #FFFFFF;
+  color: #546E7A;
+  border: 1.5px solid #CFD8DC;
 }
+
+.btn-outline-gray:hover:not(:disabled), .btn-cancel:hover:not(:disabled), .btn-outline:hover:not(:disabled) {
+  background-color: #ECEFF1;
+  color: #263238;
+  border-color: #B0BEC5;
+}
+
+/* =========================================================
+   STATUS BADGES & RISK INDICATORS
+   ========================================================= */
 
 .badge {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   padding: 4px 12px;
   border-radius: var(--radius-full);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
-.badge-success { background-color: var(--color-success-bg); color: var(--color-success); }
-.badge-warning { background-color: var(--color-warning-bg); color: var(--color-warning); }
-.badge-danger { background-color: var(--color-danger-bg); color: var(--color-danger); }
+/* Success / Low Risk */
+.badge-success, .risk-low {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+
+/* Warning / Moderate Risk */
+.badge-warning, .risk-moderate {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
+}
+
+/* Error / High Risk */
+.badge-danger, .badge-error, .risk-high {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger-border);
+}
+
+/* Info / Processing / Unknown */
+.badge-info, .risk-unknown {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid rgba(25, 118, 210, 0.25);
+}
 
 /* Spinners */
-.pipeline-spinner {
+.pipeline-spinner, .spinner-icon {
   display: inline-block;
-  animation: pipeline-spin 1s linear infinite;
-}
-
-@keyframes pipeline-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.spinner-icon {
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-.glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-@media (prefers-color-scheme: dark) {
-  .glass-panel {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
 }

@@ -156,10 +156,10 @@ export default function AuthModal({ onAuthSuccess }) {
           maxWidth: "540px",
           maxHeight: "calc(100vh - 32px)",
           overflowY: "auto",
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
+          backgroundColor: "#FFFFFF",
+          border: "1px solid #D9E2E8",
           borderRadius: "22px",
-          boxShadow: "0 25px 60px rgba(15, 23, 42, 0.28)",
+          boxShadow: "0 20px 50px rgba(30, 60, 90, 0.15)",
         }}
       >
         <div
@@ -263,14 +263,14 @@ export default function AuthModal({ onAuthSuccess }) {
                       gap: "7px",
                       borderRadius: "12px",
                       border: active
-                        ? "1.5px solid var(--color-primary)"
-                        : "1px solid var(--color-border)",
+                        ? "1.5px solid #1976D2"
+                        : "1px solid #D9E2E8",
                       backgroundColor: active
-                        ? "rgba(0, 82, 255, 0.06)"
-                        : "var(--color-surface)",
+                        ? "rgba(25, 118, 210, 0.08)"
+                        : "#FFFFFF",
                       color: active
-                        ? "var(--color-primary)"
-                        : "var(--color-text)",
+                        ? "#1976D2"
+                        : "#263238",
                       cursor: "pointer",
                       transition: "all 0.18s ease",
                     }}
@@ -470,16 +470,17 @@ function Field({ label, icon, children }) {
             height: 46px;
             padding: 0 14px 0 40px;
             border-radius: 10px;
-            border: 1px solid var(--color-border);
-            background: var(--saas-bg-subtle);
-            color: var(--color-text);
+            border: 1px solid #D9E2E8;
+            background: #FFFFFF;
+            color: #263238;
             font-size: 0.9375rem;
             outline: none;
+            transition: all 0.2s ease;
           }
 
           input:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.08);
+            border-color: #1976D2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.10);
           }
         `}</style>
       </div>

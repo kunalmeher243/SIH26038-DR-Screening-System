@@ -15,38 +15,39 @@
      Brand
      ------------------------------------------------------- */
 
-    --color-primary: #2f6f9f;
-    --color-primary-dark: #245a82;
-    --color-primary-light: #e8f4fb;
+    --color-primary: #1976D2;
+    --color-primary-dark: #1565C0;
+    --color-primary-light: #E3F2FD;
 
-    --color-secondary: #2aa889;
-    --color-secondary-light: #e7f7f2;
+    --color-secondary: #16A085;
+    --color-secondary-dark: #0F8A70;
+    --color-secondary-light: #E8F8F5;
 
 
     /* -------------------------------------------------------
-     Backgrounds
+     Backgrounds (Pure White Canvas)
      ------------------------------------------------------- */
 
-    --color-background: #f3f8fc;
+    --color-background: #FFFFFF;
 
-    --color-background-soft: #edf5fa;
+    --color-background-soft: #FFFFFF;
 
-    --color-surface: rgba(255, 255, 255, 0.72);
+    --color-surface: #FFFFFF;
 
-    --color-surface-solid: #ffffff;
+    --color-surface-solid: #FFFFFF;
 
 
     /* -------------------------------------------------------
      Text
      ------------------------------------------------------- */
 
-    --color-heading: #162b45;
+    --color-heading: #263238;
 
-    --color-text-primary: #243b53;
+    --color-text-primary: #263238;
 
-    --color-text-secondary: #647b91;
+    --color-text-secondary: #546E7A;
 
-    --color-text-muted: #8ca0b2;
+    --color-text-muted: #90A4AE;
 
     --color-text-white: #ffffff;
 
@@ -55,26 +56,26 @@
      Borders
      ------------------------------------------------------- */
 
-    --color-border: rgba(104, 139, 165, 0.18);
+    --color-border: #D9E2E8;
 
-    --color-border-strong: rgba(78, 119, 149, 0.28);
+    --color-border-strong: #CFD8DC;
 
 
     /* -------------------------------------------------------
      Status colors
      ------------------------------------------------------- */
 
-    --color-success: #21b978;
+    --color-success: #16A085;
 
-    --color-success-light: #e8f8f1;
+    --color-success-light: #E8F8F5;
 
-    --color-warning: #f3a712;
+    --color-warning: #F39C12;
 
-    --color-warning-light: #fff6df;
+    --color-warning-light: #FEF9E7;
 
-    --color-danger: #dc5c5c;
+    --color-danger: #E74C3C;
 
-    --color-danger-light: #fdecec;
+    --color-danger-light: #FDEDEC;
 
 
     /* -------------------------------------------------------

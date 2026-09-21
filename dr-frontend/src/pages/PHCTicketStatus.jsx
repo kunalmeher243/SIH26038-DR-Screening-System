@@ -59,23 +59,23 @@ export default function PHCTicketStatus() {
       : "High Risk";
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '40px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', backgroundColor: '#FFFFFF', padding: '40px 24px' }}>
       <div style={{ width: '100%', maxWidth: '800px', marginBottom: '24px' }}>
-        <Link to="/phc" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 600, marginBottom: '16px' }}>
-          <ArrowLeft size={16} /> Back to Upload
+        <Link to="/phc" className="btn-outline-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '16px' }}>
+          <ArrowLeft size={16} /> [ ← Back to Portal ]
         </Link>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)', margin: 0 }}>Ticket Status</h1>
         <p style={{ color: 'var(--color-text-muted)' }}>Ticket ID: {id}</p>
       </div>
 
-      <div style={{ width: '100%', maxWidth: '800px', backgroundColor: 'var(--color-surface)', borderRadius: '16px', border: '1px solid var(--color-border)', padding: '32px', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+      <div style={{ width: '100%', maxWidth: '800px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1px solid var(--color-border)', padding: '32px', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 8px 0' }}>Patient: {ticket.patient_name}</h2>
             <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Email: {ticket.patient_email}</div>
             <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Assigned Doctor: {ticket.doctor_name}</div>
           </div>
-          <div style={{ padding: '8px 16px', borderRadius: '24px', backgroundColor: isAccepted ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)', color: isAccepted ? '#22c55e' : '#d97706', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
+          <div style={{ padding: '8px 16px', borderRadius: '24px', backgroundColor: isAccepted ? 'rgba(22,160,133,0.1)' : 'rgba(245,158,11,0.1)', color: isAccepted ? '#16A085' : '#d97706', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
             {isAccepted ? <CheckCircle size={18} /> : <Clock size={18} />}
             {isAccepted ? "Accepted" : "Pending Doctor Review"}
           </div>

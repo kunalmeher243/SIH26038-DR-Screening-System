@@ -4,53 +4,53 @@
    ========================================================= */
 
 :root {
-  /* Surface & Canvas */
-  --saas-bg: #FAFAFA;
+  /* Surface & Canvas: STRICTLY WHITE */
+  --saas-bg: #FFFFFF;
   --saas-bg-pure: #FFFFFF;
-  --saas-bg-subtle: #F8FAFC;
-  --saas-bg-muted: #F1F5F9;
+  --saas-bg-subtle: #FFFFFF;
+  --saas-bg-muted: #F8FAFC;
   
   /* Text & Foreground */
-  --saas-fg: #0F172A;
-  --saas-fg-secondary: #334155;
-  --saas-fg-muted: #64748B;
-  --saas-fg-light: #94A3B8;
+  --saas-fg: #263238;
+  --saas-fg-secondary: #546E7A;
+  --saas-fg-muted: #90A4AE;
+  --saas-fg-light: #B0BEC5;
 
-  /* Accent - Crisp Medical / Electric Blue */
-  --saas-accent: #0052FF;
-  --saas-accent-hover: #0045D8;
-  --saas-accent-light: #EFF6FF;
-  --saas-accent-subtle: rgba(0, 82, 255, 0.08);
-  --saas-accent-secondary: #4D7CFF;
-  --saas-accent-gradient: linear-gradient(135deg, #0052FF 0%, #4D7CFF 100%);
-  --saas-accent-gradient-subtle: linear-gradient(135deg, rgba(0, 82, 255, 0.06) 0%, rgba(77, 124, 255, 0.02) 100%);
+  /* Accent - Medical Blue (#1976D2) */
+  --saas-accent: #1976D2;
+  --saas-accent-hover: #1565C0;
+  --saas-accent-light: #E3F2FD;
+  --saas-accent-subtle: rgba(25, 118, 210, 0.08);
+  --saas-accent-secondary: #1E88E5;
+  --saas-accent-gradient: linear-gradient(135deg, #1976D2 0%, #1E88E5 100%);
+  --saas-accent-gradient-subtle: linear-gradient(135deg, rgba(25, 118, 210, 0.06) 0%, rgba(30, 136, 229, 0.02) 100%);
 
   /* Borders & Dividers */
-  --saas-border: #E2E8F0;
-  --saas-border-subtle: #F1F5F9;
-  --saas-border-accent: rgba(0, 82, 255, 0.25);
+  --saas-border: #D9E2E8;
+  --saas-border-subtle: #ECEFF1;
+  --saas-border-accent: rgba(25, 118, 210, 0.25);
 
   /* Status Colors */
-  --saas-success: #10B981;
-  --saas-success-bg: #ECFDF5;
-  --saas-warning: #F59E0B;
-  --saas-warning-bg: #FFFBEB;
-  --saas-danger: #EF4444;
-  --saas-danger-bg: #FEF2F2;
+  --saas-success: #16A085;
+  --saas-success-bg: #E8F8F5;
+  --saas-warning: #F39C12;
+  --saas-warning-bg: #FEF9E7;
+  --saas-danger: #E74C3C;
+  --saas-danger-bg: #FDEDEC;
 
   /* Typography */
-  --font-display: "Calistoga", Georgia, serif;
+  --font-display: "Manrope", "Inter", sans-serif;
   --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Shadows */
-  --shadow-saas-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-saas-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-  --shadow-saas-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
-  --shadow-saas-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
-  --shadow-saas-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-  --shadow-saas-accent: 0 6px 20px -2px rgba(0, 82, 255, 0.28);
-  --shadow-saas-accent-lg: 0 12px 28px -4px rgba(0, 82, 255, 0.35);
+  --shadow-saas-xs: 0 1px 3px 0 rgba(30, 60, 90, 0.04);
+  --shadow-saas-sm: 0 2px 6px 0 rgba(30, 60, 90, 0.05);
+  --shadow-saas-md: 0 4px 16px -1px rgba(30, 60, 90, 0.06);
+  --shadow-saas-lg: 0 8px 30px -3px rgba(30, 60, 90, 0.08);
+  --shadow-saas-xl: 0 16px 40px -5px rgba(30, 60, 90, 0.10);
+  --shadow-saas-accent: 0 6px 20px -2px rgba(25, 118, 210, 0.28);
+  --shadow-saas-accent-lg: 0 12px 28px -4px rgba(25, 118, 210, 0.35);
 
   /* Radii */
   --radius-sm: 6px;
@@ -63,8 +63,8 @@
 /* Global Reset & Typography Baseline */
 body {
   font-family: var(--font-body);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: #FFFFFF !important;
+  color: var(--color-text, #263238);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
